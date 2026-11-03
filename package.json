@@ -1,0 +1,33 @@
+{
+  "name": "rumhora",
+  "version": "1.0.0",
+  "private": true,
+  "description": "Thème WordPress Rumhora — ACF, GSAP, Sass, Barba.js",
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/raoelsonnyaro1/rumhora.git"
+  },
+  "license": "GPL-2.0-or-later",
+  "scripts": {
+    "build:css": "npx sass assets/sass/style.scss dist/temp.css --no-source-map && node node_modules/tailwindcss/lib/cli.js -i dist/temp.css -o dist/styles.css",
+    "build:js": "npx esbuild src/js/main.js --bundle --outfile=dist/main.js --format=iife --target=es2017",
+    "build": "npm run build:css && npm run build:js",
+    "watch": "node watch-css.js",
+    "dev": "npm run watch",
+    "icons": "gulp iconfont",
+    "icons:watch": "gulp watch"
+  },
+  "devDependencies": {
+    "autoprefixer": "^10.4.21",
+    "esbuild": "^0.25.9",
+    "gulp": "^5.0.1",
+    "gulp-iconfont": "^11.0.1",
+    "gulp-iconfont-css": "^3.0.0",
+    "postcss": "^8.5.6",
+    "sass": "1.77.0",
+    "tailwindcss": "^3.4.17"
+  },
+  "dependencies": {
+    "lenis": "^1.3.11"
+  }
+}

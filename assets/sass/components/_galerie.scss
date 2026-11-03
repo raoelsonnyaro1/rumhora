@@ -1,0 +1,95 @@
+/**
+ * Galerie Slider Section
+ */
+@use '../variables' as *;
+
+.section_galerie {
+  .rs-slider-main {
+    cursor: grab;
+
+    &:active {
+      cursor: grabbing;
+    }
+
+    .swiper-wrapper {
+      height: 100%;
+    }
+
+    .swiper-slide {
+      height: auto;
+    }
+  }
+
+  .galerie-thumb-slide {
+    cursor: pointer;
+    opacity: 0.5;
+    transition: opacity 0.3s ease;
+    overflow: hidden;
+  }
+}
+
+// Réserve la place des flèches mobile (36px = 28px bouton + 8px d'espace,
+// voir rs-galerie.php) sous la photo plutôt que dessus : le conteneur fourni
+// par la page appelante (ex: h-[60vw] overflow-hidden) a une hauteur fixe qui
+// rognerait sinon tout ce qui dépasse. Posée sur le wrapper outer (h-full,
+// sibling direct du bloc flèches) - .section_galerie à l'intérieur retombe
+// naturellement sur les 100% déjà réduits de son parent, pas besoin de la lui
+// poser aussi. max-height (pas height) : plafonne la hauteur déjà posée par
+// $classes sans la remplacer - sans effet si le parent n'a pas de hauteur
+// définie (ex: usage hero h-screen, pourcentage alors ignoré par le CSS).
+.has-mobile-dots {
+  @media (max-width: 767px) {
+    max-height: calc(100% - 36px);
+  }
+}
+
+// Flèches précédent/suivant mobile (voir rs-galerie.php, sous le slider, PAS
+// superposées à la photo - les vignettes desktop restent, elles, à
+// l'intérieur). Swiper gère lui-même l'état désactivé (.swiper-button-disabled)
+// en début/fin de slider (voir 'navigation' dans initGalerieSwipers).
+.galerie-nav-arrow {
+  width: 28px;
+  height: 28px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border-radius: 999px;
+  background: $dark;
+  color: white;
+  cursor: pointer;
+  border: none;
+  transition: opacity 0.3s ease;
+
+  svg {
+    width: 14px;
+    height: 14px;
+  }
+
+  &.swiper-button-disabled {
+    opacity: 0.3;
+    cursor: default;
+  }
+}
+
+// Swiper applique margin-left/right: auto par défaut (centrage) ; on l'annule ici
+// pour que les thumbs restent alignées à droite via ml-auto côté markup.
+.swiper.rs-slider-thumbs {
+  margin-right: 0;
+
+  // S'il y a moins de vignettes que de slidesPerView (ex: 2 photos, voir
+  // rs_galerie), Swiper les positionne par défaut collées à GAUCHE du
+  // conteneur (display:flex sans justification) : le ml-auto ci-dessus
+  // aligne bien le conteneur à droite de la barre, mais laisse alors un vide
+  // visible à droite, à l'intérieur du conteneur lui-même. flex-end pousse
+  // les vignettes présentes contre le bord droit dans ce cas.
+  //
+  // Classe posée en JS (voir initGalerieSwipers dans animations.js), PAS une
+  // règle inconditionnelle : avec assez de vignettes pour dépasser la largeur
+  // du conteneur (ex: 4 photos), flex-end pousse tout le contenu vers la
+  // droite et masque alors la 1re vignette hors du conteneur (overflow côté
+  // gauche) au lieu de la dernière - l'inverse du comportement natif de
+  // Swiper (départ à gauche, la fin déborde), qu'on veut garder dans ce cas.
+  &.rs-slider-thumbs--underfull .swiper-wrapper {
+    justify-content: flex-end;
+  }
+}

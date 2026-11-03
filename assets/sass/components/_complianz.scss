@@ -1,0 +1,14 @@
+/**
+ * Contenu généré par le plugin Complianz sur la page de politique de cookies :
+ * the_content() affiche directement son HTML — #cmplz-document n'est pas du
+ * markup à nous, impossible d'y ajouter une classe Tailwind depuis le
+ * template, d'où ce ciblage par ID.
+ */
+#cmplz-document {
+  padding-left: .3rem;
+  padding-bottom: 1.5rem;
+
+  @media (min-width: 768px) {
+    padding-bottom: 2.5rem;
+  }
+}

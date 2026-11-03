@@ -1,0 +1,3588 @@
+@charset "UTF-8";
+
+/**
+ * Feuille maîtresse — compilée vers dist/styles.css
+ *
+ * Chaîne de build : sass (ce fichier) → dist/temp.css → tailwindcss CLI →
+ * dist/styles.css. Les directives @tailwind ci-dessous sont donc résolues par
+ * Tailwind APRÈS la compilation Sass (voir package.json, build:css).
+ *
+ * Conséquence importante sur l'ordre des règles : Tailwind place toutes ses
+ * utilitaires (et surtout les variantes responsives "md:", "lg:") À LA FIN du
+ * CSS produit, donc APRÈS tout ce qui est écrit ici. Une règle de ce fichier
+ * qui doit l'emporter sur un utilitaire Tailwind de même spécificité a besoin
+ * d'un !important (voir les overrides "100svh" plus bas).
+ */
+
+/**
+ * Design system — variables
+ *
+ * Toute couleur déclarée ici doit AUSSI l'être dans tailwind.config.js
+ * (theme.extend.colors) pour rester utilisable en classe utilitaire côté
+ * markup : ce fichier sert les partials SCSS, tailwind.config.js sert le
+ * markup. Les deux doivent rester synchronisés.
+ */
+
+/* ==========================================================================
+   Palette de marque — source de vérité
+   ========================================================================== */
+
+/* ==========================================================================
+   Alias sémantiques
+   ==========================================================================
+   Les composants parlent en rôles ("dark", "cream", "accent") plutôt qu'en
+   noms de couleur : un changement de palette ne demande alors de toucher qu'au
+   bloc ci-dessus. Les deux jeux de noms sont exposés en Tailwind, donc
+   `bg-rouge` et `bg-dark` sont équivalents côté markup — préférer le rôle
+   sémantique pour tout ce qui est réutilisable.
+*/
+
+/* Neutres (hors palette de marque) */
+
+/* ==========================================================================
+   Versions URL-encodées
+   ==========================================================================
+   Pour les chevrons SVG inline des <select> (voir _form.scss) : un
+   `data:image/svg+xml` ne peut pas contenir un "#" littéral, il faut "%23".
+   Sass ne peut pas dériver cette forme depuis une valeur de type couleur —
+   À GARDER SYNCHRONISÉ À LA MAIN avec la palette ci-dessus.
+*/
+
+/**
+ * Feuille maîtresse — compilée vers dist/styles.css
+ *
+ * Chaîne de build : sass (ce fichier) → dist/temp.css → tailwindcss CLI →
+ * dist/styles.css. Les directives @tailwind ci-dessous sont donc résolues par
+ * Tailwind APRÈS la compilation Sass (voir package.json, build:css).
+ *
+ * Conséquence importante sur l'ordre des règles : Tailwind place toutes ses
+ * utilitaires (et surtout les variantes responsives "md:", "lg:") À LA FIN du
+ * CSS produit, donc APRÈS tout ce qui est écrit ici. Une règle de ce fichier
+ * qui doit l'emporter sur un utilitaire Tailwind de même spécificité a besoin
+ * d'un !important (voir les overrides "100svh" plus bas).
+ */
+
+/**
+ * Buttons
+ */
+
+.btn-list {
+  overflow-x: auto;
+  overflow-y: hidden;
+  scroll-behavior: smooth;
+  scrollbar-width: none;
+  -webkit-overflow-scrolling: touch;
+}
+
+.btn-list::-webkit-scrollbar {
+  display: none;
+}
+
+.btn-list .btn {
+  white-space: nowrap;
+  padding: 47px 20px;
+  display: flex;
+  justify-content: center;
+  flex: auto;
+  flex-shrink: 0;
+}
+
+@media (max-width: 1023px) {
+  .btn-list .btn {
+    flex: 0 0 calc(33% - 0rem);
+  }
+}
+
+@media (max-width: 480px) {
+  .btn-list .btn {
+    flex: 0 0 calc(60% - 0rem);
+    padding: 2rem 1rem;
+  }
+}
+
+@media (max-width: 1025px) {
+  .btn-list {
+    display: flex !important;
+    gap: 0;
+  }
+}
+
+.btn {
+  font-family: "General Sans";
+  display: inline-block;
+  padding: 15px 20px;
+  color: #000;
+  border: 1px solid #000;
+  text-align: center;
+  cursor: pointer;
+  position: relative;
+  overflow: hidden;
+  z-index: 1;
+  transition: color 0.3s ease, background-color 0.4s ease, border-color 0.4s ease, filter 0.3s ease;
+  /* CTA variants */
+}
+
+@media (max-width: 1025px) {
+  .btn {
+    font-size: 14px;
+  }
+}
+
+.btn:disabled {
+  opacity: 0.5;
+  cursor: not-allowed;
+  pointer-events: none;
+}
+
+.btn::before {
+  content: "";
+  position: absolute;
+  inset: 0;
+  background: #F4EDE4;
+  transform: scaleX(0);
+  transform-origin: right;
+  transition: transform 0.5s cubic-bezier(0.77, 0, 0.175, 1);
+  z-index: -1;
+}
+
+.btn:hover::before {
+  transform: scaleX(1);
+  transform-origin: left;
+}
+
+.btn.btn-white {
+  color: white;
+  border-color: white;
+}
+
+.btn.btn-white:hover {
+  color: #8C2D34;
+}
+
+.btn.btn-primary {
+  color: white;
+  background-color: #8C2D34;
+  border-color: #8C2D34;
+}
+
+.btn.btn-primary:hover {
+  color: #8C2D34;
+}
+
+.btn.btn-secondary {
+  color: #C6A75E;
+  background-color: transparent;
+  border-color: #C6A75E;
+}
+
+.btn.btn-secondary::before {
+  background: #C6A75E;
+}
+
+.btn.btn-secondary:hover {
+  color: white;
+}
+
+.btn.btn-tertiary {
+  color: white;
+  background-color: rgba(255, 255, 255, 0.1);
+  backdrop-filter: blur(10px);
+  -webkit-backdrop-filter: blur(10px);
+  transform: translateZ(0);
+  will-change: backdrop-filter, transform;
+  border-color: white;
+}
+
+.btn.btn-tertiary:hover {
+  color: #8C2D34;
+}
+
+.social-icon-wipe {
+  position: relative;
+  overflow: hidden;
+  transition: color 0.3s ease;
+}
+
+.social-icon-wipe::before {
+  content: "";
+  position: absolute;
+  inset: 0;
+  background: #F4EDE4;
+  transform: scaleX(0);
+  transform-origin: right;
+  transition: transform 0.5s cubic-bezier(0.77, 0, 0.175, 1);
+  z-index: 0;
+}
+
+.social-icon-wipe:hover::before {
+  transform: scaleX(1);
+  transform-origin: left;
+}
+
+.social-icon-wipe:hover {
+  color: #8C2D34;
+}
+
+.social-icon-wipe svg {
+  position: relative;
+  z-index: 1;
+}
+
+/**
+ * Feuille maîtresse — compilée vers dist/styles.css
+ *
+ * Chaîne de build : sass (ce fichier) → dist/temp.css → tailwindcss CLI →
+ * dist/styles.css. Les directives @tailwind ci-dessous sont donc résolues par
+ * Tailwind APRÈS la compilation Sass (voir package.json, build:css).
+ *
+ * Conséquence importante sur l'ordre des règles : Tailwind place toutes ses
+ * utilitaires (et surtout les variantes responsives "md:", "lg:") À LA FIN du
+ * CSS produit, donc APRÈS tout ce qui est écrit ici. Une règle de ce fichier
+ * qui doit l'emporter sur un utilitaire Tailwind de même spécificité a besoin
+ * d'un !important (voir les overrides "100svh" plus bas).
+ */
+
+/**
+ * Hero Section
+ */
+
+.section_hero {
+  background-color: #8C2D34;
+}
+
+.section_hero_content p {
+  font-family: "Recia";
+}
+
+/* Scroll down indicator */
+
+.scroll-down {
+  display: inline-flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 8px;
+  color: white;
+  transition: transform 0.3s ease;
+}
+
+.scroll-down:hover {
+  transform: translateY(-2px);
+}
+
+.scroll-down__mouse {
+  width: 22px;
+  height: 34px;
+  border: 2px solid currentColor;
+  border-radius: 12px;
+  position: relative;
+  display: flex;
+  justify-content: center;
+}
+
+.scroll-down__wheel {
+  width: 2px;
+  height: 7px;
+  background: currentColor;
+  border-radius: 2px;
+  position: absolute;
+  top: 5px;
+  animation: scroll-wheel 1.6s cubic-bezier(0.4, 0, 0.2, 1) infinite;
+}
+
+.scroll-down__text {
+  font-size: 9px;
+  letter-spacing: 0.15em;
+  text-transform: capitalize;
+}
+
+@keyframes scroll-wheel {
+  0% {
+    opacity: 1;
+    transform: translateY(0);
+  }
+
+  60% {
+    opacity: 0;
+    transform: translateY(12px);
+  }
+
+  61% {
+    opacity: 0;
+    transform: translateY(0);
+  }
+
+  100% {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+/**
+ * Feuille maîtresse — compilée vers dist/styles.css
+ *
+ * Chaîne de build : sass (ce fichier) → dist/temp.css → tailwindcss CLI →
+ * dist/styles.css. Les directives @tailwind ci-dessous sont donc résolues par
+ * Tailwind APRÈS la compilation Sass (voir package.json, build:css).
+ *
+ * Conséquence importante sur l'ordre des règles : Tailwind place toutes ses
+ * utilitaires (et surtout les variantes responsives "md:", "lg:") À LA FIN du
+ * CSS produit, donc APRÈS tout ce qui est écrit ici. Une règle de ce fichier
+ * qui doit l'emporter sur un utilitaire Tailwind de même spécificité a besoin
+ * d'un !important (voir les overrides "100svh" plus bas).
+ */
+
+/* =========================================
+   Formulaires (libellé flottant)
+   =========================================
+   À poser sur le <form> : .reservation-form, plus .reservation-form-cream
+   pour la variante sur fond sombre (ex: newsletter du footer). Les champs
+   eux-mêmes sont générés par rs_form_field()
+   (inc/components/form/rs-form-field.php). */
+
+.form-intro ol, .form-intro ul {
+  list-style-position: outside;
+  margin: 0 0 0 1.25em;
+  padding: 0;
+}
+
+.form-intro ol {
+  list-style-type: decimal;
+}
+
+.form-intro ul {
+  list-style-type: disc;
+}
+
+.form-intro li {
+  margin-bottom: 0.5em;
+}
+
+.form-intro li:last-child {
+  margin-bottom: 0;
+}
+
+.reservation-form {
+  position: relative;
+}
+
+.reservation-form .form-field {
+  position: relative;
+  border-bottom: 1px solid rgba(140, 45, 52, 0.25) !important;
+  padding-top: 20px;
+  padding-bottom: 6px;
+  margin-bottom: 4px;
+}
+
+.reservation-form .form-field label {
+  position: absolute;
+  top: 20px;
+  left: 0;
+  font-family: "General Sans", sans-serif;
+  font-size: 14px;
+  font-weight: 500;
+  color: #8C2D34;
+  transform-origin: left top;
+  transition: transform 0.25s ease;
+  pointer-events: none;
+}
+
+.reservation-form .form-field input,
+.reservation-form .form-field select,
+.reservation-form .form-field textarea {
+  width: 100%;
+  font-family: "General Sans", sans-serif;
+  font-size: 13px;
+  font-weight: 500;
+  color: #8C2D34 !important;
+  background: transparent !important;
+  border: none !important;
+  outline: none !important;
+  box-shadow: none !important;
+  -moz-appearance: none;
+       appearance: none;
+  -webkit-appearance: none;
+  padding: 0;
+}
+
+@media (max-width: 767px) {
+  .reservation-form .form-field input,
+  .reservation-form .form-field select,
+  .reservation-form .form-field textarea {
+    font-size: 16px;
+  }
+}
+
+.reservation-form .form-field textarea {
+  resize: none;
+  display: block;
+}
+
+.reservation-form .form-field input[data-flatpickr],
+.reservation-form .form-field input[data-flatpickr-time] {
+  cursor: pointer;
+}
+
+.reservation-form .form-field select {
+  cursor: pointer;
+  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='%238C2D34' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'%3E%3Cpolyline points='6 9 12 15 18 9'/%3E%3C/svg%3E") !important;
+  background-repeat: no-repeat !important;
+  background-position: right center !important;
+  background-size: 14px !important;
+  padding-right: 24px !important;
+}
+
+.reservation-form .form-field select option {
+  background-color: #F4EDE4;
+  color: #8C2D34;
+  padding: 10px 14px;
+}
+
+.reservation-form .form-field select option:hover,
+.reservation-form .form-field select option:checked,
+.reservation-form .form-field select option:focus {
+  background-color: rgba(140, 45, 52, 0.12);
+}
+
+.reservation-form .form-field input:focus ~ label, .reservation-form .form-field input:not(:-moz-placeholder) ~ label, .reservation-form .form-field textarea:focus ~ label, .reservation-form .form-field textarea:not(:-moz-placeholder) ~ label {
+  transform: translateY(-20px) scale(0.75);
+}
+
+.reservation-form .form-field input:focus ~ label,
+.reservation-form .form-field input:not(:placeholder-shown) ~ label,
+.reservation-form .form-field textarea:focus ~ label,
+.reservation-form .form-field textarea:not(:placeholder-shown) ~ label {
+  transform: translateY(-20px) scale(0.75);
+}
+
+.reservation-form .form-field input:required ~ label::after,
+.reservation-form .form-field textarea:required ~ label::after {
+  content: " *";
+}
+
+.reservation-form .form-field input[type=number]::-webkit-inner-spin-button,
+.reservation-form .form-field input[type=number]::-webkit-outer-spin-button {
+  -webkit-appearance: none;
+  margin: 0;
+}
+
+.reservation-form .form-field input[type=number] {
+  -moz-appearance: textfield;
+}
+
+.reservation-form .form-ajax-message {
+  position: absolute;
+  left: 0;
+  right: 0;
+  top: 100%;
+  width: -moz-fit-content;
+  width: fit-content;
+  margin-top: 12px;
+  font-size: 14px;
+  padding: 12px 16px;
+  border-radius: 4px;
+  background-color: #8C2D34;
+  color: #F4EDE4;
+  opacity: 0;
+  transform: translateY(-8px);
+  pointer-events: none;
+  transition: opacity 0.4s ease, transform 0.4s ease;
+}
+
+.reservation-form .form-ajax-message.is-visible {
+  opacity: 1;
+  transform: translateY(0);
+  pointer-events: auto;
+}
+
+.reservation-form .custom-select {
+  position: relative;
+}
+
+.reservation-form .custom-select .custom-select-native {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  opacity: 0;
+  pointer-events: none;
+}
+
+.reservation-form .custom-select .custom-select-trigger {
+  width: 100%;
+  text-align: left;
+  font-family: "General Sans", sans-serif;
+  font-size: 13px;
+  font-weight: 500;
+  color: #8C2D34;
+  background: transparent;
+  border: none;
+  outline: none;
+  cursor: pointer;
+  padding: 0;
+  padding-right: 24px;
+  min-height: 1.2em;
+  display: block;
+  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='%238C2D34' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'%3E%3Cpolyline points='6 9 12 15 18 9'/%3E%3C/svg%3E");
+  background-repeat: no-repeat;
+  background-position: right center;
+  background-size: 14px;
+}
+
+.reservation-form .custom-select .custom-select-options {
+  position: absolute;
+  top: 100%;
+  left: 0;
+  right: 0;
+  z-index: 20;
+  margin-top: 8px;
+  background-color: #F4EDE4;
+  border: 1px solid rgba(140, 45, 52, 0.15);
+  box-shadow: 0 8px 24px rgba(0, 0, 0, 0.08);
+  list-style: none;
+  margin-left: 0;
+  max-height: 240px;
+  overflow-y: auto;
+  opacity: 0;
+  visibility: hidden;
+  transform: translateY(-6px);
+  transition: opacity 0.2s ease, transform 0.2s ease, visibility 0.2s;
+}
+
+.reservation-form .custom-select.open .custom-select-options {
+  opacity: 1;
+  visibility: visible;
+  transform: translateY(0);
+}
+
+.reservation-form .custom-select .custom-select-option {
+  padding: 10px 14px;
+  font-family: "General Sans", sans-serif;
+  font-size: 13px;
+  font-weight: 500;
+  color: #8C2D34;
+  cursor: pointer;
+  transition: background-color 0.15s ease;
+}
+
+.reservation-form .custom-select .custom-select-option:hover, .reservation-form .custom-select .custom-select-option.is-selected {
+  background-color: rgba(140, 45, 52, 0.12);
+}
+
+.reservation-form .custom-select.has-value label {
+  transform: translateY(-20px) scale(0.75);
+}
+
+.reservation-form .custom-select select:required ~ label::after {
+  content: " *";
+}
+
+.reservation-form.reservation-form-cream .form-field {
+  border-bottom-color: rgba(244, 237, 228, 0.6) !important;
+}
+
+.reservation-form.reservation-form-cream .form-field label {
+  color: #F4EDE4;
+}
+
+.reservation-form.reservation-form-cream .form-field input,
+.reservation-form.reservation-form-cream .form-field select,
+.reservation-form.reservation-form-cream .form-field textarea {
+  color: #F4EDE4 !important;
+}
+
+.reservation-form.reservation-form-cream .form-field select {
+  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='%23F4EDE4' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'%3E%3Cpolyline points='6 9 12 15 18 9'/%3E%3C/svg%3E") !important;
+}
+
+.reservation-form.reservation-form-cream .form-field select option {
+  color: #8C2D34;
+}
+
+.reservation-form.reservation-form-cream .form-ajax-message {
+  background-color: #F4EDE4;
+  color: #8C2D34;
+}
+
+.reservation-form .form-field-checkbox {
+  cursor: pointer;
+  color: #8C2D34;
+  font-size: 14px;
+}
+
+.reservation-form .form-field-checkbox:has(input:required)::after {
+  content: " *";
+}
+
+.reservation-form .form-field-checkbox input[type=checkbox] {
+  -moz-appearance: none;
+       appearance: none;
+  -webkit-appearance: none;
+  flex-shrink: 0;
+  width: 18px;
+  height: 18px;
+  margin-top: 1px;
+  border: 1.5px solid #8C2D34;
+  border-radius: 3px;
+  position: relative;
+  cursor: pointer;
+  transition: background-color 0.2s ease;
+}
+
+.reservation-form .form-field-checkbox input[type=checkbox]:checked {
+  background-color: #8C2D34;
+}
+
+.reservation-form .form-field-checkbox input[type=checkbox]:checked::after {
+  content: "";
+  position: absolute;
+  left: 5px;
+  top: 1px;
+  width: 5px;
+  height: 9px;
+  border: solid #F4EDE4;
+  border-width: 0 2px 2px 0;
+  transform: rotate(45deg);
+}
+
+.reservation-form .form-field-checkbox input[type=checkbox]:focus-visible {
+  outline: 2px solid #8C2D34;
+  outline-offset: 2px;
+}
+
+/**
+ * Feuille maîtresse — compilée vers dist/styles.css
+ *
+ * Chaîne de build : sass (ce fichier) → dist/temp.css → tailwindcss CLI →
+ * dist/styles.css. Les directives @tailwind ci-dessous sont donc résolues par
+ * Tailwind APRÈS la compilation Sass (voir package.json, build:css).
+ *
+ * Conséquence importante sur l'ordre des règles : Tailwind place toutes ses
+ * utilitaires (et surtout les variantes responsives "md:", "lg:") À LA FIN du
+ * CSS produit, donc APRÈS tout ce qui est écrit ici. Une règle de ce fichier
+ * qui doit l'emporter sur un utilitaire Tailwind de même spécificité a besoin
+ * d'un !important (voir les overrides "100svh" plus bas).
+ */
+
+/**
+ * Flatpickr (voir inc/components/form/rs-form-field.php type "date" et
+ * src/js/components/date-picker.js) : surcharge du thème par défaut de la
+ * librairie (quasi sans style imposé) aux couleurs du site, même esprit que
+ * .custom-select-options (_form.scss) - fond crème, bordure/texte vert,
+ * sans arrondi, pour rester cohérent avec le reste des champs/dropdowns.
+ */
+
+.flatpickr-calendar {
+  background-color: #F4EDE4;
+  border: 1px solid rgba(140, 45, 52, 0.15);
+  box-shadow: 0 8px 24px rgba(0, 0, 0, 0.08);
+  border-radius: 0;
+  font-family: "General Sans", sans-serif;
+}
+
+.flatpickr-calendar.arrowTop:before, .flatpickr-calendar.arrowTop:after {
+  display: none;
+}
+
+.flatpickr-months {
+  padding: 12px 10px 4px;
+}
+
+.flatpickr-months .flatpickr-month {
+  color: #8C2D34;
+  fill: #8C2D34;
+}
+
+.flatpickr-months .flatpickr-current-month {
+  font-size: 14px;
+  font-weight: 500;
+}
+
+.flatpickr-months .flatpickr-current-month .flatpickr-monthDropdown-months,
+.flatpickr-months .flatpickr-current-month input.cur-year {
+  font-family: "General Sans", sans-serif;
+  font-weight: 500;
+  color: #8C2D34;
+}
+
+.flatpickr-months .flatpickr-prev-month,
+.flatpickr-months .flatpickr-next-month {
+  color: #8C2D34;
+  fill: #8C2D34;
+}
+
+.flatpickr-months .flatpickr-prev-month:hover,
+.flatpickr-months .flatpickr-next-month:hover {
+  color: #8C2D34;
+  fill: #8C2D34;
+  opacity: 0.6;
+}
+
+.flatpickr-weekdays {
+  background-color: transparent;
+}
+
+span.flatpickr-weekday {
+  color: rgba(140, 45, 52, 0.6);
+  font-family: "General Sans", sans-serif;
+  font-size: 12px;
+  font-weight: 500;
+}
+
+.flatpickr-day {
+  color: #8C2D34;
+  font-family: "General Sans", sans-serif;
+  font-size: 13px;
+  font-weight: 500;
+  border-radius: 0;
+}
+
+.flatpickr-day.today {
+  border-color: rgba(140, 45, 52, 0.4);
+}
+
+.flatpickr-day:hover, .flatpickr-day:focus {
+  background-color: rgba(140, 45, 52, 0.12);
+  border-color: transparent;
+}
+
+.flatpickr-day.selected, .flatpickr-day.selected:hover, .flatpickr-day.selected:focus {
+  background-color: #8C2D34;
+  border-color: #8C2D34;
+  color: #F4EDE4;
+}
+
+.flatpickr-day.prevMonthDay, .flatpickr-day.nextMonthDay {
+  color: rgba(140, 45, 52, 0.3);
+}
+
+.flatpickr-day.flatpickr-disabled, .flatpickr-day.flatpickr-disabled:hover {
+  color: rgba(140, 45, 52, 0.2);
+}
+
+/**
+ * Champs "heure" (voir rs_form_field() type "time", enableTime + noCalendar
+ * dans initTimePickers(), src/js/components/date-picker.js) : même palette
+ * que le reste du calendrier ci-dessus, pas de style imposé par défaut sur
+ * ce bloc-là non plus.
+ */
+
+.flatpickr-time {
+  font-family: "General Sans", sans-serif;
+}
+
+.flatpickr-time input,
+.flatpickr-time .flatpickr-time-separator {
+  color: #8C2D34;
+  font-size: 14px;
+  font-weight: 500;
+}
+
+.flatpickr-time .numInputWrapper:hover {
+  background: rgba(140, 45, 52, 0.06);
+}
+
+.flatpickr-time .numInputWrapper span.arrowUp:after {
+  border-bottom-color: #8C2D34;
+}
+
+.flatpickr-time .numInputWrapper span.arrowDown:after {
+  border-top-color: #8C2D34;
+}
+
+.flatpickr-time .numInputWrapper span:hover {
+  background: rgba(140, 45, 52, 0.12);
+}
+
+/**
+ * Feuille maîtresse — compilée vers dist/styles.css
+ *
+ * Chaîne de build : sass (ce fichier) → dist/temp.css → tailwindcss CLI →
+ * dist/styles.css. Les directives @tailwind ci-dessous sont donc résolues par
+ * Tailwind APRÈS la compilation Sass (voir package.json, build:css).
+ *
+ * Conséquence importante sur l'ordre des règles : Tailwind place toutes ses
+ * utilitaires (et surtout les variantes responsives "md:", "lg:") À LA FIN du
+ * CSS produit, donc APRÈS tout ce qui est écrit ici. Une règle de ce fichier
+ * qui doit l'emporter sur un utilitaire Tailwind de même spécificité a besoin
+ * d'un !important (voir les overrides "100svh" plus bas).
+ */
+
+/**
+ * Galerie Slider Section
+ */
+
+.section_galerie .rs-slider-main {
+  cursor: grab;
+}
+
+.section_galerie .rs-slider-main:active {
+  cursor: grabbing;
+}
+
+.section_galerie .rs-slider-main .swiper-wrapper {
+  height: 100%;
+}
+
+.section_galerie .rs-slider-main .swiper-slide {
+  height: auto;
+}
+
+.section_galerie .galerie-thumb-slide {
+  cursor: pointer;
+  opacity: 0.5;
+  transition: opacity 0.3s ease;
+  overflow: hidden;
+}
+
+@media (max-width: 767px) {
+  .has-mobile-dots {
+    max-height: calc(100% - 36px);
+  }
+}
+
+.galerie-nav-arrow {
+  width: 28px;
+  height: 28px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border-radius: 999px;
+  background: #8C2D34;
+  color: white;
+  cursor: pointer;
+  border: none;
+  transition: opacity 0.3s ease;
+}
+
+.galerie-nav-arrow svg {
+  width: 14px;
+  height: 14px;
+}
+
+.galerie-nav-arrow.swiper-button-disabled {
+  opacity: 0.3;
+  cursor: default;
+}
+
+.swiper.rs-slider-thumbs {
+  margin-right: 0;
+}
+
+.swiper.rs-slider-thumbs.rs-slider-thumbs--underfull .swiper-wrapper {
+  justify-content: flex-end;
+}
+
+/**
+ * Feuille maîtresse — compilée vers dist/styles.css
+ *
+ * Chaîne de build : sass (ce fichier) → dist/temp.css → tailwindcss CLI →
+ * dist/styles.css. Les directives @tailwind ci-dessous sont donc résolues par
+ * Tailwind APRÈS la compilation Sass (voir package.json, build:css).
+ *
+ * Conséquence importante sur l'ordre des règles : Tailwind place toutes ses
+ * utilitaires (et surtout les variantes responsives "md:", "lg:") À LA FIN du
+ * CSS produit, donc APRÈS tout ce qui est écrit ici. Une règle de ce fichier
+ * qui doit l'emporter sur un utilitaire Tailwind de même spécificité a besoin
+ * d'un !important (voir les overrides "100svh" plus bas).
+ */
+
+/**
+ * Masque 3 barres (dégradé du rouge de marque vers le beige clair) pour le
+ * reveal des images — voir layeredMaskRevealRight() dans animations.js et le
+ * rideau de transition (#page-transition-mask, header.php). Chaque couche
+ * est un peu plus claire que la précédente.
+ *
+ * Les barres sont injectées en JS comme enfants temporaires du conteneur de
+ * l'image (retirées du DOM une fois l'animation terminée) : ce conteneur
+ * doit déjà être positionné (relative/absolute) pour qu'elles s'y calent
+ * correctement — c'est déjà le cas de tous les conteneurs de reveal existants
+ * (.reveal, .swiper-slide, ...).
+ */
+
+.media-reveal-overlay {
+  position: absolute;
+  inset: 0;
+  z-index: 1;
+  pointer-events: none;
+}
+
+.media-reveal-overlay div {
+  position: absolute;
+  inset: 0;
+}
+
+.media-reveal-overlay div:nth-child(1) {
+  background-color: #aa6e6e;
+}
+
+.media-reveal-overlay div:nth-child(2) {
+  background-color: #9b4d51;
+}
+
+.media-reveal-overlay div:nth-child(3) {
+  background-color: #8C2D34;
+}
+
+/**
+ * initColumnParallax (animations.js, technique reprise de
+ * codrops/SmoothScrollAnimations) translate l'image de -var(--overflow) à
+ * +var(--overflow) px au scroll : le scale ci-dessous donne la marge de
+ * débordement nécessaire pour que ce mouvement ne laisse jamais voir de bord
+ * vide de l'image.
+ */
+
+.scroll-parallax-img {
+  --overflow: 50;
+  transform: scale(1.2);
+  transform-origin: center center !important;
+  will-change: transform;
+}
+
+/**
+ * Feuille maîtresse — compilée vers dist/styles.css
+ *
+ * Chaîne de build : sass (ce fichier) → dist/temp.css → tailwindcss CLI →
+ * dist/styles.css. Les directives @tailwind ci-dessous sont donc résolues par
+ * Tailwind APRÈS la compilation Sass (voir package.json, build:css).
+ *
+ * Conséquence importante sur l'ordre des règles : Tailwind place toutes ses
+ * utilitaires (et surtout les variantes responsives "md:", "lg:") À LA FIN du
+ * CSS produit, donc APRÈS tout ce qui est écrit ici. Une règle de ce fichier
+ * qui doit l'emporter sur un utilitaire Tailwind de même spécificité a besoin
+ * d'un !important (voir les overrides "100svh" plus bas).
+ */
+
+/**
+ * Composant réutilisable : vidéo plein écran pilotée au scroll (rs_video)
+ */
+
+.scroll-video-outer {
+  transform: scale(0.3333);
+  transform-origin: top center;
+  will-change: transform;
+}
+
+.youtube-video {
+  overflow: hidden;
+}
+
+.youtube-video .youtube-video-poster {
+  z-index: 1;
+}
+
+.youtube-video .youtube-video-target,
+.youtube-video iframe {
+  position: absolute;
+  top: -25%;
+  left: -17.5%;
+  width: 135%;
+  height: 135%;
+  pointer-events: none;
+  z-index: 2;
+}
+
+.scroll-video-mute-toggle {
+  top: 16px;
+  left: 16px;
+  width: 44px;
+  height: 44px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border: none;
+  border-radius: 999px;
+  background: #8C2D34;
+  color: white;
+  cursor: pointer;
+  overflow: hidden;
+  z-index: 1;
+  transition: color 0.3s ease;
+}
+
+@media (max-width: 767px) {
+  .scroll-video-mute-toggle {
+    top: 10px;
+    left: 10px;
+    width: 32px;
+    height: 32px;
+  }
+}
+
+.scroll-video-mute-toggle::before {
+  content: "";
+  position: absolute;
+  inset: 0;
+  background: #F4EDE4;
+  transform: scaleX(0);
+  transform-origin: right;
+  transition: transform 0.5s cubic-bezier(0.77, 0, 0.175, 1);
+  z-index: -1;
+}
+
+.scroll-video-mute-toggle:hover {
+  color: #8C2D34;
+}
+
+.scroll-video-mute-toggle:hover::before {
+  transform: scaleX(1);
+  transform-origin: left;
+}
+
+.scroll-video-mute-toggle svg {
+  width: 20px;
+  height: 20px;
+}
+
+@media (max-width: 767px) {
+  .scroll-video-mute-toggle svg {
+    width: 15px;
+    height: 15px;
+  }
+}
+
+.scroll-video-mute-toggle .icon-unmuted {
+  display: none;
+}
+
+.scroll-video-mute-toggle.is-unmuted .icon-muted {
+  display: none;
+}
+
+.scroll-video-mute-toggle.is-unmuted .icon-unmuted {
+  display: block;
+}
+
+.scroll-video-youtube-link {
+  bottom: 16px;
+  right: 16px;
+  width: 44px;
+  height: 44px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border-radius: 999px;
+  background: #8C2D34;
+  color: white;
+  cursor: pointer;
+  overflow: hidden;
+  opacity: 0;
+  transition: opacity 0.3s ease, color 0.3s ease;
+}
+
+.scroll-video-section:hover .scroll-video-youtube-link {
+  opacity: 1;
+}
+
+@media (max-width: 767px) {
+  .scroll-video-youtube-link {
+    bottom: 10px;
+    right: 10px;
+    width: 32px;
+    height: 32px;
+    opacity: 1;
+  }
+}
+
+.scroll-video-youtube-link::before {
+  content: "";
+  position: absolute;
+  inset: 0;
+  background: #F4EDE4;
+  transform: scaleX(0);
+  transform-origin: right;
+  transition: transform 0.5s cubic-bezier(0.77, 0, 0.175, 1);
+  z-index: -1;
+}
+
+.scroll-video-youtube-link:hover {
+  color: #8C2D34;
+}
+
+.scroll-video-youtube-link:hover::before {
+  transform: scaleX(1);
+  transform-origin: left;
+}
+
+.scroll-video-youtube-link svg {
+  width: 20px;
+  height: 20px;
+}
+
+@media (max-width: 767px) {
+  .scroll-video-youtube-link svg {
+    width: 15px;
+    height: 15px;
+  }
+}
+
+/**
+ * FICHIER GÉNÉRÉ — ne pas éditer à la main.
+ *
+ * Police d'icônes produite par `npm run icons` (gulp-iconfont, voir
+ * gulpfile.js) à partir des SVG déposés dans img/icon/. Chaque fichier donne
+ * une classe .icon-<nom-du-fichier> (ex: cocktail.svg → .icon-cocktail), à
+ * utiliser avec .icon : <span class="icon icon-cocktail"></span>.
+ *
+ * Tout ce qui est écrit ici est écrasé à la prochaine génération — les
+ * ajustements durables (épaisseur de trait, tailles) vivent dans style.scss.
+ *
+ * Tant qu'aucun SVG n'a été déposé dans img/icon/, ce fichier reste vide :
+ * déclarer un @font-face vers des fichiers de police inexistants provoquerait
+ * des 404 à chaque page.
+ */
+
+/**
+ * Contenu généré par le plugin Complianz sur la page de politique de cookies :
+ * the_content() affiche directement son HTML — #cmplz-document n'est pas du
+ * markup à nous, impossible d'y ajouter une classe Tailwind depuis le
+ * template, d'où ce ciblage par ID.
+ */
+
+#cmplz-document {
+  padding-left: 0.3rem;
+  padding-bottom: 1.5rem;
+}
+
+@media (min-width: 768px) {
+  #cmplz-document {
+    padding-bottom: 2.5rem;
+  }
+}
+
+*, ::before, ::after{
+  --tw-border-spacing-x: 0;
+  --tw-border-spacing-y: 0;
+  --tw-translate-x: 0;
+  --tw-translate-y: 0;
+  --tw-rotate: 0;
+  --tw-skew-x: 0;
+  --tw-skew-y: 0;
+  --tw-scale-x: 1;
+  --tw-scale-y: 1;
+  --tw-pan-x:  ;
+  --tw-pan-y:  ;
+  --tw-pinch-zoom:  ;
+  --tw-scroll-snap-strictness: proximity;
+  --tw-gradient-from-position:  ;
+  --tw-gradient-via-position:  ;
+  --tw-gradient-to-position:  ;
+  --tw-ordinal:  ;
+  --tw-slashed-zero:  ;
+  --tw-numeric-figure:  ;
+  --tw-numeric-spacing:  ;
+  --tw-numeric-fraction:  ;
+  --tw-ring-inset:  ;
+  --tw-ring-offset-width: 0px;
+  --tw-ring-offset-color: #fff;
+  --tw-ring-color: rgb(59 130 246 / 0.5);
+  --tw-ring-offset-shadow: 0 0 #0000;
+  --tw-ring-shadow: 0 0 #0000;
+  --tw-shadow: 0 0 #0000;
+  --tw-shadow-colored: 0 0 #0000;
+  --tw-blur:  ;
+  --tw-brightness:  ;
+  --tw-contrast:  ;
+  --tw-grayscale:  ;
+  --tw-hue-rotate:  ;
+  --tw-invert:  ;
+  --tw-saturate:  ;
+  --tw-sepia:  ;
+  --tw-drop-shadow:  ;
+  --tw-backdrop-blur:  ;
+  --tw-backdrop-brightness:  ;
+  --tw-backdrop-contrast:  ;
+  --tw-backdrop-grayscale:  ;
+  --tw-backdrop-hue-rotate:  ;
+  --tw-backdrop-invert:  ;
+  --tw-backdrop-opacity:  ;
+  --tw-backdrop-saturate:  ;
+  --tw-backdrop-sepia:  ;
+  --tw-contain-size:  ;
+  --tw-contain-layout:  ;
+  --tw-contain-paint:  ;
+  --tw-contain-style:  ;
+}
+
+::backdrop{
+  --tw-border-spacing-x: 0;
+  --tw-border-spacing-y: 0;
+  --tw-translate-x: 0;
+  --tw-translate-y: 0;
+  --tw-rotate: 0;
+  --tw-skew-x: 0;
+  --tw-skew-y: 0;
+  --tw-scale-x: 1;
+  --tw-scale-y: 1;
+  --tw-pan-x:  ;
+  --tw-pan-y:  ;
+  --tw-pinch-zoom:  ;
+  --tw-scroll-snap-strictness: proximity;
+  --tw-gradient-from-position:  ;
+  --tw-gradient-via-position:  ;
+  --tw-gradient-to-position:  ;
+  --tw-ordinal:  ;
+  --tw-slashed-zero:  ;
+  --tw-numeric-figure:  ;
+  --tw-numeric-spacing:  ;
+  --tw-numeric-fraction:  ;
+  --tw-ring-inset:  ;
+  --tw-ring-offset-width: 0px;
+  --tw-ring-offset-color: #fff;
+  --tw-ring-color: rgb(59 130 246 / 0.5);
+  --tw-ring-offset-shadow: 0 0 #0000;
+  --tw-ring-shadow: 0 0 #0000;
+  --tw-shadow: 0 0 #0000;
+  --tw-shadow-colored: 0 0 #0000;
+  --tw-blur:  ;
+  --tw-brightness:  ;
+  --tw-contrast:  ;
+  --tw-grayscale:  ;
+  --tw-hue-rotate:  ;
+  --tw-invert:  ;
+  --tw-saturate:  ;
+  --tw-sepia:  ;
+  --tw-drop-shadow:  ;
+  --tw-backdrop-blur:  ;
+  --tw-backdrop-brightness:  ;
+  --tw-backdrop-contrast:  ;
+  --tw-backdrop-grayscale:  ;
+  --tw-backdrop-hue-rotate:  ;
+  --tw-backdrop-invert:  ;
+  --tw-backdrop-opacity:  ;
+  --tw-backdrop-saturate:  ;
+  --tw-backdrop-sepia:  ;
+  --tw-contain-size:  ;
+  --tw-contain-layout:  ;
+  --tw-contain-paint:  ;
+  --tw-contain-style:  ;
+}
+
+/*! tailwindcss v3.4.19 | MIT License | https://tailwindcss.com
+ */
+
+/*
+1. Prevent padding and border from affecting element width. (https://github.com/mozdevs/cssremedy/issues/4)
+2. Allow adding a border to an element by just adding a border-width. (https://github.com/tailwindcss/tailwindcss/pull/116)
+*/
+
+*,
+::before,
+::after {
+  box-sizing: border-box;
+  /* 1 */
+  border-width: 0;
+  /* 2 */
+  border-style: solid;
+  /* 2 */
+  border-color: #e5e7eb;
+  /* 2 */
+}
+
+::before,
+::after {
+  --tw-content: '';
+}
+
+/*
+1. Use a consistent sensible line-height in all browsers.
+2. Prevent adjustments of font size after orientation changes in iOS.
+3. Use a more readable tab size.
+4. Use the user's configured `sans` font-family by default.
+5. Use the user's configured `sans` font-feature-settings by default.
+6. Use the user's configured `sans` font-variation-settings by default.
+7. Disable tap highlights on iOS
+*/
+
+html,
+:host {
+  line-height: 1.5;
+  /* 1 */
+  -webkit-text-size-adjust: 100%;
+  /* 2 */
+  -moz-tab-size: 4;
+  /* 3 */
+  -o-tab-size: 4;
+     tab-size: 4;
+  /* 3 */
+  font-family: Rumhora Sans, system-ui, sans-serif;
+  /* 4 */
+  font-feature-settings: normal;
+  /* 5 */
+  font-variation-settings: normal;
+  /* 6 */
+  -webkit-tap-highlight-color: transparent;
+  /* 7 */
+}
+
+/*
+1. Remove the margin in all browsers.
+2. Inherit line-height from `html` so users can set them as a class directly on the `html` element.
+*/
+
+body {
+  margin: 0;
+  /* 1 */
+  line-height: inherit;
+  /* 2 */
+}
+
+/*
+1. Add the correct height in Firefox.
+2. Correct the inheritance of border color in Firefox. (https://bugzilla.mozilla.org/show_bug.cgi?id=190655)
+3. Ensure horizontal rules are visible by default.
+*/
+
+hr {
+  height: 0;
+  /* 1 */
+  color: inherit;
+  /* 2 */
+  border-top-width: 1px;
+  /* 3 */
+}
+
+/*
+Add the correct text decoration in Chrome, Edge, and Safari.
+*/
+
+abbr:where([title]) {
+  -webkit-text-decoration: underline dotted;
+          text-decoration: underline dotted;
+}
+
+/*
+Remove the default font size and weight for headings.
+*/
+
+h1,
+h2,
+h3,
+h4,
+h5,
+h6 {
+  font-size: inherit;
+  font-weight: inherit;
+}
+
+/*
+Reset links to optimize for opt-in styling instead of opt-out.
+*/
+
+a {
+  color: inherit;
+  text-decoration: inherit;
+}
+
+/*
+Add the correct font weight in Edge and Safari.
+*/
+
+b,
+strong {
+  font-weight: bolder;
+}
+
+/*
+1. Use the user's configured `mono` font-family by default.
+2. Use the user's configured `mono` font-feature-settings by default.
+3. Use the user's configured `mono` font-variation-settings by default.
+4. Correct the odd `em` font sizing in all browsers.
+*/
+
+code,
+kbd,
+samp,
+pre {
+  font-family: ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, "Liberation Mono", "Courier New", monospace;
+  /* 1 */
+  font-feature-settings: normal;
+  /* 2 */
+  font-variation-settings: normal;
+  /* 3 */
+  font-size: 1em;
+  /* 4 */
+}
+
+/*
+Add the correct font size in all browsers.
+*/
+
+small {
+  font-size: 80%;
+}
+
+/*
+Prevent `sub` and `sup` elements from affecting the line height in all browsers.
+*/
+
+sub,
+sup {
+  font-size: 75%;
+  line-height: 0;
+  position: relative;
+  vertical-align: baseline;
+}
+
+sub {
+  bottom: -0.25em;
+}
+
+sup {
+  top: -0.5em;
+}
+
+/*
+1. Remove text indentation from table contents in Chrome and Safari. (https://bugs.chromium.org/p/chromium/issues/detail?id=999088, https://bugs.webkit.org/show_bug.cgi?id=201297)
+2. Correct table border color inheritance in all Chrome and Safari. (https://bugs.chromium.org/p/chromium/issues/detail?id=935729, https://bugs.webkit.org/show_bug.cgi?id=195016)
+3. Remove gaps between table borders by default.
+*/
+
+table {
+  text-indent: 0;
+  /* 1 */
+  border-color: inherit;
+  /* 2 */
+  border-collapse: collapse;
+  /* 3 */
+}
+
+/*
+1. Change the font styles in all browsers.
+2. Remove the margin in Firefox and Safari.
+3. Remove default padding in all browsers.
+*/
+
+button,
+input,
+optgroup,
+select,
+textarea {
+  font-family: inherit;
+  /* 1 */
+  font-feature-settings: inherit;
+  /* 1 */
+  font-variation-settings: inherit;
+  /* 1 */
+  font-size: 100%;
+  /* 1 */
+  font-weight: inherit;
+  /* 1 */
+  line-height: inherit;
+  /* 1 */
+  letter-spacing: inherit;
+  /* 1 */
+  color: inherit;
+  /* 1 */
+  margin: 0;
+  /* 2 */
+  padding: 0;
+  /* 3 */
+}
+
+/*
+Remove the inheritance of text transform in Edge and Firefox.
+*/
+
+button,
+select {
+  text-transform: none;
+}
+
+/*
+1. Correct the inability to style clickable types in iOS and Safari.
+2. Remove default button styles.
+*/
+
+button,
+input:where([type='button']),
+input:where([type='reset']),
+input:where([type='submit']) {
+  -webkit-appearance: button;
+  /* 1 */
+  background-color: transparent;
+  /* 2 */
+  background-image: none;
+  /* 2 */
+}
+
+/*
+Use the modern Firefox focus style for all focusable elements.
+*/
+
+:-moz-focusring {
+  outline: auto;
+}
+
+/*
+Remove the additional `:invalid` styles in Firefox. (https://github.com/mozilla/gecko-dev/blob/2f9eacd9d3d995c937b4251a5557d95d494c9be1/layout/style/res/forms.css#L728-L737)
+*/
+
+:-moz-ui-invalid {
+  box-shadow: none;
+}
+
+/*
+Add the correct vertical alignment in Chrome and Firefox.
+*/
+
+progress {
+  vertical-align: baseline;
+}
+
+/*
+Correct the cursor style of increment and decrement buttons in Safari.
+*/
+
+::-webkit-inner-spin-button,
+::-webkit-outer-spin-button {
+  height: auto;
+}
+
+/*
+1. Correct the odd appearance in Chrome and Safari.
+2. Correct the outline style in Safari.
+*/
+
+[type='search'] {
+  -webkit-appearance: textfield;
+  /* 1 */
+  outline-offset: -2px;
+  /* 2 */
+}
+
+/*
+Remove the inner padding in Chrome and Safari on macOS.
+*/
+
+::-webkit-search-decoration {
+  -webkit-appearance: none;
+}
+
+/*
+1. Correct the inability to style clickable types in iOS and Safari.
+2. Change font properties to `inherit` in Safari.
+*/
+
+::-webkit-file-upload-button {
+  -webkit-appearance: button;
+  /* 1 */
+  font: inherit;
+  /* 2 */
+}
+
+/*
+Add the correct display in Chrome and Safari.
+*/
+
+summary {
+  display: list-item;
+}
+
+/*
+Removes the default spacing and border for appropriate elements.
+*/
+
+blockquote,
+dl,
+dd,
+h1,
+h2,
+h3,
+h4,
+h5,
+h6,
+hr,
+figure,
+p,
+pre {
+  margin: 0;
+}
+
+fieldset {
+  margin: 0;
+  padding: 0;
+}
+
+legend {
+  padding: 0;
+}
+
+ol,
+ul,
+menu {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+}
+
+/*
+Reset default styling for dialogs.
+*/
+
+dialog {
+  padding: 0;
+}
+
+/*
+Prevent resizing textareas horizontally by default.
+*/
+
+textarea {
+  resize: vertical;
+}
+
+/*
+1. Reset the default placeholder opacity in Firefox. (https://github.com/tailwindlabs/tailwindcss/issues/3300)
+2. Set the default placeholder color to the user's configured gray 400 color.
+*/
+
+input::-moz-placeholder, textarea::-moz-placeholder {
+  opacity: 1;
+  /* 1 */
+  color: #9ca3af;
+  /* 2 */
+}
+
+input::placeholder,
+textarea::placeholder {
+  opacity: 1;
+  /* 1 */
+  color: #9ca3af;
+  /* 2 */
+}
+
+/*
+Set the default cursor for buttons.
+*/
+
+button,
+[role="button"] {
+  cursor: pointer;
+}
+
+/*
+Make sure disabled buttons don't get the pointer cursor.
+*/
+
+:disabled {
+  cursor: default;
+}
+
+/*
+1. Make replaced elements `display: block` by default. (https://github.com/mozdevs/cssremedy/issues/14)
+2. Add `vertical-align: middle` to align replaced elements more sensibly by default. (https://github.com/jensimmons/cssremedy/issues/14#issuecomment-634934210)
+   This can trigger a poorly considered lint error in some tools but is included by design.
+*/
+
+img,
+svg,
+video,
+canvas,
+audio,
+iframe,
+embed,
+object {
+  display: block;
+  /* 1 */
+  vertical-align: middle;
+  /* 2 */
+}
+
+/*
+Constrain images and videos to the parent width and preserve their intrinsic aspect ratio. (https://github.com/mozdevs/cssremedy/issues/14)
+*/
+
+img,
+video {
+  max-width: 100%;
+  height: auto;
+}
+
+/* Make elements with the HTML hidden attribute stay hidden by default */
+
+[hidden]:where(:not([hidden="until-found"])) {
+  display: none;
+}
+
+.\!container{
+  width: 100% !important;
+}
+
+.container{
+  width: 100%;
+}
+
+@media (min-width: 640px){
+  .\!container{
+    max-width: 640px !important;
+  }
+
+  .container{
+    max-width: 640px;
+  }
+}
+
+@media (min-width: 768px){
+  .\!container{
+    max-width: 768px !important;
+  }
+
+  .container{
+    max-width: 768px;
+  }
+}
+
+@media (min-width: 1024px){
+  .\!container{
+    max-width: 1024px !important;
+  }
+
+  .container{
+    max-width: 1024px;
+  }
+}
+
+@media (min-width: 1280px){
+  .\!container{
+    max-width: 1280px !important;
+  }
+
+  .container{
+    max-width: 1280px;
+  }
+}
+
+@media (min-width: 1536px){
+  .\!container{
+    max-width: 1536px !important;
+  }
+
+  .container{
+    max-width: 1536px;
+  }
+}
+
+.pointer-events-none{
+  pointer-events: none;
+}
+
+.visible{
+  visibility: visible;
+}
+
+.invisible{
+  visibility: hidden;
+}
+
+.static{
+  position: static;
+}
+
+.fixed{
+  position: fixed;
+}
+
+.absolute{
+  position: absolute;
+}
+
+.relative{
+  position: relative;
+}
+
+.inset-0{
+  inset: 0px;
+}
+
+.inset-x-0{
+  left: 0px;
+  right: 0px;
+}
+
+.bottom-0{
+  bottom: 0px;
+}
+
+.left-0{
+  left: 0px;
+}
+
+.left-1\/2{
+  left: 50%;
+}
+
+.right-0{
+  right: 0px;
+}
+
+.top-0{
+  top: 0px;
+}
+
+.top-1\/2{
+  top: 50%;
+}
+
+.z-10{
+  z-index: 10;
+}
+
+.z-50{
+  z-index: 50;
+}
+
+.z-\[100\]{
+  z-index: 100;
+}
+
+.m-0{
+  margin: 0px;
+}
+
+.mx-auto{
+  margin-left: auto;
+  margin-right: auto;
+}
+
+.mb-1{
+  margin-bottom: 0.25rem;
+}
+
+.mb-10{
+  margin-bottom: 2.5rem;
+}
+
+.mb-2{
+  margin-bottom: 0.5rem;
+}
+
+.mb-4{
+  margin-bottom: 1rem;
+}
+
+.mb-5{
+  margin-bottom: 1.25rem;
+}
+
+.mb-6{
+  margin-bottom: 1.5rem;
+}
+
+.ml-4{
+  margin-left: 1rem;
+}
+
+.ml-auto{
+  margin-left: auto;
+}
+
+.mt-3{
+  margin-top: 0.75rem;
+}
+
+.mt-4{
+  margin-top: 1rem;
+}
+
+.mt-6{
+  margin-top: 1.5rem;
+}
+
+.mt-8{
+  margin-top: 2rem;
+}
+
+.mt-auto{
+  margin-top: auto;
+}
+
+.block{
+  display: block;
+}
+
+.inline{
+  display: inline;
+}
+
+.flex{
+  display: flex;
+}
+
+.table{
+  display: table;
+}
+
+.grid{
+  display: grid;
+}
+
+.hidden{
+  display: none;
+}
+
+.aspect-square{
+  aspect-ratio: 1 / 1;
+}
+
+.aspect-video{
+  aspect-ratio: 16 / 9;
+}
+
+.h-10{
+  height: 2.5rem;
+}
+
+.h-2\/3{
+  height: 66.666667%;
+}
+
+.h-4{
+  height: 1rem;
+}
+
+.h-5{
+  height: 1.25rem;
+}
+
+.h-8{
+  height: 2rem;
+}
+
+.h-\[100svh\]{
+  height: 100svh;
+}
+
+.h-\[36px\]{
+  height: 36px;
+}
+
+.h-\[70vw\]{
+  height: 70vw;
+}
+
+.h-full{
+  height: 100%;
+}
+
+.h-px{
+  height: 1px;
+}
+
+.h-screen{
+  height: 100vh;
+}
+
+.min-h-\[70vh\]{
+  min-height: 70vh;
+}
+
+.w-3\/4{
+  width: 75%;
+}
+
+.w-4{
+  width: 1rem;
+}
+
+.w-5{
+  width: 1.25rem;
+}
+
+.w-8{
+  width: 2rem;
+}
+
+.w-\[160px\]{
+  width: 160px;
+}
+
+.w-auto{
+  width: auto;
+}
+
+.w-full{
+  width: 100%;
+}
+
+.w-px{
+  width: 1px;
+}
+
+.max-w-2xl{
+  max-width: 42rem;
+}
+
+.max-w-lg{
+  max-width: 32rem;
+}
+
+.max-w-xl{
+  max-width: 36rem;
+}
+
+.flex-1{
+  flex: 1 1 0%;
+}
+
+.flex-shrink-0{
+  flex-shrink: 0;
+}
+
+.-translate-y-1\/2{
+  --tw-translate-y: -50%;
+  transform: translate(var(--tw-translate-x), var(--tw-translate-y)) rotate(var(--tw-rotate)) skewX(var(--tw-skew-x)) skewY(var(--tw-skew-y)) scaleX(var(--tw-scale-x)) scaleY(var(--tw-scale-y));
+}
+
+.transform{
+  transform: translate(var(--tw-translate-x), var(--tw-translate-y)) rotate(var(--tw-rotate)) skewX(var(--tw-skew-x)) skewY(var(--tw-skew-y)) scaleX(var(--tw-scale-x)) scaleY(var(--tw-scale-y));
+}
+
+.resize{
+  resize: both;
+}
+
+.grid-cols-1{
+  grid-template-columns: repeat(1, minmax(0, 1fr));
+}
+
+.grid-cols-3{
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+}
+
+.flex-col{
+  flex-direction: column;
+}
+
+.flex-col-reverse{
+  flex-direction: column-reverse;
+}
+
+.flex-wrap{
+  flex-wrap: wrap;
+}
+
+.items-end{
+  align-items: flex-end;
+}
+
+.items-center{
+  align-items: center;
+}
+
+.justify-end{
+  justify-content: flex-end;
+}
+
+.justify-center{
+  justify-content: center;
+}
+
+.justify-between{
+  justify-content: space-between;
+}
+
+.gap-2{
+  gap: 0.5rem;
+}
+
+.gap-3{
+  gap: 0.75rem;
+}
+
+.gap-4{
+  gap: 1rem;
+}
+
+.gap-6{
+  gap: 1.5rem;
+}
+
+.gap-8{
+  gap: 2rem;
+}
+
+.overflow-hidden{
+  overflow: hidden;
+}
+
+.rounded-full{
+  border-radius: 9999px;
+}
+
+.border{
+  border-width: 1px;
+}
+
+.border-b{
+  border-bottom-width: 1px;
+}
+
+.border-t{
+  border-top-width: 1px;
+}
+
+.border-cream{
+  --tw-border-opacity: 1;
+  border-color: rgb(244 237 228 / var(--tw-border-opacity, 1));
+}
+
+.border-cream\/20{
+  border-color: rgb(244 237 228 / 0.2);
+}
+
+.border-cream\/40{
+  border-color: rgb(244 237 228 / 0.4);
+}
+
+.border-cream\/60{
+  border-color: rgb(244 237 228 / 0.6);
+}
+
+.border-dark{
+  --tw-border-opacity: 1;
+  border-color: rgb(140 45 52 / var(--tw-border-opacity, 1));
+}
+
+.border-dark\/20{
+  border-color: rgb(140 45 52 / 0.2);
+}
+
+.border-dark\/40{
+  border-color: rgb(140 45 52 / 0.4);
+}
+
+.bg-cream{
+  --tw-bg-opacity: 1;
+  background-color: rgb(244 237 228 / var(--tw-bg-opacity, 1));
+}
+
+.bg-current{
+  background-color: currentColor;
+}
+
+.bg-dark{
+  --tw-bg-opacity: 1;
+  background-color: rgb(140 45 52 / var(--tw-bg-opacity, 1));
+}
+
+.bg-dark\/30{
+  background-color: rgb(140 45 52 / 0.3);
+}
+
+.bg-gradient-to-b{
+  background-image: linear-gradient(to bottom, var(--tw-gradient-stops));
+}
+
+.bg-gradient-to-t{
+  background-image: linear-gradient(to top, var(--tw-gradient-stops));
+}
+
+.from-black\/40{
+  --tw-gradient-from: rgb(0 0 0 / 0.4) var(--tw-gradient-from-position);
+  --tw-gradient-to: rgb(0 0 0 / 0) var(--tw-gradient-to-position);
+  --tw-gradient-stops: var(--tw-gradient-from), var(--tw-gradient-to);
+}
+
+.from-transparent{
+  --tw-gradient-from: transparent var(--tw-gradient-from-position);
+  --tw-gradient-to: rgb(0 0 0 / 0) var(--tw-gradient-to-position);
+  --tw-gradient-stops: var(--tw-gradient-from), var(--tw-gradient-to);
+}
+
+.to-black\/50{
+  --tw-gradient-to: rgb(0 0 0 / 0.5) var(--tw-gradient-to-position);
+}
+
+.to-transparent{
+  --tw-gradient-to: transparent var(--tw-gradient-to-position);
+}
+
+.object-cover{
+  -o-object-fit: cover;
+     object-fit: cover;
+}
+
+.object-center{
+  -o-object-position: center;
+     object-position: center;
+}
+
+.p-4{
+  padding: 1rem;
+}
+
+.p-5{
+  padding: 1.25rem;
+}
+
+.px-4{
+  padding-left: 1rem;
+  padding-right: 1rem;
+}
+
+.px-\[10px\]{
+  padding-left: 10px;
+  padding-right: 10px;
+}
+
+.py-10{
+  padding-top: 2.5rem;
+  padding-bottom: 2.5rem;
+}
+
+.py-12{
+  padding-top: 3rem;
+  padding-bottom: 3rem;
+}
+
+.py-3{
+  padding-top: 0.75rem;
+  padding-bottom: 0.75rem;
+}
+
+.py-6{
+  padding-top: 1.5rem;
+  padding-bottom: 1.5rem;
+}
+
+.pb-10{
+  padding-bottom: 2.5rem;
+}
+
+.pb-12{
+  padding-bottom: 3rem;
+}
+
+.pb-2{
+  padding-bottom: 0.5rem;
+}
+
+.pb-4{
+  padding-bottom: 1rem;
+}
+
+.pb-5{
+  padding-bottom: 1.25rem;
+}
+
+.pb-6{
+  padding-bottom: 1.5rem;
+}
+
+.pb-8{
+  padding-bottom: 2rem;
+}
+
+.pb-\[10px\]{
+  padding-bottom: 10px;
+}
+
+.pt-4{
+  padding-top: 1rem;
+}
+
+.pt-6{
+  padding-top: 1.5rem;
+}
+
+.pt-8{
+  padding-top: 2rem;
+}
+
+.pt-\[10px\]{
+  padding-top: 10px;
+}
+
+.text-left{
+  text-align: left;
+}
+
+.text-center{
+  text-align: center;
+}
+
+.text-base{
+  font-size: 1rem;
+  line-height: 1.5rem;
+}
+
+.text-lg{
+  font-size: 1.125rem;
+  line-height: 1.75rem;
+}
+
+.text-sm{
+  font-size: 0.875rem;
+  line-height: 1.25rem;
+}
+
+.text-xl{
+  font-size: 1.25rem;
+  line-height: 1.75rem;
+}
+
+.text-xs{
+  font-size: 0.75rem;
+  line-height: 1rem;
+}
+
+.font-bold{
+  font-weight: 700;
+}
+
+.font-medium{
+  font-weight: 500;
+}
+
+.font-semibold{
+  font-weight: 600;
+}
+
+.leading-relaxed{
+  line-height: 1.625;
+}
+
+.text-cream{
+  --tw-text-opacity: 1;
+  color: rgb(244 237 228 / var(--tw-text-opacity, 1));
+}
+
+.text-cream\/60{
+  color: rgb(244 237 228 / 0.6);
+}
+
+.text-cream\/80{
+  color: rgb(244 237 228 / 0.8);
+}
+
+.text-dark{
+  --tw-text-opacity: 1;
+  color: rgb(140 45 52 / var(--tw-text-opacity, 1));
+}
+
+.text-white{
+  --tw-text-opacity: 1;
+  color: rgb(255 255 255 / var(--tw-text-opacity, 1));
+}
+
+.opacity-60{
+  opacity: 0.6;
+}
+
+.outline{
+  outline-style: solid;
+}
+
+.outline-dark{
+  outline-color: #8C2D34;
+}
+
+.ring{
+  --tw-ring-offset-shadow: var(--tw-ring-inset) 0 0 0 var(--tw-ring-offset-width) var(--tw-ring-offset-color);
+  --tw-ring-shadow: var(--tw-ring-inset) 0 0 0 calc(3px + var(--tw-ring-offset-width)) var(--tw-ring-color);
+  box-shadow: var(--tw-ring-offset-shadow), var(--tw-ring-shadow), var(--tw-shadow, 0 0 #0000);
+}
+
+.filter{
+  filter: var(--tw-blur) var(--tw-brightness) var(--tw-contrast) var(--tw-grayscale) var(--tw-hue-rotate) var(--tw-invert) var(--tw-saturate) var(--tw-sepia) var(--tw-drop-shadow);
+}
+
+.transition{
+  transition-property: color, background-color, border-color, text-decoration-color, fill, stroke, opacity, box-shadow, transform, filter, backdrop-filter;
+  transition-timing-function: cubic-bezier(0.4, 0, 0.2, 1);
+  transition-duration: 150ms;
+}
+
+.transition-colors{
+  transition-property: color, background-color, border-color, text-decoration-color, fill, stroke;
+  transition-timing-function: cubic-bezier(0.4, 0, 0.2, 1);
+  transition-duration: 150ms;
+}
+
+/* ==========================================================================
+   Polices
+   ==========================================================================
+   Déposer les .woff2 dans assets/fonts/<Famille>/ puis déclarer les @font-face
+   ici. Les chemins sont relatifs à dist/styles.css (la CSS compilée vit dans
+   dist/, d'où le "../assets/fonts/").
+
+   Placeholders à remplacer par les polices réelles de la maquette XD. Tant
+   qu'aucun fichier n'est présent, le navigateur retombe silencieusement sur la
+   pile système déclarée sur body plus bas.
+
+@font-face {
+  font-family: 'Rumhora Sans';
+  src: url('../assets/fonts/RumhoraSans/RumhoraSans-Regular.woff2') format('woff2');
+  font-weight: 400;
+  font-style: normal;
+  font-display: swap;
+}
+
+@font-face {
+  font-family: 'Rumhora Serif';
+  src: url('../assets/fonts/RumhoraSerif/RumhoraSerif-Regular.woff2') format('woff2');
+  font-weight: 400;
+  font-style: normal;
+  font-display: swap;
+}
+*/
+
+/* ==========================================================================
+   Reset et base
+   ========================================================================== */
+
+*, *::before, *::after {
+  box-sizing: border-box;
+  margin: 0;
+  padding: 0;
+  border-color: #8C2D34;
+}
+
+body {
+  font-family: "Rumhora Sans", system-ui, -apple-system, sans-serif;
+  font-weight: 400;
+  line-height: 1;
+  color: #8C2D34;
+  background-color: #F4EDE4;
+  overflow-x: hidden;
+  letter-spacing: -0.019em;
+}
+
+a {
+  text-decoration: none;
+  transition: color 0.3s ease;
+}
+
+/* Lien volontairement inerte (voir prevent() dans src/js/barba.js, qui
+   n'intercepte pas ces liens). */
+
+.disabled-link {
+  pointer-events: none;
+  cursor: default;
+}
+
+.disabled-link:hover {
+  background-color: transparent;
+}
+
+/* ==========================================================================
+   Typographie
+   ==========================================================================
+   Échelles à recalibrer sur la maquette XD. Les translate(-1px, -0.1em)
+   compensent l'approche optique de la police (le bearing gauche et la hauteur
+   d'x d'une police display laissent sinon un décalage visible par rapport aux
+   bords de section) — à réajuster, voire retirer, selon la police retenue.
+*/
+
+h1, h2 {
+  font-family: "Rumhora Sans", system-ui, sans-serif;
+  font-size: clamp(45px, 6.5vw, 128px);
+  font-weight: 400;
+  color: #8C2D34;
+  letter-spacing: -0.04em;
+  line-height: 0.9;
+  transform: translateX(-3px) translateY(-0.1em);
+}
+
+h3 {
+  font-family: "Rumhora Sans", system-ui, sans-serif;
+  font-size: clamp(20px, 4vw, 64px);
+  font-weight: 400;
+  letter-spacing: -0.04em;
+  transform: translateX(-1px) translateY(-0.1em);
+}
+
+h4 {
+  font-family: "Rumhora Sans", system-ui, sans-serif;
+  font-size: 18px;
+  font-weight: 500;
+  text-transform: uppercase;
+  transform: translateX(-1px) translateY(-0.1em);
+}
+
+h5, p {
+  transform: translateX(-1px) translateY(-0.1em);
+}
+
+@media (max-width: 768px) {
+  h3 {
+    font-size: 18px;
+  }
+
+  h4, h6, p {
+    font-size: 14px;
+  }
+}
+
+/* Police secondaire (descriptions, citations) */
+
+.text-scrub,
+.font-serif-display {
+  font-family: "Rumhora Serif", Georgia, serif;
+  font-weight: 400;
+}
+
+/* ==========================================================================
+   Scroll (Lenis + scrollbar custom)
+   ========================================================================== */
+
+/* Scrollbar native masquée : le scroll reste fonctionnel, l'indicateur visuel
+   est remplacé par .scrollbar ci-dessous (voir src/js/components/rs-scroll.js).
+   Pas de scrollbar-gutter : elle réservait la place de la scrollbar pour
+   éviter un saut de mise en page à son apparition — sans scrollbar visible, ce
+   saut ne peut plus se produire. */
+
+html {
+  scrollbar-width: none;
+  -ms-overflow-style: none;
+}
+
+html::-webkit-scrollbar {
+  display: none;
+}
+
+html.lenis,
+html.lenis body {
+  height: auto;
+}
+
+.lenis.lenis-smooth {
+  scroll-behavior: auto !important;
+}
+
+.lenis.lenis-smooth [data-lenis-prevent] {
+  overscroll-behavior: contain;
+}
+
+.lenis.lenis-stopped {
+  overflow: hidden;
+}
+
+.lenis.lenis-scrolling iframe {
+  pointer-events: none;
+}
+
+/**
+ * Scrollbar custom (voir src/js/components/rs-scroll.js) : piste + thumb.
+ * mix-blend-mode sur le CONTENEUR (pas juste le thumb) : la piste transparente
+ * et le thumb blanc s'inversent tous les deux selon ce qu'il y a dessous,
+ * restant visibles sur fond clair comme sombre sans logique JS pour basculer
+ * une couleur.
+ */
+
+.scrollbar {
+  position: fixed;
+  top: 0;
+  right: 0;
+  width: 10px;
+  height: 100%;
+  opacity: 0;
+  z-index: 100;
+  mix-blend-mode: exclusion;
+  transition: opacity 0.4s ease-out;
+}
+
+.scrollbar--shown {
+  opacity: 1;
+}
+
+.scrollbar__track {
+  position: absolute;
+  inset: 0;
+  background-color: transparent;
+  cursor: pointer;
+}
+
+.scrollbar__thumb {
+  position: absolute;
+  width: 100%;
+  padding: 1px;
+  background-clip: content-box;
+  background-color: #fff;
+  border-radius: 4px;
+  cursor: grab;
+  touch-action: none;
+}
+
+.scrollbar--is-dragging .scrollbar__thumb, .scrollbar__thumb:active {
+  cursor: grabbing;
+}
+
+body.is-scrollbar-dragging {
+  -webkit-user-select: none;
+     -moz-user-select: none;
+          user-select: none;
+}
+
+/* ==========================================================================
+   Transitions Barba.js
+   ========================================================================== */
+
+/* Pas de transform ici : les transitions Barba n'animent que l'opacité du
+   container (voir src/js/barba.js). Un décalage y sur ce container entrerait
+   en conflit avec un pin GSAP pinType:'transform' sur une section enfant, et
+   un transform statique laissé ici ne serait jamais remis à 0 par le JS. */
+
+[data-barba=container] {
+  opacity: 0;
+  /* Commence invisible, révélé par le rideau */
+}
+
+/* Rideau de transition (voir #page-transition-mask dans header.php et
+   leave()/enter() dans src/js/barba.js). Plein écran, 3 couches (voir
+   .media-reveal-overlay) : partent hors-écran en haut, glissent ensemble pour
+   couvrir tout l'écran (leave), puis continuent vers le bas pour révéler la
+   page suivante (enter) — un seul mouvement continu, pas un fondu.
+
+   Visible et NON transformé par défaut (donc couvrant tout l'écran, sans
+   attendre le JS) : au tout premier chargement, c'est volontairement le
+   premier élément peint, avant qu'initPageLoadCurtainReveal() ne le fasse
+   glisser. Aucun transform CSS ici pour autant : il serait lu par GSAP via
+   getComputedStyle et mis en cache comme offset figé, sur lequel les "y" des
+   transitions suivantes s'additionneraient au lieu de le remplacer — la
+   position hors-écran de repos est donc toujours posée en JS.
+
+   z-index en dur sur l'ID (pas seulement via .media-reveal-overlay, z-index:1) :
+   une règle par ID gagne toujours sur une règle par classe, quel que soit
+   l'ordre de sortie du CSS compilé — garantit qu'il reste au-dessus du header
+   (z-50). */
+
+#page-transition-mask {
+  z-index: 100;
+}
+
+/* ==========================================================================
+   Lazyload (blur-up)
+   ==========================================================================
+   Pas d'opacity:0 : l'image doit rester visible (floutée) pendant son
+   chargement, pas cachée — c'est le principe du blur-up. Les images avec leur
+   propre reveal (mediaRevealImage dans animations.js) gèrent leur opacité de
+   départ via fromTo, indépendamment de cette règle.
+
+   background-color : avant même que le chargement démarre (data-src pas encore
+   résolu par lazysizes), l'image n'a rien à flouter — sans ce fond, le cadre
+   est transparent et une animation de reveal déclenchée à ce moment découvre
+   un trou plutôt qu'un état de chargement volontaire. Retiré une fois chargée.
+*/
+
+img.lazyload,
+img[data-src] {
+  transition: filter 0.6s ease;
+  filter: blur(6px);
+  background-color: #8C2D34;
+}
+
+img.lazyload.lazyloaded,
+img[data-src].lazyloaded {
+  filter: blur(0);
+  background-color: transparent;
+}
+
+/* ==========================================================================
+   Header
+   ========================================================================== */
+
+.custom-logo-link {
+  display: block;
+  width: 100%;
+  position: relative;
+}
+
+.custom-logo-link img {
+  width: 100%;
+  height: auto;
+  transition: none;
+  display: block;
+}
+
+/**
+ * Logomark seul, centré dans la barre du header (voir .header-container,
+ * position:relative) — remplace le logo complet partout SAUF sur le hero
+ * (voir .header-away-from-hero plus bas).
+ *
+ * Contient 2 images : une claire par défaut (sur fond sombre) et une sombre
+ * superposée, révélée sur fond clair (.header-scrolled).
+ *
+ * Le centrage (xPercent/yPercent) ET le reveal (y, opacity) sont pilotés par
+ * GSAP dans src/js/header.js — même profil que les boutons .btn. Pas de
+ * transform/transition CSS ici : GSAP réécrit tout le transform à chaque tween
+ * et ne connaît pas un transform posé en CSS, ce qui écraserait le centrage.
+ */
+
+.header-logo-center {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  height: 40px;
+  width: auto;
+  opacity: 0;
+  pointer-events: none;
+  z-index: 3;
+}
+
+@media (min-width: 768px) {
+  .header-logo-center {
+    height: 48px;
+  }
+}
+
+.header-logo-center img {
+  width: auto;
+  height: 100%;
+  display: block;
+}
+
+.header-logo-center-scrolled {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  opacity: 0;
+  -o-object-fit: contain;
+     object-fit: contain;
+  transition: opacity 0.4s ease;
+}
+
+#masthead {
+  position: fixed !important;
+  top: 0;
+  left: 0;
+  right: 0;
+  z-index: 50;
+  background-color: transparent;
+  opacity: 0;
+  transform: translateY(-40px);
+  /* ---------- Menu mobile plein écran (voir rs_mobile_menu) ---------- */
+}
+
+#masthead .custom-logo-link {
+  transition: none;
+  display: block;
+  width: 200px;
+}
+
+@media (max-width: 768px) {
+  #masthead .custom-logo-link {
+    width: 140px;
+  }
+}
+
+#masthead .custom-logo-link img {
+  filter: invert(0);
+  transition: filter 0.3s ease, opacity 0.5s cubic-bezier(0.215, 0.61, 0.355, 1), transform 0.5s cubic-bezier(0.215, 0.61, 0.355, 1);
+}
+
+#masthead .header-logo-center img:not(.header-logo-center-scrolled) {
+  filter: invert(0);
+  transition: filter 0.3s ease;
+}
+
+#masthead.header-black .custom-logo-link img,
+#masthead.header-black .header-logo-center img:not(.header-logo-center-scrolled) {
+  filter: invert(1) !important;
+}
+
+#masthead.header-black #site-navigation a {
+  color: #8C2D34;
+}
+
+#masthead.header-black #site-navigation a::after {
+  background-color: #8C2D34;
+}
+
+#masthead.header-white .custom-logo-link img,
+#masthead.header-white .header-logo-center img:not(.header-logo-center-scrolled) {
+  filter: invert(0);
+}
+
+#masthead:not(.header-scrolled) .custom-logo-link img,
+#masthead:not(.header-scrolled) .header-logo-center img:not(.header-logo-center-scrolled) {
+  filter: invert(0) !important;
+}
+
+#masthead.header-scrolled .header-logo-center-scrolled {
+  opacity: 1;
+}
+
+#masthead.header-away-from-hero .custom-logo-link img {
+  opacity: 0;
+  transform: translateY(10px);
+  pointer-events: none;
+}
+
+#masthead.header-away-from-hero .header-logo-center {
+  pointer-events: auto;
+}
+
+#masthead .header-container {
+  height: auto;
+}
+
+#masthead .logo-container {
+  position: relative;
+  z-index: 1;
+}
+
+#masthead .logo-container h1 {
+  margin: 0;
+}
+
+#masthead .menu-container {
+  z-index: 2;
+  height: -moz-fit-content;
+  height: fit-content;
+}
+
+#masthead .lang-toggle {
+  color: #F4EDE4;
+  font-size: 14px;
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+}
+
+#masthead.header-scrolled .lang-toggle {
+  color: #8C2D34;
+}
+
+#masthead #site-navigation ul {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+}
+
+#masthead #site-navigation .current-menu-item a::after, #masthead #site-navigation .current-menu-item a:not(:hover)::after,
+#masthead #site-navigation .current_page_item a::after,
+#masthead #site-navigation .current_page_item a:not(:hover)::after {
+  transform: scaleX(1);
+  transform-origin: left;
+}
+
+#masthead #site-navigation a {
+  position: relative;
+  display: inline-block;
+  font-weight: 500;
+  font-size: 1rem;
+  text-decoration: none;
+  overflow: hidden;
+  transition: color 0.3s ease;
+  padding-bottom: 0.2rem;
+}
+
+#masthead #site-navigation a::after {
+  content: "";
+  position: absolute;
+  bottom: 0;
+  left: 0;
+  width: 100%;
+  height: 2px;
+  background-color: #fff;
+  transform: scaleX(0);
+  transform-origin: left;
+  transition: transform 0.5s cubic-bezier(0.65, 0, 0.35, 1);
+}
+
+#masthead #site-navigation a:hover::after {
+  transform: scaleX(1);
+  transform-origin: left;
+}
+
+#masthead #site-navigation a:not(:hover)::after {
+  transform: scaleX(0);
+  transform-origin: right;
+}
+
+#masthead .mobile-menu-overlay {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100vh;
+  z-index: 200;
+  overflow: hidden;
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  visibility: hidden;
+}
+
+@media (max-width: 768px) {
+  #masthead .mobile-menu-overlay {
+    grid-template-columns: 1fr;
+  }
+}
+
+#masthead .mobile-menu-overlay.active {
+  visibility: visible;
+}
+
+#masthead .mobile-menu-image {
+  position: relative;
+  overflow: hidden;
+}
+
+@media (max-width: 768px) {
+  #masthead .mobile-menu-image {
+    display: none;
+  }
+}
+
+#masthead .mobile-menu-image > img {
+  width: 100%;
+  height: 100%;
+  -o-object-fit: cover;
+     object-fit: cover;
+}
+
+#masthead .mobile-menu-content {
+  background-color: #8C2D34;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  overflow-y: auto;
+  padding: 4rem 5rem;
+  position: relative;
+}
+
+@media (max-width: 768px) {
+  #masthead .mobile-menu-content {
+    padding: 4rem 2rem;
+  }
+}
+
+#masthead .mobile-menu-close {
+  position: absolute;
+  top: 20px;
+  right: 20px;
+  cursor: pointer;
+}
+
+#masthead .mobile-menu-logo {
+  position: absolute;
+  top: 20px;
+  left: 20px;
+  display: block;
+  width: 200px;
+  z-index: 2;
+}
+
+@media (max-width: 768px) {
+  #masthead .mobile-menu-logo {
+    width: 140px;
+  }
+}
+
+#masthead .mobile-menu-logo img {
+  width: 100%;
+  height: auto;
+  display: block;
+  filter: invert(0);
+}
+
+#masthead .mobile-menu-nav {
+  width: 100%;
+  display: flex;
+}
+
+#masthead .mobile-menu-list {
+  list-style: none;
+  padding: 0;
+  margin: 0;
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+}
+
+#masthead .mobile-menu-list li a {
+  font-size: clamp(28px, 9vw, 50px);
+  font-weight: 400;
+  color: #F4EDE4;
+  line-height: 1.3;
+}
+
+#masthead .mobile-menu-item {
+  overflow: hidden;
+}
+
+#masthead .mobile-menu-link {
+  opacity: 1;
+  transition: opacity 0.3s ease;
+}
+
+#masthead .mobile-menu-link.hover-underline::after {
+  bottom: 0;
+}
+
+#masthead .mobile-menu-list:hover .mobile-menu-link {
+  opacity: 0.4;
+}
+
+#masthead .mobile-menu-list .mobile-menu-link:hover {
+  opacity: 1;
+  color: #F4EDE4;
+}
+
+#masthead .mobile-menu-list.is-navigating .mobile-menu-link {
+  opacity: 0.4;
+}
+
+#masthead .mobile-menu-list.is-navigating .mobile-menu-item.is-navigating-active .mobile-menu-link {
+  opacity: 1;
+  color: #F4EDE4;
+}
+
+#masthead .mobile-menu-list.is-navigating .mobile-menu-item.is-navigating-active .mobile-menu-link::after {
+  animation: menu-loading-sweep 1.1s ease-in-out infinite;
+}
+
+#masthead .current-menu-item .mobile-menu-link::after {
+  transform: scaleX(1) !important;
+  transform-origin: left !important;
+}
+
+#masthead .mobile-menu-link-wrapper {
+  overflow: hidden;
+  display: inline-block;
+}
+
+/* Barre de chargement : remplit depuis la gauche jusqu'à pleine largeur, puis
+   se retire par la droite, en boucle — un balayage gauche→droite continu en
+   réutilisant seulement scaleX + transform-origin. */
+
+@keyframes menu-loading-sweep {
+  0% {
+    transform: scaleX(0);
+    transform-origin: left;
+  }
+
+  50% {
+    transform: scaleX(1);
+    transform-origin: left;
+  }
+
+  50.01% {
+    transform-origin: right;
+  }
+
+  100% {
+    transform: scaleX(0);
+    transform-origin: right;
+  }
+}
+
+/* ==========================================================================
+   Footer
+   ========================================================================== */
+
+footer {
+  background-color: #8C2D34;
+}
+
+.footer-block > * {
+  width: -moz-fit-content;
+  width: fit-content;
+}
+
+/* ==========================================================================
+   Hooks d'animation (voir src/js/animations.js)
+   ========================================================================== */
+
+/* SplitText (type:'lines') : wrapper masquant par ligne, pour permettre le
+   glissement vertical sans déborder. */
+
+.lineParent,
+.line-parent {
+  overflow: hidden;
+  padding: 0.15em 0;
+  margin: -0.15em 0;
+}
+
+/* Reveal d'image : état caché posé en CSS (pas en JS) pour éviter un flash de
+   l'image à pleine opacité avant l'exécution du JS. */
+
+.reveal {
+  visibility: hidden;
+  overflow: hidden;
+  position: relative;
+  width: 100%;
+}
+
+.reveal img {
+  width: 100%;
+  height: 100%;
+  -o-object-fit: cover;
+     object-fit: cover;
+  transform-origin: left;
+  display: block;
+}
+
+/* Reveal d'une ligne/bordure horizontale (voir initLineReveal) : scaleX 0 → 1
+   au scroll, dessinée de gauche à droite. Même raison que .reveal pour l'état
+   caché en CSS. */
+
+.line-reveal {
+  transform: scaleX(0);
+  transform-origin: left center;
+}
+
+/* Hook de l'animation d'entrée GSAP (translateY), voir initSlideUp().
+   will-change pré-promeut l'élément dans sa propre couche de composition :
+   sans ça, un backdrop-filter porté par un descendant (ex: .btn-tertiary) ne
+   se met jamais à jour correctement pendant/après le transform animé. */
+
+.slide-up {
+  will-change: transform;
+}
+
+.fade-in {
+  opacity: 0;
+  transform: translateY(20px);
+  transition: all 0.6s ease-out;
+}
+
+.fade-in.visible {
+  opacity: 1;
+  transform: translateY(0);
+}
+
+/* ==========================================================================
+   Utilitaires réutilisables
+   ========================================================================== */
+
+.container {
+  max-width: 1200px;
+  margin: 0 auto;
+  padding: 0 1rem;
+}
+
+/* Soulignement au survol : entre par la gauche, sort par la droite. */
+
+.hover-underline {
+  position: relative;
+  display: inline-block;
+  text-decoration: none;
+  cursor: pointer;
+  line-height: 1;
+}
+
+.hover-underline::after {
+  content: "";
+  position: absolute;
+  bottom: -2px;
+  left: 0;
+  width: 100%;
+  height: 2px;
+  background-color: currentColor;
+  transform: scaleX(0);
+  transform-origin: left;
+  transition: transform 0.5s cubic-bezier(0.65, 0, 0.35, 1);
+}
+
+.hover-underline:hover::after {
+  transform: scaleX(1);
+  transform-origin: left;
+}
+
+.hover-underline:not(:hover)::after {
+  transform: scaleX(0);
+  transform-origin: right;
+}
+
+/* Accordéon FAQ (voir rs_faq + initFaqAccordion) : wipe sombre haut→bas au
+   survol, sortie par le bas. */
+
+.faq-item {
+  position: relative;
+  overflow: hidden;
+}
+
+.faq-item::before {
+  content: "";
+  position: absolute;
+  inset: 0;
+  background-color: #8C2D34;
+  transform: scaleY(0);
+  transform-origin: bottom;
+  transition: transform 0.5s cubic-bezier(0.77, 0, 0.175, 1);
+  z-index: 0;
+}
+
+@media (hover: hover) and (pointer: fine) {
+  .faq-item:hover::before {
+    transform: scaleY(1);
+    transform-origin: top;
+  }
+
+  .faq-item:hover .faq-question span, .faq-item:hover .faq-answer p {
+    color: #F4EDE4;
+  }
+
+  .faq-item:hover .faq-icon span {
+    background-color: #F4EDE4;
+  }
+}
+
+.faq-item > * {
+  position: relative;
+  z-index: 1;
+}
+
+.faq-item .faq-question span,
+.faq-item .faq-answer p {
+  transition: all 0.3s ease;
+}
+
+.faq-item .faq-icon span:not(.faq-icon-v) {
+  transition: background-color 0.3s ease;
+}
+
+.faq-item .faq-icon-v {
+  transform: translateX(-50%) rotate(0deg);
+  transition: background-color 0.3s ease, transform 0.5s cubic-bezier(0.77, 0, 0.175, 1);
+}
+
+.faq-item:has(.faq-question[aria-expanded=true]) .faq-icon-v {
+  transform: translateX(-50%) rotate(90deg);
+}
+
+.card {
+  background: #fff;
+  border-radius: 0.5rem;
+  padding: 1.5rem;
+  box-shadow: 0 4px 20px rgba(0, 0, 0, 0.1);
+  transition: transform 0.3s ease, box-shadow 0.3s ease;
+}
+
+.card:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 8px 30px rgba(0, 0, 0, 0.15);
+}
+
+/* Contenu WYSIWYG (the_content() des pages légales) : Tailwind retire
+   list-style par défaut sur ul/ol (preflight), à restaurer ici plutôt que
+   globalement pour ne pas affecter les listes de nav/menus. */
+
+.wp-text-block-container .content li {
+  list-style: disc;
+  list-style-position: outside;
+  margin-left: 1.5em;
+  padding-left: 0;
+  line-height: 1;
+}
+
+@media (max-width: 768px) {
+  .wp-text-block-container .content li {
+    font-size: 14px;
+  }
+}
+
+.wp-text-block-container .content li::marker {
+  font-size: 1.5em;
+}
+
+/* Curseur d'attente pendant une navigation Barba */
+
+body.page-loading,
+body.page-loading * {
+  cursor: wait !important;
+}
+
+/* ==========================================================================
+   Overrides d'utilitaires Tailwind
+   ==========================================================================
+   Fallback pour "100svh" (hauteur de viewport "small") : unité non supportée
+   avant Safari 15.4 (certains iPad concernés) — une propriété CSS invalide est
+   alors ignorée EN ENTIER, sans repli automatique sur 100vh. On réécrit donc
+   ici les classes Tailwind générées pour redéclarer height en 100vh AVANT
+   100svh dans la même règle : ignoré proprement si "svh" n'est pas supporté
+   (garde 100vh), sinon écrasé par 100svh juste après.
+
+   !important nécessaire pour les variantes "md:" : Tailwind regroupe toutes
+   ses classes responsives à la toute fin du CSS compilé (après ce bloc), donc
+   sa propre règle .md\:h-\[100svh\] gagnerait sinon par ordre de source.
+*/
+
+.h-\[100svh\] {
+  height: 100vh !important;
+  height: 100svh !important;
+}
+
+.max-h-\[100svh\] {
+  max-height: 100vh !important;
+  max-height: 100svh !important;
+}
+
+@media (min-width: 768px) {
+  .md\:h-\[100svh\] {
+    height: 100vh !important;
+    height: 100svh !important;
+  }
+
+  .md\:max-h-\[100svh\] {
+    max-height: 100vh !important;
+    max-height: 100svh !important;
+  }
+}
+
+.hover\:border-cream:hover{
+  --tw-border-opacity: 1;
+  border-color: rgb(244 237 228 / var(--tw-border-opacity, 1));
+}
+
+.hover\:border-dark:hover{
+  --tw-border-opacity: 1;
+  border-color: rgb(140 45 52 / var(--tw-border-opacity, 1));
+}
+
+.hover\:bg-cream\/20:hover{
+  background-color: rgb(244 237 228 / 0.2);
+}
+
+.hover\:bg-dark\/10:hover{
+  background-color: rgb(140 45 52 / 0.1);
+}
+
+.hover\:ring-2:hover{
+  --tw-ring-offset-shadow: var(--tw-ring-inset) 0 0 0 var(--tw-ring-offset-width) var(--tw-ring-offset-color);
+  --tw-ring-shadow: var(--tw-ring-inset) 0 0 0 calc(2px + var(--tw-ring-offset-width)) var(--tw-ring-color);
+  box-shadow: var(--tw-ring-offset-shadow), var(--tw-ring-shadow), var(--tw-shadow, 0 0 #0000);
+}
+
+.hover\:ring-cream:hover{
+  --tw-ring-opacity: 1;
+  --tw-ring-color: rgb(244 237 228 / var(--tw-ring-opacity, 1));
+}
+
+@media (min-width: 768px){
+  .md\:col-span-1{
+    grid-column: span 1 / span 1;
+  }
+
+  .md\:col-span-2{
+    grid-column: span 2 / span 2;
+  }
+
+  .md\:col-start-1{
+    grid-column-start: 1;
+  }
+
+  .md\:col-start-4{
+    grid-column-start: 4;
+  }
+
+  .md\:mb-0{
+    margin-bottom: 0px;
+  }
+
+  .md\:mb-14{
+    margin-bottom: 3.5rem;
+  }
+
+  .md\:mt-10{
+    margin-top: 2.5rem;
+  }
+
+  .md\:mt-8{
+    margin-top: 2rem;
+  }
+
+  .md\:mt-auto{
+    margin-top: auto;
+  }
+
+  .md\:block{
+    display: block;
+  }
+
+  .md\:inline-block{
+    display: inline-block;
+  }
+
+  .md\:grid{
+    display: grid;
+  }
+
+  .md\:hidden{
+    display: none;
+  }
+
+  .md\:h-12{
+    height: 3rem;
+  }
+
+  .md\:w-1\/2{
+    width: 50%;
+  }
+
+  .md\:min-w-\[280px\]{
+    min-width: 280px;
+  }
+
+  .md\:grid-cols-2{
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
+
+  .md\:grid-cols-3{
+    grid-template-columns: repeat(3, minmax(0, 1fr));
+  }
+
+  .md\:grid-cols-4{
+    grid-template-columns: repeat(4, minmax(0, 1fr));
+  }
+
+  .md\:flex-row{
+    flex-direction: row;
+  }
+
+  .md\:items-end{
+    align-items: flex-end;
+  }
+
+  .md\:justify-between{
+    justify-content: space-between;
+  }
+
+  .md\:gap-10{
+    gap: 2.5rem;
+  }
+
+  .md\:gap-20{
+    gap: 5rem;
+  }
+
+  .md\:gap-6{
+    gap: 1.5rem;
+  }
+
+  .md\:gap-8{
+    gap: 2rem;
+  }
+
+  .md\:p-5{
+    padding: 1.25rem;
+  }
+
+  .md\:p-8{
+    padding: 2rem;
+  }
+
+  .md\:px-10{
+    padding-left: 2.5rem;
+    padding-right: 2.5rem;
+  }
+
+  .md\:px-5{
+    padding-left: 1.25rem;
+    padding-right: 1.25rem;
+  }
+
+  .md\:py-10{
+    padding-top: 2.5rem;
+    padding-bottom: 2.5rem;
+  }
+
+  .md\:py-16{
+    padding-top: 4rem;
+    padding-bottom: 4rem;
+  }
+
+  .md\:py-20{
+    padding-top: 5rem;
+    padding-bottom: 5rem;
+  }
+
+  .md\:py-5{
+    padding-top: 1.25rem;
+    padding-bottom: 1.25rem;
+  }
+
+  .md\:pb-10{
+    padding-bottom: 2.5rem;
+  }
+
+  .md\:pb-28{
+    padding-bottom: 7rem;
+  }
+
+  .md\:pb-3{
+    padding-bottom: 0.75rem;
+  }
+
+  .md\:pb-5{
+    padding-bottom: 1.25rem;
+  }
+
+  .md\:pt-10{
+    padding-top: 2.5rem;
+  }
+
+  .md\:pt-5{
+    padding-top: 1.25rem;
+  }
+
+  .md\:text-base{
+    font-size: 1rem;
+    line-height: 1.5rem;
+  }
+
+  .md\:text-lg{
+    font-size: 1.125rem;
+    line-height: 1.75rem;
+  }
+
+  .md\:text-sm{
+    font-size: 0.875rem;
+    line-height: 1.25rem;
+  }
+}
+
+@media (min-width: 1024px){
+  .lg\:mb-8{
+    margin-bottom: 2rem;
+  }
+
+  .lg\:h-screen{
+    height: 100vh;
+  }
+
+  .lg\:w-\[280px\]{
+    width: 280px;
+  }
+
+  .lg\:pb-8{
+    padding-bottom: 2rem;
+  }
+
+  .lg\:text-2xl{
+    font-size: 1.5rem;
+    line-height: 2rem;
+  }
+
+  .lg\:text-3xl{
+    font-size: 1.875rem;
+    line-height: 2.25rem;
+  }
+
+  .lg\:text-4xl{
+    font-size: 2.25rem;
+    line-height: 2.5rem;
+  }
+
+  .lg\:text-base{
+    font-size: 1rem;
+    line-height: 1.5rem;
+  }
+
+  .lg\:text-lg{
+    font-size: 1.125rem;
+    line-height: 1.75rem;
+  }
+
+  .lg\:text-xl{
+    font-size: 1.25rem;
+    line-height: 1.75rem;
+  }
+}
+
+@media (min-width: 1280px){
+  .xl\:max-h-screen{
+    max-height: 100vh;
+  }
+}

@@ -1,0 +1,41 @@
+# Dépendances
+node_modules/
+vendor/
+
+# Build
+# dist/ EST versionné : il contient les assets compilés (styles.css, main.js)
+# que functions.php enqueue directement — le serveur de production ne lance pas
+# de build. Seul le fichier intermédiaire de la chaîne Sass→Tailwind est ignoré.
+dist/temp.css
+
+# Fichiers temporaires
+*.log
+*.tmp
+*.swp
+*.swo
+*~
+
+# OS
+.DS_Store
+Thumbs.db
+Desktop.ini
+
+# IDE
+.vscode/
+.idea/
+*.sublime-project
+*.sublime-workspace
+
+# Environnement
+.env
+.env.local
+
+# Cache
+.cache/
+*.cache
+.sass-cache/
+
+# Logs npm/yarn
+npm-debug.log*
+yarn-debug.log*
+yarn-error.log*

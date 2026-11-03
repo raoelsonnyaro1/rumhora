@@ -1,0 +1,54 @@
+/**
+ * Design system — variables
+ *
+ * Toute couleur déclarée ici doit AUSSI l'être dans tailwind.config.js
+ * (theme.extend.colors) pour rester utilisable en classe utilitaire côté
+ * markup : ce fichier sert les partials SCSS, tailwind.config.js sert le
+ * markup. Les deux doivent rester synchronisés.
+ */
+
+/* ==========================================================================
+   Palette de marque — source de vérité
+   ========================================================================== */
+
+$jaune: #C6A75E; // accent chaud, CTA, détails
+$beige: #F4EDE4; // fond clair dominant
+$gris:  #A89B95; // texte secondaire, bordures discrètes
+$texte: #D8CFC4; // texte et éléments posés SUR un fond sombre
+$rouge: #8C2D34; // fond sombre dominant (header, footer, overlays)
+
+/* ==========================================================================
+   Alias sémantiques
+   ==========================================================================
+   Les composants parlent en rôles ("dark", "cream", "accent") plutôt qu'en
+   noms de couleur : un changement de palette ne demande alors de toucher qu'au
+   bloc ci-dessus. Les deux jeux de noms sont exposés en Tailwind, donc
+   `bg-rouge` et `bg-dark` sont équivalents côté markup — préférer le rôle
+   sémantique pour tout ce qui est réutilisable.
+*/
+
+$dark:    $rouge;
+$cream:   $beige;
+$accent:  $jaune;
+$muted:   $gris;
+$on-dark: $texte; // à utiliser pour le texte sur fond sombre, plutôt que $cream
+
+$body-bg:    $beige;
+$body-color: $rouge;
+
+/* Neutres (hors palette de marque) */
+$white:       #fff;
+$black:       #1e1e1e;
+$extra-black: #000;
+
+/* ==========================================================================
+   Versions URL-encodées
+   ==========================================================================
+   Pour les chevrons SVG inline des <select> (voir _form.scss) : un
+   `data:image/svg+xml` ne peut pas contenir un "#" littéral, il faut "%23".
+   Sass ne peut pas dériver cette forme depuis une valeur de type couleur —
+   À GARDER SYNCHRONISÉ À LA MAIN avec la palette ci-dessus.
+*/
+
+$dark-url:  '%238C2D34'; // $rouge
+$cream-url: '%23F4EDE4'; // $beige

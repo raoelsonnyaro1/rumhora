@@ -1,0 +1,30 @@
+/*!
+Theme Name: Rumhora
+Theme URI: https://github.com/raoelsonnyaro1/rumhora
+Author: Red Sakay Studio
+Author URI: https://redsakay.com/
+Description: Thème WordPress sur mesure pour Rumhora — ACF, GSAP, Sass et Barba.js. Dérivé du starter Underscores (_s).
+Version: 1.0.0
+Tested up to: 6.8
+Requires PHP: 7.4
+License: GNU General Public License v2 or later
+License URI: LICENSE
+Text Domain: rumhora
+Tags: custom-background, custom-logo, custom-menu, featured-images, threaded-comments, translation-ready
+
+This theme, like WordPress, is licensed under the GPL.
+
+Rumhora is based on Underscores https://underscores.me/, (C) 2012-2020 Automattic, Inc.
+Underscores is distributed under the terms of the GNU GPL v2 or later.
+
+Les styles du site vivent dans assets/sass/ et sont compilés vers dist/styles.css
+(voir package.json). Ce fichier ne sert qu'à l'en-tête de thème attendu par
+WordPress et au strict minimum qui doit s'appliquer avant même que le CSS
+compilé ne soit peint.
+*/
+
+/* Curseur d'attente pendant le chargement de page (voir showWaitCursor() dans src/js/barba.js) */
+body.page-loading,
+body.page-loading * {
+	cursor: wait !important;
+}

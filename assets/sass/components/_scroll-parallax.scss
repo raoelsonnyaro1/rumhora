@@ -1,0 +1,13 @@
+/**
+ * initColumnParallax (animations.js, technique reprise de
+ * codrops/SmoothScrollAnimations) translate l'image de -var(--overflow) à
+ * +var(--overflow) px au scroll : le scale ci-dessous donne la marge de
+ * débordement nécessaire pour que ce mouvement ne laisse jamais voir de bord
+ * vide de l'image.
+ */
+.scroll-parallax-img {
+  --overflow: 50;
+  transform: scale(1.2);
+  transform-origin: center center !important;
+  will-change: transform;
+}

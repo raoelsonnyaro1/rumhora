@@ -1,0 +1,66 @@
+/**
+ * Hero Section
+ */
+@use '../variables' as *;
+
+.section_hero {
+ // Filet avant que la photo ne soit chargée (surtout visible en chargement à
+ // froid, ex: Ctrl+Shift+R) : sans fond, le fond crème de la page apparaît en
+ // flash derrière le texte blanc du hero le temps que l'image se peigne.
+ // Vert (pas crème) : cohérent avec le reste des éléments sombres du site
+ // (header, boutons) et sans le côté "masque uni" du fond vert déjà retiré
+ // des autres photos — ici il ne s'agit que d'un filet, pas d'un effet visé.
+ background-color: $dark;
+
+ &_content {
+   p{
+    font-family: 'Recia';
+   }
+ }
+}
+/* Scroll down indicator */
+.scroll-down {
+  display: inline-flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 8px;
+  color: white;
+  transition: transform 0.3s ease;
+
+  &:hover {
+    transform: translateY(-2px);
+  }
+
+  &__mouse {
+    width: 22px;
+    height: 34px;
+    border: 2px solid currentColor;
+    border-radius: 12px;
+    position: relative;
+    display: flex;
+    justify-content: center;
+  }
+
+  &__wheel {
+    width: 2px;
+    height: 7px;
+    background: currentColor;
+    border-radius: 2px;
+    position: absolute;
+    top: 5px;
+    animation: scroll-wheel 1.6s cubic-bezier(0.4, 0, 0.2, 1) infinite;
+  }
+
+  &__text {
+    font-size: 9px;
+    letter-spacing: 0.15em;
+    text-transform: capitalize;
+  }
+}
+
+@keyframes scroll-wheel {
+  0%   { opacity: 1; transform: translateY(0); }
+  60%  { opacity: 0; transform: translateY(12px); }
+  61%  { opacity: 0; transform: translateY(0); }
+  100% { opacity: 1; transform: translateY(0); }
+}

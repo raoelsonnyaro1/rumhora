@@ -1,0 +1,352 @@
+@use '../variables' as *;
+
+/* =========================================
+   Formulaires (libellé flottant)
+   =========================================
+   À poser sur le <form> : .reservation-form, plus .reservation-form-cream
+   pour la variante sur fond sombre (ex: newsletter du footer). Les champs
+   eux-mêmes sont générés par rs_form_field()
+   (inc/components/form/rs-form-field.php). */
+
+// Liste à puces/numérotée dans le texte d'intro d'un formulaire : Tailwind
+// retire list-style par défaut sur tout ol/ul (preflight), à restaurer
+// explicitement ici plutôt que globalement, pour ne pas affecter les listes
+// de navigation/menus qui s'appuient sur ce reset.
+.form-intro {
+  ol, ul {
+    list-style-position: outside;
+    margin: 0 0 0 1.25em;
+    padding: 0;
+  }
+
+  ol { list-style-type: decimal; }
+  ul { list-style-type: disc; }
+
+  li {
+    margin-bottom: 0.5em;
+    &:last-child { margin-bottom: 0; }
+  }
+}
+
+.reservation-form {
+  position: relative; // ancre .form-ajax-message en absolute (voir plus bas)
+
+  .form-field {
+    position: relative;
+    border-bottom: 1px solid rgba($dark, 0.25) !important;
+    padding-top: 20px;
+    padding-bottom: 6px;
+    margin-bottom: 4px;
+
+    label {
+      position: absolute;
+      top: 20px;
+      left: 0;
+      font-family: 'General Sans', sans-serif;
+      font-size: 14px;
+      font-weight: 500;
+      color: $dark;
+      transform-origin: left top;
+      transition: transform 0.25s ease;
+      pointer-events: none;
+    }
+
+    input,
+    select,
+    textarea {
+      width: 100%;
+      font-family: 'General Sans', sans-serif;
+      font-size: 13px;
+      font-weight: 500;
+      color: $dark !important;
+      background: transparent !important;
+      border: none !important;
+      outline: none !important;
+      box-shadow: none !important;
+      appearance: none;
+      -webkit-appearance: none;
+      padding: 0;
+
+      // Safari iOS zoome automatiquement la page au focus sur tout champ dont
+      // le font-size est < 16px - y compris les champs date/heure (Flatpickr),
+      // dont le calendrier/picker s'ouvre en plus par-dessus ce zoom intempestif.
+      // Appliqué seulement sous 768px pour ne pas changer le rendu desktop.
+      @media (max-width: 767px) {
+        font-size: 16px;
+      }
+    }
+
+    textarea {
+      resize: none;
+      display: block;
+    }
+
+    // Flatpickr (voir rs_form_field() type "date"/"time") : readonly par
+    // défaut (saisie manuelle désactivée, voir date-picker.js), curseur
+    // pointer pour signaler que c'est quand même cliquable - même logique
+    // que .custom-select-trigger.
+    input[data-flatpickr],
+    input[data-flatpickr-time] {
+      cursor: pointer;
+    }
+
+    select {
+      cursor: pointer;
+      // Chevron custom (l'appareance native est masquee ci-dessus)
+      background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='#{$dark-url}' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'%3E%3Cpolyline points='6 9 12 15 18 9'/%3E%3C/svg%3E") !important;
+      background-repeat: no-repeat !important;
+      background-position: right center !important;
+      background-size: 14px !important;
+      padding-right: 24px !important;
+    }
+
+    select option {
+      background-color: $cream;
+      color: $dark;
+      padding: 10px 14px;
+    }
+
+    select option:hover,
+    select option:checked,
+    select option:focus {
+      background-color: rgba($dark, 0.12);
+    }
+
+    // Label flottant — inputs et textarea (placeholder=" "). Les champs
+    // date/heure (Flatpickr, type="text") fonctionnent normalement via
+    // :placeholder-shown dès que leur valeur est posée (par l'utilisateur
+    // ou par JS) - plus d'exception à gérer ici depuis leur migration
+    // depuis <input type="date">/[type="time"]> natifs.
+    input:focus ~ label,
+    input:not(:placeholder-shown) ~ label,
+    textarea:focus ~ label,
+    textarea:not(:placeholder-shown) ~ label {
+      transform: translateY(-20px) scale(0.75);
+    }
+
+    // Astérisque des champs obligatoires : posé en CSS (::after sur le label,
+    // ciblé par :required sur le champ juste avant dans le DOM - voir
+    // rs-form-field.php) plutôt que dans le texte du label lui-même, pour ne
+    // jamais avoir à retoucher une traduction existante en l'ajoutant/l'enlevant.
+    input:required ~ label::after,
+    textarea:required ~ label::after {
+      content: " *";
+    }
+
+    // Supprimer spinners sur input[number]
+    input[type="number"]::-webkit-inner-spin-button,
+    input[type="number"]::-webkit-outer-spin-button {
+      -webkit-appearance: none;
+      margin: 0;
+    }
+
+    input[type="number"] {
+      -moz-appearance: textfield;
+    }
+
+  }
+
+  // Message de retour AJAX (voir src/js/forms/form-ajax.js) : absolute (ne
+  // doit jamais pousser le reste de la mise en page / faire sauter le
+  // scroll à l'apparition), caché par défaut et révélé en douceur de haut
+  // en bas (translateY + opacity) quand .is-visible est ajoutée en JS ;
+  // JS retire aussi cette classe après 10s (voir showFormAjaxMessage()).
+  .form-ajax-message {
+    position: absolute;
+    left: 0;
+    right: 0;
+    top: 100%;
+    width: fit-content;
+    margin-top: 12px;
+    font-size: 14px;
+    padding: 12px 16px;
+    border-radius: 4px;
+    background-color: $dark;
+    color: $cream;
+    opacity: 0;
+    transform: translateY(-8px);
+    pointer-events: none;
+    transition: opacity 0.4s ease, transform 0.4s ease;
+
+    &.is-visible {
+      opacity: 1;
+      transform: translateY(0);
+      pointer-events: auto;
+    }
+  }
+
+  // Dropdown custom (voir rs_form_field type "select" + src/js/components/custom-select.js) :
+  // remplace le popup natif dont le hover des options est dessiné par l'OS
+  // et n'est pas stylable en CSS cross-navigateur.
+  .custom-select {
+    position: relative;
+
+    // <select> natif conservé pour la soumission du formulaire, caché visuellement.
+    .custom-select-native {
+      position: absolute;
+      inset: 0;
+      width: 100%;
+      opacity: 0;
+      pointer-events: none;
+    }
+
+    .custom-select-trigger {
+      width: 100%;
+      text-align: left;
+      font-family: 'General Sans', sans-serif;
+      font-size: 13px;
+      font-weight: 500;
+      color: $dark;
+      background: transparent;
+      border: none;
+      outline: none;
+      cursor: pointer;
+      padding: 0;
+      padding-right: 24px;
+      min-height: 1.2em;
+      display: block;
+      background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='#{$dark-url}' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'%3E%3Cpolyline points='6 9 12 15 18 9'/%3E%3C/svg%3E");
+      background-repeat: no-repeat;
+      background-position: right center;
+      background-size: 14px;
+    }
+
+    .custom-select-options {
+      position: absolute;
+      top: 100%;
+      left: 0;
+      right: 0;
+      z-index: 20;
+      margin-top: 8px;
+      background-color: $cream;
+      border: 1px solid rgba($dark, 0.15);
+      box-shadow: 0 8px 24px rgba(0, 0, 0, 0.08);
+      list-style: none;
+      margin-left: 0;
+      max-height: 240px;
+      overflow-y: auto;
+      opacity: 0;
+      visibility: hidden;
+      transform: translateY(-6px);
+      transition: opacity 0.2s ease, transform 0.2s ease, visibility 0.2s;
+    }
+
+    &.open .custom-select-options {
+      opacity: 1;
+      visibility: visible;
+      transform: translateY(0);
+    }
+
+    .custom-select-option {
+      padding: 10px 14px;
+      font-family: 'General Sans', sans-serif;
+      font-size: 13px;
+      font-weight: 500;
+      color: $dark;
+      cursor: pointer;
+      transition: background-color 0.15s ease;
+
+      &:hover,
+      &.is-selected {
+        background-color: rgba($dark, 0.12);
+      }
+    }
+
+    // Label flottant, piloté par le JS (classe .has-value sur le wrapper)
+    // plutôt que :valid (peu fiable sur un select non required, cf. custom-select.js).
+    &.has-value label {
+      transform: translateY(-20px) scale(0.75);
+    }
+
+    // Astérisque des champs obligatoires - même principe que .form-field
+    // ci-dessus (voir .custom-select-native dans rs-form-field.php, toujours
+    // juste avant le label dans le DOM, même si visuellement caché).
+    select:required ~ label::after {
+      content: " *";
+    }
+  }
+
+  // Variante crème (fond sombre, ex: newsletter du footer) : mêmes styles
+  // que ci-dessus mais inversés pour rester lisibles sur fond foncé.
+  &.reservation-form-cream .form-field {
+    border-bottom-color: rgba($cream, 0.6) !important;
+
+    label {
+      color: $cream;
+    }
+
+    input,
+    select,
+    textarea {
+      color: $cream !important;
+    }
+
+    select {
+      background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='#{$cream-url}' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'%3E%3Cpolyline points='6 9 12 15 18 9'/%3E%3C/svg%3E") !important;
+    }
+
+    select option {
+      color: $dark;
+    }
+  }
+
+  // Message AJAX sur fond sombre (voir .form-ajax-message plus haut) :
+  // inversé en crème/vert plutôt que vert/crème - sur le fond déjà vert
+  // foncé du footer, la version par défaut (fond vert) se fondait dans
+  // l'arrière-plan et devenait illisible.
+  &.reservation-form-cream .form-ajax-message {
+    background-color: $cream;
+    color: $dark;
+  }
+
+  // Case à cocher stylisée (voir rs_form_field type "checkbox") : pas de
+  // margin ici, l'espacement vertical entre les lignes du formulaire est
+  // uniformisé par le gap du <form> côté markup (ex: flex flex-col gap-4).
+  .form-field-checkbox {
+    cursor: pointer;
+    color: $dark;
+    font-size: 14px;
+
+    // Astérisque des champs obligatoires - même principe que .form-field plus
+    // haut, mais l'input est ICI à l'intérieur du label (voir rs-form-field.php),
+    // pas un sibling séparé : :has() plutôt que le combinateur ~ utilisé ailleurs.
+    &:has(input:required)::after {
+      content: " *";
+    }
+
+    input[type="checkbox"] {
+      appearance: none;
+      -webkit-appearance: none;
+      flex-shrink: 0;
+      width: 18px;
+      height: 18px;
+      margin-top: 1px;
+      border: 1.5px solid $dark;
+      border-radius: 3px;
+      position: relative;
+      cursor: pointer;
+      transition: background-color 0.2s ease;
+
+      &:checked {
+        background-color: $dark;
+
+        &::after {
+          content: '';
+          position: absolute;
+          left: 5px;
+          top: 1px;
+          width: 5px;
+          height: 9px;
+          border: solid $cream;
+          border-width: 0 2px 2px 0;
+          transform: rotate(45deg);
+        }
+      }
+
+      &:focus-visible {
+        outline: 2px solid $dark;
+        outline-offset: 2px;
+      }
+    }
+  }
+}

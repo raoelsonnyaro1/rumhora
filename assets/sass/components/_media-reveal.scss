@@ -1,0 +1,43 @@
+/**
+ * Masque 3 barres (dégradé du rouge de marque vers le beige clair) pour le
+ * reveal des images — voir layeredMaskRevealRight() dans animations.js et le
+ * rideau de transition (#page-transition-mask, header.php). Chaque couche
+ * est un peu plus claire que la précédente.
+ *
+ * Les barres sont injectées en JS comme enfants temporaires du conteneur de
+ * l'image (retirées du DOM une fois l'animation terminée) : ce conteneur
+ * doit déjà être positionné (relative/absolute) pour qu'elles s'y calent
+ * correctement — c'est déjà le cas de tous les conteneurs de reveal existants
+ * (.reveal, .swiper-slide, ...).
+ */
+@use '../variables' as *;
+
+.media-reveal-overlay {
+  position: absolute;
+  inset: 0;
+  z-index: 1;
+  pointer-events: none;
+
+  div {
+    position: absolute;
+    inset: 0;
+
+    // Empilées (inset:0 sur les 3) : la dernière du DOM peint par-dessus les
+    // autres, et c'est elle que layeredMaskRevealRight() (animations.js)
+    // anime en premier (sinon elle resterait immobile au-dessus des 2
+    // autres, déjà en train de bouger mais invisibles en dessous — voir son
+    // commentaire). Le plus foncé en nth-child(3) = au-dessus = anime le
+    // premier = c'est la teinte que l'œil voit balayer en tête.
+    &:nth-child(1) {
+      background-color: mix($dark, $on-dark, 60%);
+    }
+
+    &:nth-child(2) {
+      background-color: mix($dark, $on-dark, 80%);
+    }
+
+    &:nth-child(3) {
+      background-color: $dark;
+    }
+  }
+}

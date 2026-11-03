@@ -1,0 +1,189 @@
+/**
+ * Composant réutilisable : vidéo plein écran pilotée au scroll (rs_video)
+ */
+@use '../variables' as *;
+
+// Reste à sa taille finale (100%) dans la mise en page ; seul le rendu visuel
+// est réduit via transform: scale() (voir initVideoReveal dans animations.js)
+// pour ne jamais faire varier la hauteur réservée par cette section au fil du
+// scroll, ce qui décalerait les déclenchements des animations plus bas.
+.scroll-video-outer {
+  transform: scale(0.3333);
+  // Ancré en haut (au lieu du centre par défaut) : sans ça, la vidéo réduite
+  // reste centrée verticalement dans sa boîte pleine taille (le scale ne
+  // change pas la hauteur réservée en layout), ce qui la fait apparaître
+  // décalée vers le bas au lieu de démarrer juste sous la section précédente.
+  transform-origin: top center;
+  will-change: transform;
+}
+
+.youtube-video {
+  overflow: hidden;
+
+  .youtube-video-poster {
+    z-index: 1;
+  }
+
+  // YouTube affiche un bandeau titre + avatar en haut (premières secondes de
+  // lecture et pause), son logo en bas à droite, et une fine bande (quasi
+  // noire) tout en bas, sans paramètre d'API pour les désactiver. On zoome
+  // l'iframe en conservant son ratio 16:9 (largeur ET hauteur agrandies du
+  // même facteur, sinon YouTube ajoute lui-même des bandes noires pour
+  // préserver ce ratio à l'intérieur d'une iframe déformée), puis on la
+  // décale pour rogner ces éléments hors du cadre visible (overflow hidden
+  // sur .youtube-video). Décalage vertical volontairement asymétrique (plus
+  // de marge en haut, pour le bandeau titre, un peu quand même en bas, pour
+  // la bande/logo) : top:-15% avec height:115% ne laissait AUCUNE marge en
+  // bas (115 - 15 - 100 = 0), laissant filtrer cette bande — d'où le
+  // top:-25%/height:135% ci-dessous (marge bas = 135 - 25 - 100 = 10%).
+  .youtube-video-target,
+  iframe {
+    position: absolute;
+    top: -25%;
+    left: -17.5%;
+    width: 135%;
+    height: 135%;
+    pointer-events: none; // lecture pilotée par le scroll, pas par les controles YouTube
+    z-index: 2;
+  }
+}
+
+// Bouton son ON/OFF (rs_video) — mêmes couleurs et hover que .btn-primary
+// (wipe crème gauche→droite, icône qui passe au vert - voir .btn dans
+// _buttons.scss), rejoué ici plutôt que la classe .btn car ce bouton est rond
+// et icône seule (pas de texte).
+.scroll-video-mute-toggle {
+  top: 16px;
+  left: 16px;
+  width: 44px;
+  height: 44px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border: none;
+  border-radius: 999px;
+  background: $dark;
+  color: white;
+  cursor: pointer;
+  overflow: hidden;
+  z-index: 1;
+  transition: color 0.3s ease;
+
+  @media (max-width: 767px) {
+    top: 10px;
+    left: 10px;
+    width: 32px;
+    height: 32px;
+  }
+
+  &::before {
+    content: '';
+    position: absolute;
+    inset: 0;
+    background: $cream;
+    transform: scaleX(0);
+    transform-origin: right;
+    transition: transform 0.5s cubic-bezier(0.77, 0, 0.175, 1);
+    z-index: -1;
+  }
+
+  &:hover {
+    color: $dark;
+
+    &::before {
+      transform: scaleX(1);
+      transform-origin: left;
+    }
+  }
+
+  svg {
+    width: 20px;
+    height: 20px;
+
+    @media (max-width: 767px) {
+      width: 15px;
+      height: 15px;
+    }
+  }
+
+  .icon-unmuted {
+    display: none;
+  }
+
+  // Le son démarre coupé (autoplay), donc l'icône "muet" est visible par
+  // défaut ; is-unmuted est ajoutée par scroll-video.js au clic.
+  &.is-unmuted {
+    .icon-muted {
+      display: none;
+    }
+    .icon-unmuted {
+      display: block;
+    }
+  }
+}
+
+// Bouton flèche vers la vidéo YouTube complète (rs_video, 'lien_youtube') :
+// même style rond que .scroll-video-mute-toggle, mais en haut à droite et
+// masqué tant que la section n'est pas survolée (contrairement au son, qui
+// reste toujours visible) - un lien de sortie du site ne doit pas être aussi
+// visible en permanence qu'un simple contrôle de lecture.
+.scroll-video-youtube-link {
+  bottom: 16px;
+  right: 16px;
+  width: 44px;
+  height: 44px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border-radius: 999px;
+  background: $dark;
+  color: white;
+  cursor: pointer;
+  overflow: hidden;
+  opacity: 0;
+  transition: opacity 0.3s ease, color 0.3s ease;
+
+  .scroll-video-section:hover & {
+    opacity: 1;
+  }
+
+  // Sur tactile, il n'y a pas de vrai survol pour révéler ce bouton (il
+  // resterait invisible en permanence) - toujours visible en dessous de 768px.
+  @media (max-width: 767px) {
+    bottom: 10px;
+    right: 10px;
+    width: 32px;
+    height: 32px;
+    opacity: 1;
+  }
+
+  &::before {
+    content: '';
+    position: absolute;
+    inset: 0;
+    background: $cream;
+    transform: scaleX(0);
+    transform-origin: right;
+    transition: transform 0.5s cubic-bezier(0.77, 0, 0.175, 1);
+    z-index: -1;
+  }
+
+  &:hover {
+    color: $dark;
+
+    &::before {
+      transform: scaleX(1);
+      transform-origin: left;
+    }
+  }
+
+  svg {
+    width: 20px;
+    height: 20px;
+
+    @media (max-width: 767px) {
+      width: 15px;
+      height: 15px;
+    }
+  }
+}

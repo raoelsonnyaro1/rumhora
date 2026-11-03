@@ -1,0 +1,139 @@
+@use '../variables' as *;
+
+/**
+ * Flatpickr (voir inc/components/form/rs-form-field.php type "date" et
+ * src/js/components/date-picker.js) : surcharge du thème par défaut de la
+ * librairie (quasi sans style imposé) aux couleurs du site, même esprit que
+ * .custom-select-options (_form.scss) - fond crème, bordure/texte vert,
+ * sans arrondi, pour rester cohérent avec le reste des champs/dropdowns.
+ */
+.flatpickr-calendar {
+  background-color: $cream;
+  border: 1px solid rgba($dark, 0.15);
+  box-shadow: 0 8px 24px rgba(0, 0, 0, 0.08);
+  border-radius: 0;
+  font-family: 'General Sans', sans-serif;
+
+  // Petite flèche décorative pointant vers le champ (désactivée) : pas dans
+  // le reste des dropdowns du site (.custom-select-options n'en a pas non
+  // plus), pour rester visuellement cohérent.
+  &.arrowTop:before,
+  &.arrowTop:after {
+    display: none;
+  }
+}
+
+.flatpickr-months {
+  padding: 12px 10px 4px;
+
+  .flatpickr-month {
+    color: $dark;
+    fill: $dark;
+  }
+
+  .flatpickr-current-month {
+    font-size: 14px;
+    font-weight: 500;
+
+    .flatpickr-monthDropdown-months,
+    input.cur-year {
+      font-family: 'General Sans', sans-serif;
+      font-weight: 500;
+      color: $dark;
+    }
+  }
+
+  .flatpickr-prev-month,
+  .flatpickr-next-month {
+    color: $dark;
+    fill: $dark;
+
+    &:hover {
+      color: $dark;
+      fill: $dark;
+      opacity: 0.6;
+    }
+  }
+}
+
+.flatpickr-weekdays {
+  background-color: transparent;
+}
+
+span.flatpickr-weekday {
+  color: rgba($dark, 0.6);
+  font-family: 'General Sans', sans-serif;
+  font-size: 12px;
+  font-weight: 500;
+}
+
+.flatpickr-day {
+  color: $dark;
+  font-family: 'General Sans', sans-serif;
+  font-size: 13px;
+  font-weight: 500;
+  border-radius: 0;
+
+  &.today {
+    border-color: rgba($dark, 0.4);
+  }
+
+  &:hover,
+  &:focus {
+    background-color: rgba($dark, 0.12);
+    border-color: transparent;
+  }
+
+  &.selected,
+  &.selected:hover,
+  &.selected:focus {
+    background-color: $dark;
+    border-color: $dark;
+    color: $cream;
+  }
+
+  &.prevMonthDay,
+  &.nextMonthDay {
+    color: rgba($dark, 0.3);
+  }
+
+  &.flatpickr-disabled,
+  &.flatpickr-disabled:hover {
+    color: rgba($dark, 0.2);
+  }
+}
+
+/**
+ * Champs "heure" (voir rs_form_field() type "time", enableTime + noCalendar
+ * dans initTimePickers(), src/js/components/date-picker.js) : même palette
+ * que le reste du calendrier ci-dessus, pas de style imposé par défaut sur
+ * ce bloc-là non plus.
+ */
+.flatpickr-time {
+  font-family: 'General Sans', sans-serif;
+
+  input,
+  .flatpickr-time-separator {
+    color: $dark;
+    font-size: 14px;
+    font-weight: 500;
+  }
+
+  .numInputWrapper {
+    &:hover {
+      background: rgba($dark, 0.06);
+    }
+
+    span.arrowUp:after {
+      border-bottom-color: $dark;
+    }
+
+    span.arrowDown:after {
+      border-top-color: $dark;
+    }
+
+    span:hover {
+      background: rgba($dark, 0.12);
+    }
+  }
+}

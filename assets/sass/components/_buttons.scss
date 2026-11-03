@@ -1,0 +1,163 @@
+/**
+ * Buttons
+ */
+
+@use '../variables' as *;
+
+.btn-list {
+  overflow-x: auto;
+  overflow-y: hidden;
+  scroll-behavior: smooth;
+  scrollbar-width: none; // Firefox
+  -webkit-overflow-scrolling: touch;
+
+  &::-webkit-scrollbar {
+    display: none; // Chrome, Safari, Opera
+  }
+
+  .btn {
+    white-space: nowrap;
+    padding: 47px 20px;
+    display: flex;
+    justify-content: center;
+    flex: auto;
+    flex-shrink: 0; // Empêche les boutons de rétrécir pendant le scroll
+    @media (max-width: 1023px) {
+      flex: 0 0 calc(33% - 0rem);
+    }
+    @media (max-width: 480px) {
+      flex: 0 0 calc(60% - 0rem);
+      padding: 2rem 1rem;
+    }
+  }
+
+  // Scroll horizontal sur mobile
+  @media (max-width: 1025px) {
+    display: flex !important;
+    gap: 0;
+  }
+}
+
+.btn {
+  font-family: 'General Sans';
+  display: inline-block;
+  padding: 15px 20px;
+  color: $extra-black;
+  border: 1px solid $extra-black;
+  text-align: center;
+  cursor: pointer;
+  position: relative;
+  overflow: hidden;
+  z-index: 1;
+  transition: color 0.3s ease, background-color 0.4s ease, border-color 0.4s ease, filter 0.3s ease;
+  @media (max-width: 1025px) {
+    font-size: 14px;
+  }
+
+  // pointer-events:none (pas juste cursor) : empêche aussi :hover de
+  // matcher, donc le voile ::before ci-dessous (wipe au survol) ne se
+  // déclenche jamais tant que le bouton est désactivé (ex: case de
+  // consentement non cochée, géré par le JS du formulaire) - sans ça, le survol
+  // restait actif malgré disabled, donnant l'impression trompeuse d'un
+  // bouton cliquable.
+  &:disabled {
+    opacity: 0.5;
+    cursor: not-allowed;
+    pointer-events: none;
+  }
+
+  // Overlay blanc qui wipe gauche→droite / sort droite→gauche
+  &::before {
+    content: '';
+    position: absolute;
+    inset: 0;
+    background: $cream;
+    transform: scaleX(0);
+    transform-origin: right;
+    transition: transform 0.5s cubic-bezier(0.77, 0, 0.175, 1);
+    z-index: -1;
+  }
+
+  &:hover::before {
+    transform: scaleX(1);
+    transform-origin: left;
+  }
+
+  &.btn-white {
+    color: white;
+    border-color: white;
+    &:hover { color: $dark; }
+  }
+
+  /* CTA variants */
+  &.btn-primary {
+    color: white;
+    background-color: $dark;
+    border-color: $dark;
+    &:hover { color: $dark; }
+  }
+
+  &.btn-secondary {
+    color: $accent;
+    background-color: transparent;
+    border-color: $accent;
+
+    // ::before (voir plus haut) wipe en vert au survol au lieu du cream par
+    // défaut, pour remplir le bouton (au lieu de le vider comme btn-primary).
+    &::before {
+      background: $accent;
+    }
+
+    &:hover { color: white; }
+  }
+
+  &.btn-tertiary {
+    color: white;
+    background-color: rgba(255, 255, 255, 0.1);
+    backdrop-filter: blur(10px);
+    -webkit-backdrop-filter: blur(10px);
+    // Force le rendu GPU dès le premier paint pour éviter le bug Chrome où
+    // le blur ne s'affiche pas tant qu'aucun scroll n'a forcé un repaint.
+    transform: translateZ(0);
+    will-change: backdrop-filter, transform;
+    border-color: white;
+    &:hover { color: $dark; }
+  }
+}
+
+// Même hover que .btn-primary ci-dessus (voile crème qui glisse, couleur qui
+// passe de blanc à vert) mais pour les icônes rondes de rs_social_icons()
+// (variante 'solid', voir inc/components/rs-social-icons.php) plutôt qu'un
+// bouton rectangulaire - pas de ::before à -z-index:-1 ici (pas de bordure à
+// garder visible dessous comme .btn), overflow:hidden + border-radius du
+// cercle (classes Tailwind rounded-full) suffisent à rogner le voile.
+.social-icon-wipe {
+  position: relative;
+  overflow: hidden;
+  transition: color 0.3s ease;
+
+  &::before {
+    content: '';
+    position: absolute;
+    inset: 0;
+    background: $cream;
+    transform: scaleX(0);
+    transform-origin: right;
+    transition: transform 0.5s cubic-bezier(0.77, 0, 0.175, 1);
+    z-index: 0;
+  }
+
+  &:hover::before {
+    transform: scaleX(1);
+    transform-origin: left;
+  }
+
+  &:hover {
+    color: $dark;
+  }
+
+  svg {
+    position: relative;
+    z-index: 1;
+  }
+}
