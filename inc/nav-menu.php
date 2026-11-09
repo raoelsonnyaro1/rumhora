@@ -104,3 +104,110 @@ function rumhora_primary_nav( $extra_class = '' ) {
 		)
 	);
 }
+
+/**
+ * Items du menu du footer tels que définis par la maquette. Sélection plus
+ * courte que le menu principal, et volontairement distincte : le footer met en
+ * avant les pages de découverte, pas la navigation complète.
+ *
+ * @return array[]
+ */
+function rumhora_default_footer_items() {
+	return array(
+		array( 'label' => __( 'Menu', 'rumhora' ), 'path' => '/menu' ),
+		array( 'label' => __( 'Events', 'rumhora' ), 'path' => '/events' ),
+		array( 'label' => __( 'Chefs', 'rumhora' ), 'path' => '/chefs' ),
+		array( 'label' => __( 'Gallery', 'rumhora' ), 'path' => '/gallery' ),
+	);
+}
+
+/**
+ * Liens légaux du bas de page. Trois pages sont obligatoires avant mise en
+ * ligne (mentions légales, confidentialité, cookies) ; la maquette n'en montre
+ * que deux, la troisième s'ajoutera depuis Apparence > Menus sans toucher au
+ * code.
+ *
+ * @return array[]
+ */
+function rumhora_default_legal_items() {
+	return array(
+		array( 'label' => __( 'Privacy Policy', 'rumhora' ), 'path' => '/privacy-policy' ),
+		array( 'label' => __( 'Legal Notice', 'rumhora' ), 'path' => '/legal-notice' ),
+	);
+}
+
+/**
+ * Repli générique : rend une liste d'items sous la même structure qu'un
+ * wp_nav_menu(), pour que le CSS s'applique indifféremment.
+ *
+ * @param array[] $items      Liste de ['label' => string, 'path' => string].
+ * @param array   $args       Arguments passés à wp_nav_menu().
+ */
+function rumhora_render_menu_fallback( $items, $args ) {
+	$args       = (array) $args;
+	$menu_class = $args['menu_class'] ?? '';
+	$link_class = $args['link_class'] ?? '';
+	$li_class   = $args['add_li_class'] ?? '';
+
+	echo '<ul class="' . esc_attr( $menu_class ) . '">';
+
+	foreach ( $items as $item ) {
+		$classes = trim( $li_class . ( rumhora_is_current_menu_item( $item['path'] ) ? ' current-menu-item' : '' ) );
+
+		printf(
+			'<li class="%1$s"><a href="%2$s" class="%3$s" data-barba>%4$s</a></li>',
+			esc_attr( $classes ),
+			esc_url( home_url( $item['path'] ) ),
+			esc_attr( $link_class ),
+			esc_html( $item['label'] )
+		);
+	}
+
+	echo '</ul>';
+}
+
+function rumhora_footer_menu_fallback( $args = array() ) {
+	rumhora_render_menu_fallback( rumhora_default_footer_items(), $args );
+}
+
+function rumhora_legal_menu_fallback( $args = array() ) {
+	rumhora_render_menu_fallback( rumhora_default_legal_items(), $args );
+}
+
+/**
+ * Liens du footer (ligne horizontale sous l'accroche).
+ */
+function rumhora_footer_nav() {
+	wp_nav_menu(
+		array(
+			'theme_location' => 'menu-footer',
+			'menu_id'        => 'footer-menu',
+			'menu_class'     => 'footer-menu flex flex-wrap items-center md:gap-8 gap-5',
+			'container'      => false,
+			'add_li_class'   => 'menu-item',
+			'link_class'     => 'footer-menu-link',
+			'walker'         => new Rumhora_Mobile_Nav_Walker(),
+			'fallback_cb'    => 'rumhora_footer_menu_fallback',
+			'depth'          => 1,
+		)
+	);
+}
+
+/**
+ * Liens légaux du bas de page.
+ */
+function rumhora_legal_nav() {
+	wp_nav_menu(
+		array(
+			'theme_location' => 'menu-legal',
+			'menu_id'        => 'legal-menu',
+			'menu_class'     => 'legal-menu flex flex-wrap items-center',
+			'container'      => false,
+			'add_li_class'   => 'menu-item',
+			'link_class'     => 'legal-menu-link',
+			'walker'         => new Rumhora_Mobile_Nav_Walker(),
+			'fallback_cb'    => 'rumhora_legal_menu_fallback',
+			'depth'          => 1,
+		)
+	);
+}

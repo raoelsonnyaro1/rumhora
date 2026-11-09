@@ -1510,13 +1510,7 @@
         start: "top 85%",
         delay: 0
       })),
-      ...Array.from(document.querySelectorAll("#newsletter")).map((group) => ({
-        group,
-        items: Array.from(group.querySelectorAll(".newsletter-reveal-item")),
-        start: "top 98%",
-        delay: 0
-      })),
-      ...Array.from(document.querySelectorAll(".footer-social")).map((group) => ({
+      ...Array.from(document.querySelectorAll(".social-icons")).map((group) => ({
         group,
         items: Array.from(group.querySelectorAll(".social-reveal-item")),
         start: "top 98%",
@@ -2527,69 +2521,6 @@
     });
   }
 
-  // src/js/forms/form-ajax.js
-  async function submitFormAjax(form, action) {
-    const formData = new FormData(form);
-    formData.append("action", action);
-    formData.append("nonce", window.rumhoraAjax.nonce);
-    formData.append("lang", document.documentElement.lang.split("-")[0]);
-    const response = await fetch(window.rumhoraAjax.url, {
-      method: "POST",
-      body: formData
-    });
-    return response.json();
-  }
-  function showFormAjaxMessage(form, success, message) {
-    const el = form.querySelector(".form-ajax-message");
-    if (!el) return;
-    el.textContent = message;
-    el.classList.add("is-visible");
-    el.classList.toggle("is-success", success);
-    el.classList.toggle("is-error", !success);
-    clearTimeout(el._hideTimeout);
-    el._hideTimeout = setTimeout(() => {
-      el.classList.remove("is-visible");
-    }, 1e4);
-  }
-  function trackFormSubmit(formName) {
-    if (typeof gtag === "function") {
-      gtag("event", "form_submit", { form_name: formName });
-    }
-    if (typeof fbq === "function") {
-      fbq("track", "Lead", { content_name: formName });
-    }
-  }
-
-  // src/js/forms/newsletter-form.js
-  function initNewsletterFormAjax() {
-    const form = document.querySelector('form[data-ajax-form="newsletter"]');
-    if (!form) return;
-    const submitBtn = form.querySelector('button[type="submit"]');
-    const submitHtml = submitBtn ? submitBtn.innerHTML : "";
-    form.addEventListener("submit", async (e) => {
-      e.preventDefault();
-      if (submitBtn) {
-        submitBtn.disabled = true;
-        submitBtn.innerHTML = "Envoi en cours...";
-      }
-      try {
-        const result = await submitFormAjax(form, "rumhora_submit_newsletter");
-        showFormAjaxMessage(form, result.success, result.data.message);
-        if (result.success) {
-          form.reset();
-          trackFormSubmit("newsletter");
-        }
-      } catch (error) {
-        console.error("Error in initNewsletterFormAjax:", error);
-        showFormAjaxMessage(form, false, "Une erreur est survenue. Merci de r\xE9essayer.");
-      }
-      if (submitBtn) {
-        submitBtn.disabled = false;
-        submitBtn.innerHTML = submitHtml;
-      }
-    });
-  }
-
   // src/js/barba.js
   var { barba, gsap: gsap3, ScrollTrigger: ScrollTrigger3 } = window;
   var isReloading = false;
@@ -2924,7 +2855,6 @@
                 initScrollVideo();
                 initCustomSelects();
                 initDatePickers();
-                initNewsletterFormAjax();
                 if (targetHash) {
                   window.history.replaceState(null, "", `${window.location.pathname}#${targetHash}`);
                 }
@@ -3149,7 +3079,6 @@
     initScrollVideo();
     initCustomSelects();
     initDatePickers();
-    initNewsletterFormAjax();
   });
   window.addEventListener("load", () => {
     const lenis2 = getLenis();

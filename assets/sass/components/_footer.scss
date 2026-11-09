@@ -1,0 +1,151 @@
+/**
+ * Pied de page.
+ *
+ * Trois colonnes (accroche + liens / logo / réseaux + coordonnées) puis une
+ * barre légale séparée par un filet.
+ */
+@use '../variables' as *;
+
+.site-footer {
+  background-color: $depth-1;
+  color: $body-text;
+}
+
+/* ==========================================================================
+   Colonne gauche
+   ========================================================================== */
+
+.footer-tagline {
+  font-family: 'Montserrat', system-ui, sans-serif;
+  font-size: 14px;
+  font-weight: 400;
+  line-height: 1.6;
+  color: $body-text;
+  // ~38 caractères : force le retour sur 3 lignes de la maquette sans avoir à
+  // écrire les sauts à la main dans le champ ACF, donc sans les figer pour la
+  // traduction anglaise.
+  max-width: 34ch;
+}
+
+.footer-menu {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+}
+
+.footer-menu-link {
+  font-family: 'Montserrat', system-ui, sans-serif;
+  font-size: 14px;
+  color: $body-text;
+  transition: color 0.3s ease;
+
+  &:hover {
+    color: $gold;
+  }
+}
+
+.footer-menu .current-menu-item > .footer-menu-link {
+  color: $gold;
+}
+
+/* ==========================================================================
+   Colonne centrale — logo
+   ========================================================================== */
+
+.footer-logo img {
+  // Hauteur de référence de la maquette (~175px pour le bloc complet
+  // logomark + nom + signature).
+  height: 175px;
+  width: auto;
+  display: block;
+
+  @media (max-width: 767px) {
+    height: 140px;
+  }
+}
+
+/* ==========================================================================
+   Colonne droite — réseaux + coordonnées
+   ========================================================================== */
+
+.social-icons {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+}
+
+.social-icon {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  color: $body-text;
+  transition: color 0.3s ease, transform 0.3s ease;
+
+  svg {
+    width: 16px;
+    height: 16px;
+    display: block;
+  }
+
+  &:hover {
+    color: $gold;
+    transform: translateY(-2px);
+  }
+}
+
+.footer-contact {
+  font-family: 'Montserrat', system-ui, sans-serif;
+  font-size: 14px;
+  font-style: normal; // <address> est en italique par défaut
+  line-height: 1.75;
+  color: $body-text;
+
+  a {
+    color: inherit;
+
+    &:hover {
+      color: $gold;
+    }
+  }
+}
+
+/* ==========================================================================
+   Barre légale
+   ========================================================================== */
+
+.footer-bottom {
+  // Le filet court sur toute la largeur du contenu, pas sur celle de la page :
+  // il est porté par ce bloc (déjà dans la gouttière) plutôt que par un
+  // élément pleine largeur à rogner.
+  border-top: 1px solid rgba($neutral, 0.25);
+  font-family: 'Montserrat', system-ui, sans-serif;
+  font-size: 13px;
+}
+
+.footer-copyright {
+  color: $secondary;
+}
+
+.legal-menu {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+
+  // Séparateur « | » entre les liens, posé en CSS plutôt que dans le markup :
+  // le nombre de liens vient d'un menu WordPress et peut changer, et un
+  // séparateur écrit en dur finirait seul en bout de liste.
+  .menu-item + .menu-item::before {
+    content: '|';
+    margin: 0 0.5em;
+    color: rgba($body-text, 0.5);
+  }
+}
+
+.legal-menu-link {
+  color: $body-text;
+  transition: color 0.3s ease;
+
+  &:hover {
+    color: $gold;
+  }
+}

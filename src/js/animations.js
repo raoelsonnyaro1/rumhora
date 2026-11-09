@@ -828,13 +828,7 @@ function initStaggerReveal() {
       start: 'top 85%',
       delay: 0,
     })),
-    ...Array.from(document.querySelectorAll('#newsletter')).map((group) => ({
-      group,
-      items: Array.from(group.querySelectorAll('.newsletter-reveal-item')),
-      start: 'top 98%',
-      delay: 0,
-    })),
-    ...Array.from(document.querySelectorAll('.footer-social')).map((group) => ({
+    ...Array.from(document.querySelectorAll('.social-icons')).map((group) => ({
       group,
       items: Array.from(group.querySelectorAll('.social-reveal-item')),
       start: 'top 98%',

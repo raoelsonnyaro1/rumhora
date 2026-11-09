@@ -22,13 +22,15 @@ function rumhora_setup() {
 	add_theme_support( 'title-tag' );
 	add_theme_support( 'post-thumbnails' );
 
-	// Deux emplacements de menu gérés indépendamment depuis Apparence > Menus :
-	// 'menu-1' (menu mobile plein écran, voir rs_mobile_menu()) et
-	// 'menu-footer' (footer.php).
+	// Trois emplacements, gérés indépendamment depuis Apparence > Menus. Chacun
+	// a un repli codé dans inc/nav-menu.php : tant qu'aucun menu n'est assigné,
+	// ce sont les entrées de la maquette qui s'affichent, et le site est donc
+	// correct dès l'activation du thème.
 	register_nav_menus(
 		array(
-			'menu-1'      => esc_html__( 'Principal', 'rumhora' ),
+			'menu-1'      => esc_html__( 'Principal (header + menu plein écran)', 'rumhora' ),
 			'menu-footer' => esc_html__( 'Footer', 'rumhora' ),
+			'menu-legal'  => esc_html__( 'Mentions légales (bas de page)', 'rumhora' ),
 		)
 	);
 
@@ -188,7 +190,8 @@ function rumhora_enqueue_scripts() {
 		);
 
 		// URL admin-ajax + nonce partagés par tous les formulaires AJAX
-		// (voir src/js/forms/form-ajax.js, inc/ajax-newsletter.php).
+		// (voir src/js/forms/form-ajax.js). Conservé même sans formulaire actif :
+		// les prochains formulaires (contact, privatisation) s'appuieront dessus.
 		wp_localize_script(
 			'rumhora-main',
 			'rumhoraAjax',
@@ -252,9 +255,20 @@ require get_template_directory() . '/inc/nav-menu.php';
 require get_template_directory() . '/inc/components.php';
 
 /**
- * Handler AJAX du formulaire newsletter (Brevo).
+ * Newsletter (Brevo) — VOLONTAIREMENT NON CHARGÉE.
+ *
+ * Le footer de la maquette n'a pas de formulaire d'inscription, et la
+ * newsletter est listée « hors périmètre » dans _planning-rhumora.md. Le
+ * handler reste dans inc/ajax-newsletter.php, prêt à servir, mais n'est pas
+ * requis ici : un endpoint admin-ajax enregistré sans formulaire pour l'appeler
+ * est une surface exposée sans contrepartie.
+ *
+ * Pour le réactiver : décommenter la ligne ci-dessous, réimporter
+ * initNewsletterFormAjax() dans src/js/main.js et src/js/barba.js, et poser le
+ * markup du formulaire (voir l'en-tête de inc/ajax-newsletter.php).
+ *
+ * require get_template_directory() . '/inc/ajax-newsletter.php';
  */
-require get_template_directory() . '/inc/ajax-newsletter.php';
 
 /**
  * Customizer additions.

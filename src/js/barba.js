@@ -16,7 +16,6 @@ import { addBarbaToLinks, updateCurrentMenuItem, setPendingMenuActive, clearPend
 import { initScrollVideo } from './components/scroll-video.js';
 import { initCustomSelects } from './components/custom-select.js';
 import { initDatePickers } from './components/date-picker.js';
-import { initNewsletterFormAjax } from './forms/newsletter-form.js';
 
 const { barba, gsap, ScrollTrigger } = window;
 
@@ -626,10 +625,9 @@ export function initBarba() {
               initCustomSelects();
               initDatePickers();
               // Le footer est remplacé en bloc à chaque transition (voir
-              // updatePersistentLayoutLinks) : son <form> newsletter est donc
-              // lui aussi un nouveau nœud à chaque fois.
-              initNewsletterFormAjax();
 
+
+            
               if (targetHash) {
                 window.history.replaceState(null, '', `${window.location.pathname}#${targetHash}`);
               }

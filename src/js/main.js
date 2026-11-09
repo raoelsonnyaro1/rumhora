@@ -24,7 +24,6 @@ import { initScrollVideo } from './components/scroll-video.js';
 import { initCustomSelects } from './components/custom-select.js';
 import { initDatePickers } from './components/date-picker.js';
 import { initRsScroll } from './components/rs-scroll.js';
-import { initNewsletterFormAjax } from './forms/newsletter-form.js';
 
 // Exposé globalement pour être appelable depuis un callback AJAX ou un script
 // inline qui a besoin de relancer la page avec le curseur d'attente.
@@ -147,7 +146,6 @@ document.addEventListener('DOMContentLoaded', () => {
   initScrollVideo();
   initCustomSelects();
   initDatePickers();
-  initNewsletterFormAjax();
 });
 
 window.addEventListener('load', () => {

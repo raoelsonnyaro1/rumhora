@@ -18,6 +18,7 @@
 @use 'components/buttons';
 @use 'components/header';
 @use 'components/hero';
+@use 'components/footer';
 @use 'components/form';
 @use 'components/flatpickr';
 @use 'components/galerie';
@@ -320,22 +321,6 @@ img[data-src] {
     filter: blur(0);
     background-color: transparent;
   }
-}
-
-/* ==========================================================================
-   Footer
-   ========================================================================== */
-
-footer {
-  background-color: $depth-1;
-}
-
-.footer-block > * {
-  width: fit-content;
-}
-
-.footer-menu-link {
-  font-family: 'Playfair Display', Georgia, serif;
 }
 
 /* ==========================================================================

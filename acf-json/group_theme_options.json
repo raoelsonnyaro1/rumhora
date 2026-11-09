@@ -40,6 +40,31 @@
             "endpoint": 0
         },
         {
+            "key": "field_footer_tagline",
+            "label": "Accroche",
+            "name": "footer_tagline",
+            "type": "textarea",
+            "instructions": "Courte phrase de présentation, colonne gauche du footer. 3 lignes environ — la largeur est bornée en CSS, inutile de forcer les retours à la ligne.",
+            "required": 0,
+            "conditional_logic": 0,
+            "wrapper": { "width": "", "class": "", "id": "" },
+            "default_value": "",
+            "rows": 3,
+            "new_lines": ""
+        },
+        {
+            "key": "field_footer_email",
+            "label": "Email affiché",
+            "name": "footer_email",
+            "type": "email",
+            "instructions": "Adresse de contact affichée dans le footer (ex: reservations@…). Si vide, reprend l'adresse de réception des formulaires, puis l'adresse d'administration.",
+            "required": 0,
+            "conditional_logic": 0,
+            "wrapper": { "width": "", "class": "", "id": "" },
+            "default_value": "",
+            "placeholder": ""
+        },
+        {
             "key": "field_footer_address",
             "label": "Adresse",
             "name": "footer_address",

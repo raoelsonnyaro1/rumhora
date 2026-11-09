@@ -1,87 +1,74 @@
 <?php
 /**
- * Icônes de réseaux sociaux en cercle. Les URLs sont lues depuis la page
- * d'options ACF (Options du Thème > Réseaux sociaux, voir
- * acf-json/group_theme_options.json) — un champ vide masque simplement
- * l'icône correspondante, plutôt que de pointer vers un faux lien.
+ * Icônes de réseaux sociaux du footer.
  *
- * 3 variantes visuelles :
- *   'outline'       cercle transparent, bordure/icône crème — fond sombre (footer)
- *   'outline-dark'  identique mais bordure/icône sombres — fond clair
- *   'solid'         cercle plein sombre, icône crème
+ * Les tracés viennent directement des SVG fournis avec la maquette
+ * (assets/elements/_Footer Elements/), réécrits en `fill="currentColor"` : la
+ * couleur est ainsi pilotée par le CSS et peut changer au survol, ce qu'un
+ * <img> externe ne permettrait pas.
+ *
+ * Les URLs sont lues depuis Options du Thème > Réseaux sociaux. Un champ vide
+ * masque simplement l'icône, plutôt que de pointer vers un faux lien.
  *
  * Usage :
- *   rs_social_icons();                               // variante 'outline'
- *   rs_social_icons(['variant' => 'outline-dark']);
- *   rs_social_icons(['variant' => 'solid']);
+ *   rs_social_icons();                             // taille par défaut
+ *   rs_social_icons(['class' => 'gap-5']);         // classes du conteneur
  *
  * @param array $args
  */
 function rs_social_icons( $args = array() ) {
-	$variant = $args['variant'] ?? 'outline';
+	$class = $args['class'] ?? 'gap-4';
 
-	// Les SVG utilisent fill="currentColor" (pas une couleur en dur) pour
-	// suivre la couleur de chaque variante.
 	$available = array(
 		array(
-			'label' => 'Instagram',
-			'url'   => get_field( 'footer_instagram', 'option' ),
-			'svg'   => '<svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" aria-hidden="true"><rect x="2.5" y="2.5" width="19" height="19" rx="5"/><circle cx="12" cy="12" r="4.2"/><circle cx="17.6" cy="6.4" r="1.1" fill="currentColor" stroke="none"/></svg>',
-		),
-		array(
+			'key'   => 'facebook',
 			'label' => 'Facebook',
-			'url'   => get_field( 'footer_facebook', 'option' ),
-			'svg'   => '<svg width="16" height="16" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><path d="M13.5 22v-9h3l.5-3.5h-3.5V7.3c0-1 .3-1.7 1.7-1.7H17V2.4A23 23 0 0 0 14.6 2c-2.4 0-4.1 1.5-4.1 4.2v3.3H7.5V13h3v9h3Z"/></svg>',
+			'svg'   => '<svg viewBox="0 0 16 16" fill="currentColor" aria-hidden="true" focusable="false"><path d="M2,0A2,2,0,0,0,0,2V14a2,2,0,0,0,2,2H8V10.5H6V8H8V6a3,3,0,0,1,3-3h2V5.5H12c-.552,0-1-.052-1,.5V8h2.5l-1,2.5H11V16h3a2,2,0,0,0,2-2V2a2,2,0,0,0-2-2Z"/></svg>',
 		),
 		array(
-			'label' => 'TripAdvisor',
-			'url'   => get_field( 'footer_tripadvisor', 'option' ),
-			'svg'   => '<svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" aria-hidden="true"><circle cx="7" cy="13" r="4.2"/><circle cx="17" cy="13" r="4.2"/><circle cx="7" cy="13" r="1.4" fill="currentColor" stroke="none"/><circle cx="17" cy="13" r="1.4" fill="currentColor" stroke="none"/><path d="M4.2 9.3A12.4 12.4 0 0 1 12 6.8c2.9 0 5.6.9 7.8 2.5"/></svg>',
+			'key'   => 'instagram',
+			'label' => 'Instagram',
+			'svg'   => '<svg viewBox="0 0 16 16" fill="currentColor" aria-hidden="true" focusable="false"><path d="M11.277,1.446a3.669,3.669,0,0,1,1.446.289,3.208,3.208,0,0,1,.964.578,2,2,0,0,1,.578.964,7.253,7.253,0,0,1,.289,1.446v6.554a3.671,3.671,0,0,1-.289,1.446,3.207,3.207,0,0,1-.578.964,2,2,0,0,1-.964.578,7.253,7.253,0,0,1-1.446.289H4.723a3.671,3.671,0,0,1-1.446-.289,3.208,3.208,0,0,1-.964-.578,2,2,0,0,1-.578-.964,7.244,7.244,0,0,1-.289-1.446V4.723a3.669,3.669,0,0,1,.289-1.446,3.208,3.208,0,0,1,.578-.964,2,2,0,0,1,.964-.578,7.244,7.244,0,0,1,1.446-.289h6.554ZM4.723,0A4.837,4.837,0,0,0,2.8.386a4.209,4.209,0,0,0-1.446.964A4.746,4.746,0,0,0,.386,2.8,7.463,7.463,0,0,0,0,4.723v6.554A4.837,4.837,0,0,0,.386,13.2a4.209,4.209,0,0,0,.964,1.446,4.747,4.747,0,0,0,1.446.964A7.467,7.467,0,0,0,4.723,16h6.554a4.838,4.838,0,0,0,1.928-.385,4.21,4.21,0,0,0,1.446-.964,4.747,4.747,0,0,0,.964-1.446A7.467,7.467,0,0,0,16,11.277V4.723A4.839,4.839,0,0,0,15.615,2.8a4.21,4.21,0,0,0-.964-1.446A4.745,4.745,0,0,0,13.2.386,7.463,7.463,0,0,0,11.277,0H4.723ZM3.855,8A4.145,4.145,0,1,0,8,3.855,4.114,4.114,0,0,0,3.855,8ZM5.3,8a2.7,2.7,0,0,1,5.4,0A2.758,2.758,0,0,1,8,10.7,2.694,2.694,0,0,1,5.3,8Zm7.9-4.241a.964.964,0,1,0-.964.964A.964.964,0,0,0,13.2,3.759Z"/></svg>',
 		),
 		array(
-			'label' => 'LinkedIn',
-			'url'   => get_field( 'footer_linkedin', 'option' ),
-			'svg'   => '<svg width="14" height="14" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><path d="M4.98 3.5a2.5 2.5 0 1 0 0 5 2.5 2.5 0 0 0 0-5ZM2.4 21h5.2V9.6H2.4V21Zm7.8 0h5.2v-6.3c0-1.7.6-2.8 2.1-2.8 1.4 0 1.9 1 1.9 2.8V21h5.2v-6.9c0-3.5-1.9-5.2-4.4-5.2a3.8 3.8 0 0 0-3.5 1.9h-.1V9.6h-5.2c.1 1.5 0 11.4 0 11.4Z"/></svg>',
-		),
-		array(
-			'label' => 'YouTube',
-			'url'   => get_field( 'footer_youtube', 'option' ),
-			'svg'   => '<svg width="16" height="16" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><path d="M22.5 7.4a2.8 2.8 0 0 0-1.9-2C18.9 5 12 5 12 5s-6.9 0-8.6.4a2.8 2.8 0 0 0-1.9 2A29 29 0 0 0 1.1 12a29 29 0 0 0 .4 4.6 2.8 2.8 0 0 0 1.9 2C5.1 19 12 19 12 19s6.9 0 8.6-.4a2.8 2.8 0 0 0 1.9-2 29 29 0 0 0 .4-4.6 29 29 0 0 0-.4-4.6ZM9.8 15.1V8.9l5.6 3.1-5.6 3.1Z"/></svg>',
+			'key'   => 'whatsapp',
+			'label' => 'WhatsApp',
+			'svg'   => '<svg viewBox="0 0 18 18" fill="currentColor" aria-hidden="true" focusable="false"><path d="M9,0A8.957,8.957,0,0,0,1.238,13.5L0,18l4.725-1.237A9.686,9.686,0,0,0,9,17.888a9.026,9.026,0,0,0,9-9,8.959,8.959,0,0,0-2.7-6.3A8.848,8.848,0,0,0,9,0ZM5.175,15.413,4.95,15.3l-2.812.787.788-2.7L2.7,13.05A7.238,7.238,0,0,1,1.575,9.113,7.491,7.491,0,0,1,9,1.688a7.688,7.688,0,0,1,5.288,2.138,7.214,7.214,0,0,1,2.137,5.288A7.4,7.4,0,0,1,9,16.425,7.482,7.482,0,0,1,5.175,15.413Zm6.3-5.288c-.225-.113-.338-.113-.45.113s-.562.675-.675.9c-.113.113-.225.113-.45.113a6.291,6.291,0,0,1-1.8-1.125A5.468,5.468,0,0,1,6.863,8.55c-.113-.225,0-.338.112-.45l.337-.338c.113-.112.113-.225.225-.337s0-.225,0-.338A12.84,12.84,0,0,0,6.863,5.4a.42.42,0,0,0-.45-.338h-.45a.727.727,0,0,0-.562.225A2.518,2.518,0,0,0,4.613,7.2a4.813,4.813,0,0,0,.9,2.363,9.69,9.69,0,0,0,3.825,3.375,4.487,4.487,0,0,0,2.7.563A1.982,1.982,0,0,0,13.5,12.488c.225-.562.225-1.012.113-1.012a.727.727,0,0,0-.562-.675A9.481,9.481,0,0,0,11.475,10.125Z"/></svg>',
 		),
 	);
 
-	$icons = array_filter(
-		$available,
-		function ( $icon ) {
-			return ! empty( $icon['url'] );
+	$icons = array();
+	foreach ( $available as $icon ) {
+		// WhatsApp n'a pas d'URL propre : il se déduit du téléphone du footer
+		// (format wa.me, sans le "+"), comme le lien de contact rapide.
+		if ( 'whatsapp' === $icon['key'] ) {
+			$phone = get_field( 'footer_phone', 'option' );
+			$icon['url'] = $phone ? 'https://wa.me/' . preg_replace( '/[^0-9]/', '', $phone ) : '';
+		} else {
+			$icon['url'] = get_field( 'footer_' . $icon['key'], 'option' );
 		}
-	);
+
+		if ( $icon['url'] ) {
+			$icons[] = $icon;
+		}
+	}
 
 	if ( empty( $icons ) ) {
 		return;
 	}
-
-	if ( 'solid' === $variant ) {
-		// ring (box-shadow) plutôt que border : une bordure se dessine à
-		// l'INTÉRIEUR de la boîte et se ferait recouvrir par le voile ::before
-		// de .social-icon-wipe ; le ring se dessine à l'extérieur, jamais
-		// affecté par un pseudo-élément interne.
-		$circle_class = 'bg-dark text-heading social-icon-wipe hover:ring-2 hover:ring-heading';
-	} elseif ( 'outline-dark' === $variant ) {
-		$circle_class = 'border border-dark/40 text-dark hover:bg-dark/10 hover:border-dark transition-colors';
-	} else {
-		$circle_class = 'border border-heading/60 text-heading hover:bg-heading/20 hover:border-heading transition-colors';
-	}
-
-	foreach ( $icons as $icon ) :
-		?>
-		<a href="<?php echo esc_url( $icon['url'] ); ?>"
-			target="_blank"
-			rel="noopener"
-			aria-label="<?php echo esc_attr( $icon['label'] ); ?>"
-			class="social-reveal-item w-8 h-8 rounded-full flex items-center justify-center <?php echo esc_attr( $circle_class ); ?>">
-			<?php echo $icon['svg']; // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped -- SVG codé en dur ci-dessus, pas une saisie utilisateur. ?>
-		</a>
-		<?php
-	endforeach;
+	?>
+	<ul class="social-icons flex items-center <?php echo esc_attr( $class ); ?>">
+		<?php foreach ( $icons as $icon ) : ?>
+			<li class="social-reveal-item">
+				<a href="<?php echo esc_url( $icon['url'] ); ?>"
+					target="_blank"
+					rel="noopener"
+					aria-label="<?php echo esc_attr( $icon['label'] ); ?>"
+					class="social-icon">
+					<?php echo $icon['svg']; // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped -- SVG codé en dur ci-dessus, pas une saisie utilisateur. ?>
+				</a>
+			</li>
+		<?php endforeach; ?>
+	</ul>
+	<?php
 }
