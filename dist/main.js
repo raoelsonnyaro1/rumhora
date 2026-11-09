@@ -3022,6 +3022,10 @@
   // src/js/main.js
   window.handlePageReload = handlePageReload;
   var { gsap: gsap4, ScrollTrigger: ScrollTrigger4 } = window;
+  if (!gsap4) {
+    document.documentElement.classList.add("no-gsap");
+    console.warn("[Rumhora] GSAP introuvable : animations d\xE9sactiv\xE9es, contenu affich\xE9 sans transition.");
+  }
   if (gsap4 && ScrollTrigger4) {
     gsap4.registerPlugin(ScrollTrigger4);
     ScrollTrigger4.config({ ignoreMobileResize: true });
@@ -3080,18 +3084,29 @@
     initCustomSelects();
     initDatePickers();
   });
+  function fallbackLazyImages() {
+    if (window.lazySizes) return;
+    console.warn("[Rumhora] lazysizes introuvable : chargement direct des images.");
+    document.querySelectorAll("img[data-src], source[data-srcset]").forEach((el) => {
+      if (el.dataset.src) el.src = el.dataset.src;
+      if (el.dataset.srcset) el.srcset = el.dataset.srcset;
+      el.classList.add("lazyloaded");
+    });
+  }
   window.addEventListener("load", () => {
     const lenis2 = getLenis();
-    forceScrollToTop();
-    if (lenis2) {
-      lenis2.scrollTo(0, { immediate: true });
+    fallbackLazyImages();
+    const hasAnchor = !!window.location.hash;
+    if (!hasAnchor) {
+      forceScrollToTop();
+      if (lenis2) lenis2.scrollTo(0, { immediate: true });
     }
     if (typeof ScrollTrigger4 !== "undefined") {
       ScrollTrigger4.getAll().forEach((st) => st.disable());
       setTimeout(() => {
-        forceScrollToTop();
-        if (lenis2) {
-          lenis2.scrollTo(0, { immediate: true });
+        if (!hasAnchor) {
+          forceScrollToTop();
+          if (lenis2) lenis2.scrollTo(0, { immediate: true });
         }
         ScrollTrigger4.getAll().forEach((st) => st.enable());
         ScrollTrigger4.refresh();

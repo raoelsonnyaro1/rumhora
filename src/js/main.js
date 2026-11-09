@@ -31,6 +31,23 @@ window.handlePageReload = handlePageReload;
 
 const { gsap, ScrollTrigger } = window;
 
+/**
+ * Filet de sécurité : GSAP est chargé depuis un CDN (voir
+ * rumhora_enqueue_scripts()). S'il n'arrive pas — CDN injoignable, requête
+ * bloquée par une extension, réseau d'entreprise filtrant —, TOUT le site
+ * reste blanc : le container Barba et le header partent à `opacity: 0` en CSS,
+ * les `.reveal` à `visibility: hidden`, et c'est GSAP seul qui les révèle.
+ *
+ * On pose donc une classe sur <html> dès que son absence est constatée ; le
+ * CSS correspondant (voir « Repli sans GSAP » dans style.scss) rétablit les
+ * états visibles. Le site perd ses animations, mais reste lisible et
+ * navigable — ce qui vaut infiniment mieux qu'une page vide.
+ */
+if (!gsap) {
+  document.documentElement.classList.add('no-gsap');
+  console.warn('[Rumhora] GSAP introuvable : animations désactivées, contenu affiché sans transition.');
+}
+
 if (gsap && ScrollTrigger) {
   gsap.registerPlugin(ScrollTrigger);
 
@@ -148,13 +165,44 @@ document.addEventListener('DOMContentLoaded', () => {
   initDatePickers();
 });
 
+/**
+ * Même logique de repli que pour GSAP, côté images : lazysizes vient lui aussi
+ * du CDN, et c'est lui qui convertit `data-src` en `src`. S'il n'arrive pas,
+ * AUCUNE image du site ne se charge — or elles portent l'essentiel du contenu.
+ *
+ * Au `load`, on vérifie sa présence et, à défaut, on fait la permutation
+ * nous-mêmes. Posé sur 'load' plutôt que 'DOMContentLoaded' : lazysizes est
+ * enqueué en pied de page, il faut lui laisser sa chance avant de conclure
+ * qu'il manque.
+ */
+function fallbackLazyImages() {
+  if (window.lazySizes) return;
+
+  console.warn('[Rumhora] lazysizes introuvable : chargement direct des images.');
+
+  document.querySelectorAll('img[data-src], source[data-srcset]').forEach((el) => {
+    if (el.dataset.src) el.src = el.dataset.src;
+    if (el.dataset.srcset) el.srcset = el.dataset.srcset;
+    // .lazyloaded retire le flou du blur-up (voir img.lazyload dans style.scss)
+    el.classList.add('lazyloaded');
+  });
+}
+
 window.addEventListener('load', () => {
   const lenis = getLenis();
 
-  forceScrollToTop();
+  fallbackLazyImages();
 
-  if (lenis) {
-    lenis.scrollTo(0, { immediate: true });
+  // Ces recalages ne doivent JAMAIS s'appliquer quand l'URL porte une ancre :
+  // handleInitialAnchor() a lancé un scroll Lenis vers la cible (600ms de
+  // délai puis 2s d'animation), et 'load' arrive en plein milieu. Sans cette
+  // garde, atterrir sur /#about — ou suivre n'importe quel lien d'ancre depuis
+  // une autre page — ramenait silencieusement en haut de page.
+  const hasAnchor = !!window.location.hash;
+
+  if (!hasAnchor) {
+    forceScrollToTop();
+    if (lenis) lenis.scrollTo(0, { immediate: true });
   }
 
   // ScrollTrigger désactivé le temps du recalage : un refresh() pendant que la
@@ -164,10 +212,9 @@ window.addEventListener('load', () => {
     ScrollTrigger.getAll().forEach((st) => st.disable());
 
     setTimeout(() => {
-      forceScrollToTop();
-
-      if (lenis) {
-        lenis.scrollTo(0, { immediate: true });
+      if (!hasAnchor) {
+        forceScrollToTop();
+        if (lenis) lenis.scrollTo(0, { immediate: true });
       }
 
       ScrollTrigger.getAll().forEach((st) => st.enable());

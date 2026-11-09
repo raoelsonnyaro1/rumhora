@@ -1036,6 +1036,80 @@
  * d'un !important (voir les overrides "100svh" plus bas).
  */
 
+/**
+ * Section « texte + média » (voir inc/components/rs-text-media.php).
+ */
+
+.text-media--surface {
+  background-color: #2A0F12;
+}
+
+/* ==========================================================================
+   Colonne éditoriale
+   ========================================================================== */
+
+.text-media__title {
+  font-size: clamp(34px, 3.9vw, 56px);
+  line-height: 1.14;
+  color: #F4EDE4;
+  max-width: 100%;
+}
+
+.text-media__text {
+  font-family: "Montserrat", system-ui, sans-serif;
+  font-size: 15px;
+  line-height: 1.8;
+  color: #D8CFC4;
+  max-width: 36ch;
+}
+
+@media (max-width: 767px) {
+  .text-media__text {
+    font-size: 14px;
+  }
+}
+
+/* ==========================================================================
+   Colonne photo
+   ==========================================================================
+   Le cadre porte le ratio et les coins arrondis ; .reveal (style.scss) lui
+   ajoute overflow:hidden et l'état caché avant animation.
+*/
+
+.text-media__frame {
+  aspect-ratio: 515/415;
+  border-radius: 10px;
+  overflow: hidden;
+}
+
+.text-media__frame img {
+  width: 100%;
+  height: 100%;
+  -o-object-fit: cover;
+     object-fit: cover;
+  display: block;
+}
+
+@media (max-width: 1023px) {
+  .text-media__frame {
+    aspect-ratio: 4/3;
+  }
+}
+
+/**
+ * Feuille maîtresse — compilée vers dist/styles.css
+ *
+ * Chaîne de build : sass (ce fichier) → dist/temp.css → tailwindcss CLI →
+ * dist/styles.css. Les directives @tailwind ci-dessous sont donc résolues par
+ * Tailwind APRÈS la compilation Sass (voir package.json, build:css).
+ *
+ * Conséquence importante sur l'ordre des règles : Tailwind place toutes ses
+ * utilitaires (et surtout les variantes responsives "md:", "lg:") À LA FIN du
+ * CSS produit, donc APRÈS tout ce qui est écrit ici. Une règle de ce fichier
+ * qui doit l'emporter sur un utilitaire Tailwind de même spécificité a besoin
+ * d'un !important (voir les overrides "100svh" plus bas).
+ */
+
 /* =========================================
    Formulaires (libellé flottant)
    =========================================
@@ -2591,6 +2665,10 @@ video {
   margin-top: 2rem;
 }
 
+.mt-9{
+  margin-top: 2.25rem;
+}
+
 .mt-auto{
   margin-top: auto;
 }
@@ -2764,6 +2842,10 @@ video {
   justify-content: space-between;
 }
 
+.gap-10{
+  gap: 2.5rem;
+}
+
 .gap-12{
   gap: 3rem;
 }
@@ -2910,6 +2992,11 @@ video {
   padding-bottom: 3rem;
 }
 
+.py-16{
+  padding-top: 4rem;
+  padding-bottom: 4rem;
+}
+
 .py-3{
   padding-top: 0.75rem;
   padding-bottom: 0.75rem;
@@ -3007,6 +3094,17 @@ video {
 
 .opacity-60{
   opacity: 0.6;
+}
+
+.shadow{
+  --tw-shadow: 0 1px 3px 0 rgb(0 0 0 / 0.1), 0 1px 2px -1px rgb(0 0 0 / 0.1);
+  --tw-shadow-colored: 0 1px 3px 0 var(--tw-shadow-color), 0 1px 2px -1px var(--tw-shadow-color);
+  box-shadow: var(--tw-ring-offset-shadow, 0 0 #0000), var(--tw-ring-shadow, 0 0 #0000), var(--tw-shadow);
+}
+
+.invert{
+  --tw-invert: invert(100%);
+  filter: var(--tw-blur) var(--tw-brightness) var(--tw-contrast) var(--tw-grayscale) var(--tw-hue-rotate) var(--tw-invert) var(--tw-saturate) var(--tw-sepia) var(--tw-drop-shadow);
 }
 
 .filter{
@@ -3161,7 +3259,9 @@ p {
   }
 }
 
-/* Surtitre de section : petites capitales dorées très espacées. */
+/* Surtitre de section : petites capitales très espacées, en rouge sourd
+   (« ABOUT US » de la maquette). La variante dorée existe pour les sections
+   posées sur une photo, où le rouge sourd manque de contraste. */
 
 .eyebrow {
   font-family: "Montserrat", system-ui, sans-serif;
@@ -3169,6 +3269,10 @@ p {
   font-weight: 500;
   letter-spacing: 0.2em;
   text-transform: uppercase;
+  color: #8C2D34;
+}
+
+.eyebrow--gold {
   color: #C6A75E;
 }
 
@@ -3540,6 +3644,50 @@ body.page-loading * {
 }
 
 /* ==========================================================================
+   Repli sans GSAP
+   ==========================================================================
+   Classe posée sur <html> par src/js/main.js quand GSAP (chargé depuis un CDN)
+   est absent. Sans ce bloc, le site s'affiche ENTIÈREMENT BLANC dans ce cas :
+   le container Barba et le header partent à opacity:0, les .reveal à
+   visibility:hidden, et c'est GSAP seul qui lève ces états.
+
+   On rétablit ici tous les états de départ cachés. Le site perd ses
+   animations, mais reste lisible et navigable.
+*/
+
+.no-gsap [data-barba=container] {
+  opacity: 1 !important;
+}
+
+.no-gsap #masthead {
+  opacity: 1 !important;
+  transform: none !important;
+}
+
+.no-gsap #page-transition-mask {
+  display: none !important;
+}
+
+.no-gsap .reveal {
+  visibility: visible !important;
+}
+
+.no-gsap .line-reveal,
+.no-gsap .hero-bottom-row-line {
+  transform: none !important;
+}
+
+.no-gsap .fade-in,
+.no-gsap .gsap-fade-in {
+  opacity: 1 !important;
+  transform: none !important;
+}
+
+.no-gsap .mobile-menu-overlay.active {
+  visibility: visible !important;
+}
+
+/* ==========================================================================
    Overrides d'utilitaires Tailwind
    ==========================================================================
    Fallback pour "100svh" (hauteur de viewport "small") : unité non supportée
@@ -3600,8 +3748,16 @@ body.page-loading * {
     margin-top: 2.5rem;
   }
 
+  .md\:mt-12{
+    margin-top: 3rem;
+  }
+
   .md\:mt-16{
     margin-top: 4rem;
+  }
+
+  .md\:mt-5{
+    margin-top: 1.25rem;
   }
 
   .md\:mt-6{
@@ -3710,6 +3866,11 @@ body.page-loading * {
     padding-bottom: 5rem;
   }
 
+  .md\:py-28{
+    padding-top: 7rem;
+    padding-bottom: 7rem;
+  }
+
   .md\:py-5{
     padding-top: 1.25rem;
     padding-bottom: 1.25rem;
@@ -3762,6 +3923,14 @@ body.page-loading * {
 }
 
 @media (min-width: 1024px){
+  .lg\:order-1{
+    order: 1;
+  }
+
+  .lg\:order-2{
+    order: 2;
+  }
+
   .lg\:mb-8{
     margin-bottom: 2rem;
   }
@@ -3796,6 +3965,10 @@ body.page-loading * {
 
   .lg\:gap-10{
     gap: 2.5rem;
+  }
+
+  .lg\:gap-12{
+    gap: 3rem;
   }
 
   .lg\:pb-8{
@@ -3844,6 +4017,10 @@ body.page-loading * {
 
   .xl\:gap-12{
     gap: 3rem;
+  }
+
+  .xl\:gap-20{
+    gap: 5rem;
   }
 
   .xl\:gap-9{

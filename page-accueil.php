@@ -47,4 +47,27 @@ rs_hero_split(
 	)
 );
 
+/**
+ * « About us » — bloc éditorial + photo.
+ *
+ * Même logique de repli que le hero : les valeurs ci-dessous sont celles de la
+ * maquette et ne s'affichent que tant que les champs ACF de la page sont vides.
+ */
+$rumhora_about_image = get_field( 'about_image' );
+if ( ! $rumhora_about_image ) {
+	$rumhora_about_image = get_template_directory_uri() . '/img/accueil-about.webp';
+}
+
+rs_text_media(
+	array(
+		'id'           => 'about',
+		'surtitre'     => get_field( 'about_surtitre' ) ?: __( 'About us', 'rumhora' ),
+		'titre'        => get_field( 'about_titre' ) ?: __( 'An architecture of flavor and sound.', 'rumhora' ),
+		'texte'        => get_field( 'about_texte' ) ?: __( 'RUMHORA is born from the intersection of haute cuisine and curated sonic environments. We believe in the power of precision—where every ingredient, every note, and every shadow is placed with intent.', 'rumhora' ),
+		'bouton_texte' => get_field( 'about_cta_texte' ) ?: __( 'Discover Our Story', 'rumhora' ),
+		'bouton_lien'  => get_field( 'about_cta_lien' ) ?: home_url( '/story' ),
+		'image'        => $rumhora_about_image,
+	)
+);
+
 get_footer();

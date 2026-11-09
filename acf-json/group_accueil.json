@@ -126,6 +126,93 @@
             "wrapper": { "width": "50", "class": "", "id": "" },
             "default_value": "",
             "placeholder": ""
+        },
+        {
+            "key": "field_accueil_about_tab",
+            "label": "About us",
+            "name": "",
+            "type": "tab",
+            "instructions": "",
+            "required": 0,
+            "conditional_logic": 0,
+            "wrapper": { "width": "", "class": "", "id": "" },
+            "placement": "top",
+            "endpoint": 0
+        },
+        {
+            "key": "field_accueil_about_surtitre",
+            "label": "Surtitre",
+            "name": "about_surtitre",
+            "type": "text",
+            "instructions": "Petite mention au-dessus du titre, affichée en capitales.",
+            "required": 0,
+            "conditional_logic": 0,
+            "wrapper": { "width": "", "class": "", "id": "" },
+            "default_value": "",
+            "placeholder": "About us"
+        },
+        {
+            "key": "field_accueil_about_titre",
+            "label": "Titre",
+            "name": "about_titre",
+            "type": "textarea",
+            "instructions": "Mettre un mot en <em>italique</em> l'affiche en doré.",
+            "required": 0,
+            "conditional_logic": 0,
+            "wrapper": { "width": "", "class": "", "id": "" },
+            "default_value": "",
+            "rows": 2,
+            "new_lines": ""
+        },
+        {
+            "key": "field_accueil_about_texte",
+            "label": "Texte",
+            "name": "about_texte",
+            "type": "textarea",
+            "instructions": "Paragraphe de présentation. La colonne est volontairement étroite (~36 caractères par ligne) : viser 4 à 6 lignes.",
+            "required": 0,
+            "conditional_logic": 0,
+            "wrapper": { "width": "", "class": "", "id": "" },
+            "default_value": "",
+            "rows": 5,
+            "new_lines": ""
+        },
+        {
+            "key": "field_accueil_about_image",
+            "label": "Photo",
+            "name": "about_image",
+            "type": "image",
+            "instructions": "Format paysage (ratio ~5/4). Si vide, la photo de la maquette est utilisée.",
+            "required": 0,
+            "conditional_logic": 0,
+            "wrapper": { "width": "", "class": "", "id": "" },
+            "return_format": "array",
+            "library": "all",
+            "preview_size": "medium"
+        },
+        {
+            "key": "field_accueil_about_cta_texte",
+            "label": "Bouton — libellé",
+            "name": "about_cta_texte",
+            "type": "text",
+            "instructions": "Laisser vide pour masquer le bouton.",
+            "required": 0,
+            "conditional_logic": 0,
+            "wrapper": { "width": "50", "class": "", "id": "" },
+            "default_value": "",
+            "placeholder": "Discover Our Story"
+        },
+        {
+            "key": "field_accueil_about_cta_lien",
+            "label": "Bouton — lien",
+            "name": "about_cta_lien",
+            "type": "text",
+            "instructions": "URL complète, ou ancre de la page courante.",
+            "required": 0,
+            "conditional_logic": 0,
+            "wrapper": { "width": "50", "class": "", "id": "" },
+            "default_value": "",
+            "placeholder": ""
         }
     ],
     "location": [

@@ -19,6 +19,7 @@
 @use 'components/header';
 @use 'components/hero';
 @use 'components/footer';
+@use 'components/text-media';
 @use 'components/form';
 @use 'components/flatpickr';
 @use 'components/galerie';
@@ -159,14 +160,20 @@ p {
   h4, h5, h6, p { font-size: 14px; }
 }
 
-/* Surtitre de section : petites capitales dorées très espacées. */
+/* Surtitre de section : petites capitales très espacées, en rouge sourd
+   (« ABOUT US » de la maquette). La variante dorée existe pour les sections
+   posées sur une photo, où le rouge sourd manque de contraste. */
 .eyebrow {
   font-family: 'Montserrat', system-ui, sans-serif;
   font-size: 12px;
   font-weight: 500;
   letter-spacing: 0.2em;
   text-transform: uppercase;
-  color: $gold;
+  color: $soft-accent;
+
+  &--gold {
+    color: $gold;
+  }
 }
 
 /* Texte secondaire */
@@ -522,6 +529,51 @@ img[data-src] {
 body.page-loading,
 body.page-loading * {
   cursor: wait !important;
+}
+
+/* ==========================================================================
+   Repli sans GSAP
+   ==========================================================================
+   Classe posée sur <html> par src/js/main.js quand GSAP (chargé depuis un CDN)
+   est absent. Sans ce bloc, le site s'affiche ENTIÈREMENT BLANC dans ce cas :
+   le container Barba et le header partent à opacity:0, les .reveal à
+   visibility:hidden, et c'est GSAP seul qui lève ces états.
+
+   On rétablit ici tous les états de départ cachés. Le site perd ses
+   animations, mais reste lisible et navigable.
+*/
+.no-gsap {
+  [data-barba="container"] {
+    opacity: 1 !important;
+  }
+
+  #masthead {
+    opacity: 1 !important;
+    transform: none !important;
+  }
+
+  #page-transition-mask {
+    display: none !important;
+  }
+
+  .reveal {
+    visibility: visible !important;
+  }
+
+  .line-reveal,
+  .hero-bottom-row-line {
+    transform: none !important;
+  }
+
+  .fade-in,
+  .gsap-fade-in {
+    opacity: 1 !important;
+    transform: none !important;
+  }
+
+  .mobile-menu-overlay.active {
+    visibility: visible !important;
+  }
 }
 
 /* ==========================================================================
