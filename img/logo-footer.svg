@@ -1,7 +1,0 @@
-<!-- PLACEHOLDER — logo du footer, sur fond sombre : teinte crème ($cream dans
-     assets/sass/_variables.scss). -->
-<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 220 48" fill="none" role="img" aria-label="Rumhora">
-  <rect x="1" y="1" width="46" height="46" rx="4" stroke="#F4EDE4" stroke-width="2"/>
-  <path d="M14 34V14h9a6 6 0 0 1 0 12h-9m10 8-6-8" stroke="#F4EDE4" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
-  <text x="60" y="33" font-family="Helvetica, Arial, sans-serif" font-size="26" letter-spacing="2" fill="#F4EDE4">RUMHORA</text>
-</svg>

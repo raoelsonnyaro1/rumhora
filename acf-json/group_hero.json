@@ -1,0 +1,117 @@
+{
+    "key": "group_hero",
+    "title": "Hero",
+    "fields": [
+        {
+            "key": "field_hero_titre",
+            "label": "Titre",
+            "name": "hero_titre",
+            "type": "textarea",
+            "instructions": "Titre principal du hero. Utiliser &lt;br&gt; pour forcer un retour à la ligne.",
+            "required": 0,
+            "conditional_logic": 0,
+            "wrapper": { "width": "", "class": "", "id": "" },
+            "default_value": "",
+            "rows": 2,
+            "new_lines": ""
+        },
+        {
+            "key": "field_hero_description",
+            "label": "Accroche",
+            "name": "hero_description",
+            "type": "textarea",
+            "instructions": "Phrase sous le titre. Animée ligne par ligne au chargement.",
+            "required": 0,
+            "conditional_logic": 0,
+            "wrapper": { "width": "", "class": "", "id": "" },
+            "default_value": "",
+            "rows": 3,
+            "new_lines": ""
+        },
+        {
+            "key": "field_hero_image",
+            "label": "Image de fond (desktop)",
+            "name": "hero_image",
+            "type": "image",
+            "instructions": "Format paysage, au moins 2400px de large. C'est l'image LCP de la page : à compresser avant l'envoi.",
+            "required": 0,
+            "conditional_logic": 0,
+            "wrapper": { "width": "50", "class": "", "id": "" },
+            "return_format": "array",
+            "library": "all",
+            "preview_size": "medium"
+        },
+        {
+            "key": "field_hero_image_mobile",
+            "label": "Image de fond (mobile)",
+            "name": "hero_image_mobile",
+            "type": "image",
+            "instructions": "Cadrage portrait, utilisé sous 560px. Si vide, l'image desktop est utilisée.",
+            "required": 0,
+            "conditional_logic": 0,
+            "wrapper": { "width": "50", "class": "", "id": "" },
+            "return_format": "array",
+            "library": "all",
+            "preview_size": "medium"
+        },
+        {
+            "key": "field_hero_col1_texte",
+            "label": "Bande basse — texte de gauche",
+            "name": "hero_col1_texte",
+            "type": "text",
+            "instructions": "Courte mention affichée en bas à gauche du hero.",
+            "required": 0,
+            "conditional_logic": 0,
+            "wrapper": { "width": "", "class": "", "id": "" },
+            "default_value": "",
+            "placeholder": ""
+        },
+        {
+            "key": "field_hero_col3_texte",
+            "label": "Bande basse — libellé du bouton",
+            "name": "hero_col3_texte",
+            "type": "text",
+            "instructions": "Si vide, affiche « Book a table ».",
+            "required": 0,
+            "conditional_logic": 0,
+            "wrapper": { "width": "50", "class": "", "id": "" },
+            "default_value": "",
+            "placeholder": ""
+        },
+        {
+            "key": "field_hero_col3_lien",
+            "label": "Bande basse — lien du bouton",
+            "name": "hero_col3_lien",
+            "type": "text",
+            "instructions": "URL complète, ou ancre de la page courante (ex: #reservation). Si vide, pointe vers la page de réservation.",
+            "required": 0,
+            "conditional_logic": 0,
+            "wrapper": { "width": "50", "class": "", "id": "" },
+            "default_value": "",
+            "placeholder": ""
+        }
+    ],
+    "location": [
+        [
+            {
+                "param": "post_type",
+                "operator": "==",
+                "value": "page"
+            },
+            {
+                "param": "page_template",
+                "operator": "!=",
+                "value": "page-accueil.php"
+            }
+        ]
+    ],
+    "menu_order": 1,
+    "position": "normal",
+    "style": "default",
+    "label_placement": "top",
+    "instruction_placement": "label",
+    "hide_on_screen": "",
+    "active": true,
+    "description": "Hero plein écran standard (voir rs_hero()). L'accueil a son propre hero, avec ses propres champs — d'où l'exclusion de son template ici, qui éviterait sinon deux groupes concurrents sur les mêmes noms de champs.",
+    "show_in_rest": 0
+}

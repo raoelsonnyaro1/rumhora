@@ -1,0 +1,149 @@
+{
+    "key": "group_accueil",
+    "title": "Accueil",
+    "fields": [
+        {
+            "key": "field_accueil_hero_tab",
+            "label": "Hero",
+            "name": "",
+            "type": "tab",
+            "instructions": "",
+            "required": 0,
+            "conditional_logic": 0,
+            "wrapper": { "width": "", "class": "", "id": "" },
+            "placement": "top",
+            "endpoint": 0
+        },
+        {
+            "key": "field_accueil_hero_titre",
+            "label": "Titre",
+            "name": "hero_titre",
+            "type": "textarea",
+            "instructions": "Titre principal. Mettre un mot en <em>italique</em> l'affiche en doré. Utiliser &lt;br&gt; pour forcer un retour à la ligne. Si vide, le titre de la maquette s'affiche.",
+            "required": 0,
+            "conditional_logic": 0,
+            "wrapper": { "width": "", "class": "", "id": "" },
+            "default_value": "",
+            "rows": 2,
+            "new_lines": ""
+        },
+        {
+            "key": "field_accueil_hero_description",
+            "label": "Accroche",
+            "name": "hero_description",
+            "type": "textarea",
+            "instructions": "Une à deux lignes sous le titre. Révélée ligne par ligne juste après le titre.",
+            "required": 0,
+            "conditional_logic": 0,
+            "wrapper": { "width": "", "class": "", "id": "" },
+            "default_value": "",
+            "rows": 3,
+            "new_lines": ""
+        },
+        {
+            "key": "field_accueil_hero_image",
+            "label": "Image de fond",
+            "name": "hero_image",
+            "type": "image",
+            "instructions": "Photo d'ambiance très sombre, format paysage, au moins 2400px de large. C'est l'image LCP de la page : à compresser avant l'envoi. Si vide, l'image de la maquette est utilisée.",
+            "required": 0,
+            "conditional_logic": 0,
+            "wrapper": { "width": "", "class": "", "id": "" },
+            "return_format": "array",
+            "library": "all",
+            "preview_size": "medium"
+        },
+        {
+            "key": "field_accueil_hero_media_1",
+            "label": "Photo 1 (haute)",
+            "name": "hero_media_1",
+            "type": "image",
+            "instructions": "Photo de gauche de la paire en quinconce. Cadrage portrait (ratio ~4/5).",
+            "required": 0,
+            "conditional_logic": 0,
+            "wrapper": { "width": "50", "class": "", "id": "" },
+            "return_format": "array",
+            "library": "all",
+            "preview_size": "medium"
+        },
+        {
+            "key": "field_accueil_hero_media_2",
+            "label": "Photo 2 (décalée vers le bas)",
+            "name": "hero_media_2",
+            "type": "image",
+            "instructions": "Photo de droite de la paire en quinconce. Même cadrage portrait que la photo 1.",
+            "required": 0,
+            "conditional_logic": 0,
+            "wrapper": { "width": "50", "class": "", "id": "" },
+            "return_format": "array",
+            "library": "all",
+            "preview_size": "medium"
+        },
+        {
+            "key": "field_accueil_hero_cta1_texte",
+            "label": "Bouton 1 — libellé",
+            "name": "hero_cta1_texte",
+            "type": "text",
+            "instructions": "Laisser vide pour masquer ce bouton.",
+            "required": 0,
+            "conditional_logic": 0,
+            "wrapper": { "width": "50", "class": "", "id": "" },
+            "default_value": "",
+            "placeholder": "Book A Table"
+        },
+        {
+            "key": "field_accueil_hero_cta1_lien",
+            "label": "Bouton 1 — lien",
+            "name": "hero_cta1_lien",
+            "type": "text",
+            "instructions": "URL complète, ou ancre de la page courante (ex: #menu).",
+            "required": 0,
+            "conditional_logic": 0,
+            "wrapper": { "width": "50", "class": "", "id": "" },
+            "default_value": "",
+            "placeholder": ""
+        },
+        {
+            "key": "field_accueil_hero_cta2_texte",
+            "label": "Bouton 2 — libellé",
+            "name": "hero_cta2_texte",
+            "type": "text",
+            "instructions": "Laisser vide pour masquer ce bouton.",
+            "required": 0,
+            "conditional_logic": 0,
+            "wrapper": { "width": "50", "class": "", "id": "" },
+            "default_value": "",
+            "placeholder": "Explore Menu"
+        },
+        {
+            "key": "field_accueil_hero_cta2_lien",
+            "label": "Bouton 2 — lien",
+            "name": "hero_cta2_lien",
+            "type": "text",
+            "instructions": "URL complète, ou ancre de la page courante.",
+            "required": 0,
+            "conditional_logic": 0,
+            "wrapper": { "width": "50", "class": "", "id": "" },
+            "default_value": "",
+            "placeholder": ""
+        }
+    ],
+    "location": [
+        [
+            {
+                "param": "page_template",
+                "operator": "==",
+                "value": "page-accueil.php"
+            }
+        ]
+    ],
+    "menu_order": 0,
+    "position": "normal",
+    "style": "default",
+    "label_placement": "top",
+    "instruction_placement": "label",
+    "hide_on_screen": "",
+    "active": true,
+    "description": "Contenus de la page d'accueil (voir page-accueil.php).",
+    "show_in_rest": 0
+}

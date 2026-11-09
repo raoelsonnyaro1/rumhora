@@ -52,7 +52,7 @@ function rs_contact_cta( $args = array() ) {
 		<!-- Colonne texte + bouton -->
 		<div class="md:px-10 px-[10px] md:py-10 py-6 flex flex-col justify-between">
 			<?php if ( $texte ) : ?>
-				<p class="text-reveal lg:text-4xl text-xl max-w-lg font-serif-display mb-6 md:mb-0"><?php echo wp_kses_post( $texte ); ?></p>
+				<p class="text-reveal lg:text-4xl text-xl max-w-lg font-serif mb-6 md:mb-0"><?php echo wp_kses_post( $texte ); ?></p>
 			<?php endif; ?>
 
 			<a href="<?php echo esc_url( $bouton_lien ); ?>" class="btn btn-primary w-full text-center text-base mt-auto" data-barba>

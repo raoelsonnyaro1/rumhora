@@ -20,7 +20,7 @@ get_header();
 <section class="md:px-5 px-[10px] flex flex-col justify-center min-h-[70vh] md:py-20 py-12">
 	<h1 class="m-0 mb-6"><?php esc_html_e( 'Page introuvable', 'rumhora' ); ?></h1>
 
-	<p class="text-reveal font-serif-display lg:text-2xl text-base max-w-xl m-0 mb-10">
+	<p class="text-reveal font-serif lg:text-2xl text-base max-w-xl m-0 mb-10">
 		<?php esc_html_e( "Cette page n'existe pas ou a été déplacée.", 'rumhora' ); ?>
 	</p>
 

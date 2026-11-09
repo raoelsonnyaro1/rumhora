@@ -43,7 +43,7 @@ rs_hero(
 		<h2 class="m-0 md:col-span-1"><?php esc_html_e( 'Notre maison', 'rumhora' ); ?></h2>
 
 		<div class="md:col-span-2">
-			<p class="text-scrub font-serif-display lg:text-3xl text-lg m-0">
+			<p class="text-scrub font-serif lg:text-3xl text-lg m-0">
 				<?php esc_html_e( 'Remplacer ce paragraphe par le texte de la maquette. Les caractères se révèlent au fil du scroll.', 'rumhora' ); ?>
 			</p>
 

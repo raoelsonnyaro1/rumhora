@@ -1,0 +1,337 @@
+/**
+ * Header fixe + navigation principale + menu plein écran.
+ *
+ * Le menu plein écran (.mobile-menu-*) est volontairement au premier niveau et
+ * non imbriqué sous #masthead : il est rendu EN DEHORS du <header> (voir
+ * header.php / rs_mobile_menu) pour pouvoir passer au-dessus de lui.
+ */
+@use '../variables' as *;
+
+/* ==========================================================================
+   Header
+   ========================================================================== */
+
+#masthead {
+  // État initial caché posé en CSS, pas seulement par JS (voir
+  // gsap.set(header, {y:-40, opacity:0}) dans initHeroIntro) : sur un
+  // chargement lent/à froid, le header restait visible le temps que le JS
+  // s'exécute et le cache. GSAP applique ensuite les mêmes valeurs de départ
+  // puis anime vers y:0/opacity:1 — aucun changement de comportement une fois
+  // le JS chargé, juste plus de flash avant.
+  opacity: 0;
+  transform: translateY(-40px);
+
+  background-color: transparent;
+  transition: background-color 0.4s ease, backdrop-filter 0.4s ease;
+
+  // Une fois le header sorti du hero, un fond translucide flouté le détache du
+  // contenu qui défile dessous (classe posée par src/js/header.js).
+  &.header-scrolled {
+    background-color: rgba($noir, 0.85);
+    backdrop-filter: blur(12px);
+    -webkit-backdrop-filter: blur(12px);
+  }
+
+  .site-logo img {
+    // Hauteur de référence prise sur la maquette (~70px de haut sur desktop).
+    height: 70px;
+    width: auto;
+    display: block;
+
+    @media (max-width: 767px) {
+      height: 52px;
+    }
+  }
+}
+
+/* ==========================================================================
+   Navigation horizontale (desktop)
+   ========================================================================== */
+
+.site-nav {
+  .nav-menu {
+    list-style: none;
+    margin: 0;
+    padding: 0;
+  }
+
+  .nav-link {
+    position: relative;
+    display: inline-block;
+    font-family: 'Playfair Display', Georgia, serif;
+    font-size: 17px;
+    font-weight: 400;
+    color: $texte;
+    white-space: nowrap;
+    padding-bottom: 0.3rem;
+    transition: color 0.3s ease;
+
+    // Filet doré : entre par la gauche au survol, sort par la droite.
+    &::after {
+      content: '';
+      position: absolute;
+      bottom: 0;
+      left: 0;
+      width: 100%;
+      height: 1px;
+      background-color: $jaune;
+      transform: scaleX(0);
+      transform-origin: left;
+      transition: transform 0.45s cubic-bezier(0.65, 0, 0.35, 1);
+    }
+
+    &:hover {
+      color: $jaune;
+
+      &::after {
+        transform: scaleX(1);
+        transform-origin: left;
+      }
+    }
+
+    &:not(:hover)::after {
+      transform: scaleX(0);
+      transform-origin: right;
+    }
+  }
+
+  // Page courante : filet doré maintenu, sans attendre le survol.
+  // updateCurrentMenuItem() (src/js/utils.js) repose la classe après chaque
+  // transition Barba, puisque le header n'est jamais rechargé.
+  .current-menu-item > .nav-link,
+  .current_page_item > .nav-link {
+    color: $jaune;
+
+    &::after,
+    &:not(:hover)::after {
+      transform: scaleX(1);
+      transform-origin: left;
+    }
+  }
+}
+
+/* Bascule de langue */
+.lang-toggle {
+  font-family: 'Playfair Display', Georgia, serif;
+  font-size: 15px;
+  color: $texte;
+  text-transform: uppercase;
+  letter-spacing: 0.08em;
+  transition: color 0.3s ease;
+
+  &:hover {
+    color: $jaune;
+  }
+}
+
+/* ==========================================================================
+   Bouton burger (sous lg)
+   ========================================================================== */
+
+.menu-mobile-button {
+  width: 34px;
+  height: 22px;
+  position: relative;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  gap: 7px;
+  background: none;
+  border: none;
+  padding: 0;
+  cursor: pointer;
+
+  &__bar {
+    display: block;
+    width: 100%;
+    height: 1px;
+    background-color: $texte;
+    transition: background-color 0.3s ease, transform 0.3s ease;
+  }
+
+  &:hover &__bar {
+    background-color: $jaune;
+  }
+}
+
+/* ==========================================================================
+   Menu plein écran
+   ========================================================================== */
+
+.mobile-menu-overlay {
+  position: fixed;
+  inset: 0;
+  z-index: 200;
+  overflow: hidden;
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  // visibility (pas display:none) : GSAP doit pouvoir mesurer et positionner
+  // les colonnes avant l'ouverture, ce qu'un élément display:none interdit.
+  visibility: hidden;
+
+  @media (max-width: 767px) {
+    grid-template-columns: 1fr;
+  }
+
+  &.active {
+    visibility: visible;
+  }
+}
+
+.mobile-menu-image {
+  position: relative;
+  overflow: hidden;
+  background-color: $depth-1;
+
+  @media (max-width: 767px) {
+    display: none;
+  }
+
+  > img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+  }
+}
+
+.mobile-menu-content {
+  background-color: $noir;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: flex-start;
+  gap: 2.5rem;
+  overflow-y: auto;
+  padding: 6rem 5rem;
+  position: relative;
+
+  @media (max-width: 767px) {
+    padding: 6rem 2rem 3rem;
+  }
+}
+
+.mobile-menu-logo {
+  position: absolute;
+  top: 1.25rem;
+  left: 1.25rem;
+  display: block;
+  // z-index explicite : .mobile-menu-image et ce lien reçoivent tous deux un
+  // transform GSAP (même translate(0,0) au repos, voir js/navigation.js), ce
+  // qui crée un nouveau contexte d'empilement — sans z-index ici, le logo
+  // (pourtant absolute) se retrouve peint SOUS l'image de fond.
+  z-index: 2;
+
+  img {
+    height: 52px;
+    width: auto;
+    display: block;
+  }
+}
+
+.mobile-menu-close {
+  position: absolute;
+  top: 1.25rem;
+  right: 1.75rem;
+  font-size: 2.5rem;
+  line-height: 1;
+  color: $texte;
+  background: none;
+  border: none;
+  cursor: pointer;
+  transition: color 0.3s ease;
+
+  &:hover {
+    color: $jaune;
+  }
+}
+
+.mobile-menu-nav {
+  width: 100%;
+  display: flex;
+}
+
+.mobile-menu-list {
+  list-style: none;
+  padding: 0;
+  margin: 0;
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  width: 100%;
+
+  li a {
+    font-family: 'Playfair Display', Georgia, serif;
+    font-size: clamp(28px, 7vw, 44px);
+    font-weight: 400;
+    color: $beige;
+    line-height: 1.45;
+  }
+}
+
+.mobile-menu-item {
+  overflow: hidden; // nécessaire à l'effet de text-reveal (yPercent)
+}
+
+.mobile-menu-link {
+  opacity: 1;
+  transition: opacity 0.3s ease, color 0.3s ease;
+
+  &.hover-underline::after {
+    bottom: 0;
+    background-color: $jaune;
+  }
+}
+
+// Au survol de la liste, les liens non survolés se déprécient. Le lien survolé
+// doit rester à pleine opacité : la règle suivante a la même spécificité, donc
+// celle déclarée en second gagne.
+.mobile-menu-list:hover .mobile-menu-link {
+  opacity: 0.4;
+}
+
+.mobile-menu-list .mobile-menu-link:hover {
+  opacity: 1;
+  color: $jaune;
+}
+
+// État « en attente » pendant une transition Barba (voir setPendingMenuActive
+// dans src/js/utils.js) : retour visuel immédiat au clic, sans attendre la fin
+// du chargement — mêmes valeurs que le survol de la liste ci-dessus.
+.mobile-menu-list.is-navigating .mobile-menu-link {
+  opacity: 0.4;
+}
+
+.mobile-menu-list.is-navigating .mobile-menu-item.is-navigating-active .mobile-menu-link {
+  opacity: 1;
+  color: $jaune;
+
+  // Le filet ::after devient une barre de chargement qui balaie de gauche à
+  // droite en boucle tant que la page suivante n'est pas prête
+  // (is-navigating-active retiré par clearPendingMenuActive()).
+  &::after {
+    animation: menu-loading-sweep 1.1s ease-in-out infinite;
+  }
+}
+
+.mobile-menu-list .current-menu-item .mobile-menu-link {
+  color: $jaune;
+
+  &::after {
+    transform: scaleX(1) !important;
+    transform-origin: left !important;
+  }
+}
+
+.mobile-menu-cta {
+  flex-shrink: 0;
+}
+
+/* Barre de chargement : remplit depuis la gauche jusqu'à pleine largeur, puis
+   se retire par la droite, en boucle — un balayage gauche→droite continu en
+   réutilisant seulement scaleX + transform-origin. */
+@keyframes menu-loading-sweep {
+  0%     { transform: scaleX(0); transform-origin: left; }
+  50%    { transform: scaleX(1); transform-origin: left; }
+  50.01% { transform-origin: right; }
+  100%   { transform: scaleX(0); transform-origin: right; }
+}

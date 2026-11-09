@@ -139,7 +139,7 @@ function rs_galerie( $args = array() ) {
 				<?php if ( $description || $bouton ) : ?>
 					<div class="flex flex-col md:flex-row md:items-end md:justify-between gap-4 md:gap-8 mt-4 md:mt-8">
 						<?php if ( $description ) : ?>
-							<p class="text-reveal text-cream lg:text-lg text-base max-w-lg font-serif-display" data-reveal-start="95%"><?php echo wp_kses_post( $description ); ?></p>
+							<p class="text-reveal text-cream lg:text-lg text-base max-w-lg font-serif" data-reveal-start="95%"><?php echo wp_kses_post( $description ); ?></p>
 						<?php endif; ?>
 
 						<?php if ( $bouton ) : ?>

@@ -1986,6 +1986,7 @@
     const bottomRow = hero.querySelector(".hero-bottom-row");
     const bottomRowLine = hero.querySelector(".hero-bottom-row-line");
     const heroImg = hero.querySelector("picture img");
+    const mediaItems = Array.from(hero.querySelectorAll(".hero-media-item"));
     if (header) gsap.set(header, { y: -40, opacity: 0 });
     if (title) gsap.set(title, { autoAlpha: 0 });
     if (description) gsap.set(description, { autoAlpha: 0 });
@@ -1994,6 +1995,9 @@
     }
     if (bottomRowLine) {
       gsap.set(bottomRowLine, { scaleX: 0, transformOrigin: "left center" });
+    }
+    if (mediaItems.length) {
+      gsap.set(mediaItems, { y: 70, opacity: 0 });
     }
     const run = () => {
       try {
@@ -2037,8 +2041,18 @@
         if (bottomRow) {
           tl.to(bottomRow, { y: 0, opacity: 1, duration: 0.9, ease: "power3.out" });
         }
+        if (mediaItems.length) {
+          tl.to(mediaItems, {
+            y: 0,
+            opacity: 1,
+            duration: 1.1,
+            stagger: 0.18,
+            ease: "power3.out"
+          }, 0.2);
+        }
       } catch (error) {
         console.error("Error in initHeroIntro run():", error);
+        if (mediaItems.length) gsap.set(mediaItems, { y: 0, opacity: 1 });
         if (header) gsap.set(header, { y: 0, opacity: 1 });
         done();
       }
@@ -2076,91 +2090,20 @@
   var { gsap: gsap2, ScrollTrigger: ScrollTrigger2 } = window;
   function initHeaderScroll() {
     const header = document.getElementById("masthead");
-    const logo = document.querySelector(".custom-logo-link");
-    const logoImg = logo == null ? void 0 : logo.querySelector("img");
-    const logoCenter = document.querySelector(".header-logo-center");
-    const menu = document.querySelector(".menu-container");
-    const scrolledButtons = [
-      document.getElementById("header-book-btn"),
-      document.getElementById("mobile-menu-button")
-    ].filter(Boolean);
-    if (!header || !logo || !logoImg || !menu || typeof gsap2 === "undefined" || typeof ScrollTrigger2 === "undefined") {
+    if (!header || typeof gsap2 === "undefined" || typeof ScrollTrigger2 === "undefined") {
       return;
     }
-    const lenis2 = getLenis();
-    ScrollTrigger2.getAll().forEach((trigger) => {
-      if (trigger.vars.trigger === "body") {
-        trigger.kill();
-      }
-    });
-    gsap2.set(logoImg, {
-      width: "100%",
-      clearProps: "width"
-    });
-    gsap2.set(menu, {
-      bottom: "-3rem"
-    });
-    if (logoCenter) {
-      gsap2.set(logoCenter, { xPercent: -50, yPercent: -50, y: 40, opacity: 0 });
-    }
-    if (window.scrollY !== 0) {
-      window.scrollTo(0, 0);
-      if (lenis2) {
-        lenis2.scrollTo(0, { immediate: true });
-      }
-    }
-    const tl = gsap2.timeline({
-      scrollTrigger: {
-        trigger: "body",
-        start: "top top",
-        end: "300px top",
-        scrub: 1.5,
-        invalidateOnRefresh: true,
-        onRefresh: () => {
-          if (window.scrollY < 10) {
-            gsap2.set(logoImg, { width: "100%" });
-            gsap2.set(menu, { bottom: "-3rem", top: "auto" });
-          }
-        },
-        onUpdate: (self) => {
-          if (window.scrollY === 0 && self.progress > 0) {
-            self.scroll(0);
-          }
-        }
-      }
-    });
     const darkSections = Array.from(document.querySelectorAll(".section_hero, .header-dark-section"));
-    const heroSections = Array.from(document.querySelectorAll(".section_hero"));
     const isOverlappingHeader = (section) => {
       const headerRect = header.getBoundingClientRect();
       const rect = section.getBoundingClientRect();
       return rect.top <= headerRect.bottom && rect.bottom > headerRect.top;
     };
-    let logoCenterAway = null;
     const updateHeaderState = () => {
       const measurable = darkSections.filter((section) => section.getBoundingClientRect().height > 0);
       if (darkSections.length > 0 && measurable.length === 0) return;
       const overDarkSection = measurable.some(isOverlappingHeader);
       header.classList.toggle("header-scrolled", !overDarkSection);
-      scrolledButtons.forEach((btn) => {
-        btn.classList.toggle("btn-primary", !overDarkSection);
-        btn.classList.toggle("btn-tertiary", overDarkSection);
-      });
-      const measurableHero = heroSections.filter((section) => section.getBoundingClientRect().height > 0);
-      if (heroSections.length > 0 && measurableHero.length === 0) return;
-      const overHero = measurableHero.some(isOverlappingHeader);
-      const isAway = !overHero;
-      header.classList.toggle("header-away-from-hero", isAway);
-      if (logoCenter && isAway !== logoCenterAway) {
-        logoCenterAway = isAway;
-        gsap2.to(logoCenter, {
-          y: isAway ? 0 : 40,
-          opacity: isAway ? 1 : 0,
-          duration: 0.8,
-          ease: "power3.out",
-          overwrite: "auto"
-        });
-      }
     };
     let ticking = false;
     const onScroll = () => {
@@ -2751,7 +2694,7 @@
     try {
       if (!html) return;
       const nextDoc = new DOMParser().parseFromString(html, "text/html");
-      [".header-logo-center", ".custom-logo-link"].forEach((selector) => {
+      [".site-logo", ".mobile-menu-logo"].forEach((selector) => {
         const nextLink = nextDoc.querySelector(selector);
         const currentLink = document.querySelector(selector);
         if (nextLink && currentLink) {
@@ -2866,10 +2809,6 @@
               try {
                 targetHash = "";
                 showWaitCursor();
-                const logoCenter = document.querySelector(".header-logo-center");
-                if (logoCenter) {
-                  gsap3.set(logoCenter, { opacity: 0, y: 40 });
-                }
                 setPendingMenuActive(data.trigger);
                 if (data.trigger && data.trigger.href) {
                   const { href } = data.trigger;

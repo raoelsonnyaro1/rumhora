@@ -214,8 +214,9 @@ function updatePersistentLayoutLinks(html) {
     if (!html) return;
     const nextDoc = new DOMParser().parseFromString(html, 'text/html');
 
-    // Logos (logomark centré + logo complet), même href (home_url())
-    ['.header-logo-center', '.custom-logo-link'].forEach((selector) => {
+    // Logos du header et du menu plein écran : même href (home_url()), qui
+    // change avec la langue.
+    ['.site-logo', '.mobile-menu-logo'].forEach((selector) => {
       const nextLink = nextDoc.querySelector(selector);
       const currentLink = document.querySelector(selector);
       if (nextLink && currentLink) {
@@ -396,19 +397,6 @@ export function initBarba() {
             try {
               targetHash = '';
               showWaitCursor();
-
-              // Cache le logomark centré dès le clic : sinon, en quittant une
-              // page scrollée (logomark visible), il resterait visible pendant
-              // toute la transition et apparaîtrait un instant sur la page
-              // suivante, avant qu'initHeaderScroll() (appelé dans after(),
-              // donc tard) ne le recache. La nouvelle page démarre presque
-              // toujours sur son hero (logomark masqué), donc le cacher
-              // immédiatement est correct dans tous les cas courants ;
-              // updateHeaderState() corrigera de toute façon l'état exact.
-              const logoCenter = document.querySelector('.header-logo-center');
-              if (logoCenter) {
-                gsap.set(logoCenter, { opacity: 0, y: 40 });
-              }
 
               // Retour visuel immédiat sur le lien de menu cliqué, avant même
               // le chargement de la page suivante (nettoyé dans after()).

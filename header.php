@@ -8,9 +8,9 @@
  * @package rumhora
  */
 
-// Couleur du logo/de la nav quand le header n'est PAS au-dessus d'une section
-// sombre. Champ ACF header_color (voir acf-json/) ; 'white' par défaut, le cas
-// d'un hero photo plein écran.
+// Le site est intégralement sur fond sombre : le header est donc toujours en
+// version claire (logo couleur, texte crème). Le champ ACF header_color
+// permet de basculer en version sombre sur une éventuelle page à fond clair.
 $rumhora_header_color = get_field( 'header_color' ) ?: 'white';
 $rumhora_header_class = ( 'black' === $rumhora_header_color ) ? 'header-black' : 'header-white';
 
@@ -38,6 +38,8 @@ if ( has_filter( 'wpml_active_languages' ) ) {
 		}
 	}
 }
+
+$rumhora_book_url = get_field( 'book_url', 'option' ) ?: home_url( '/book-a-table' );
 ?>
 <!doctype html>
 <html <?php language_attributes(); ?>>
@@ -57,6 +59,23 @@ if ( has_filter( 'wpml_active_languages' ) ) {
 	</script>
 	<link rel="profile" href="https://gmpg.org/xfn/11">
 	<link rel="icon" type="image/svg+xml" href="<?php echo esc_url( get_template_directory_uri() . '/img/favicon.svg' ); ?>">
+
+	<?php
+	// Préchargement des 2 polices variables : elles portent TOUT le rendu
+	// typographique (titres Playfair, texte Montserrat) et sont découvertes
+	// tardivement par le navigateur, qui doit d'abord télécharger puis parser
+	// dist/styles.css pour connaître leurs @font-face. Sans preload, le texte
+	// reste en police de repli pendant ce temps — d'autant plus visible que
+	// SplitText mesure les lignes APRÈS chargement des polices (voir
+	// initTextRevealAnimations), ce qui retarde d'autant les animations.
+	foreach ( array( 'PlayfairDisplay/PlayfairDisplay-Variable', 'Montserrat/Montserrat-Variable' ) as $rumhora_font ) :
+		?>
+		<link rel="preload" as="font" type="font/woff2" crossorigin
+			href="<?php echo esc_url( get_template_directory_uri() . '/assets/fonts/' . $rumhora_font . '.woff2' ); ?>">
+		<?php
+	endforeach;
+	?>
+
 	<?php wp_head(); ?>
 </head>
 
@@ -68,9 +87,7 @@ if ( has_filter( 'wpml_active_languages' ) ) {
 	     EN DEHORS du container Barba pour persister entre les pages. z-index
 	     entre le header fixe (z-50, couvert) et le menu mobile plein écran
 	     (z-index:200, qui doit rester AU-DESSUS pour que son animation de
-	     fermeture reste visible pendant une navigation lancée depuis le menu).
-	     3 couches (voir .media-reveal-overlay) qui glissent ensemble de haut en
-	     bas avec un léger décalage entre elles, pour un effet "3 bandes". -->
+	     fermeture reste visible pendant une navigation lancée depuis le menu). -->
 	<div id="page-transition-mask" class="media-reveal-overlay fixed inset-0 z-[100] pointer-events-none" aria-hidden="true">
 		<div></div>
 		<div></div>
@@ -80,41 +97,43 @@ if ( has_filter( 'wpml_active_languages' ) ) {
 	<!-- Header EN DEHORS du container Barba pour rester fixe d'une page à
 	     l'autre. Les éléments dont le contenu/l'URL dépendent de la langue sont
 	     resynchronisés par updatePersistentLayoutLinks() (src/js/barba.js). -->
-	<header id="masthead" class="fixed top-0 left-0 right-0 text-white z-50 <?php echo esc_attr( $rumhora_header_class ); ?>">
-		<div class="header-container mx-auto md:px-5 px-[10px] md:pt-5 pt-[10px] relative">
+	<header id="masthead" class="site-header fixed top-0 left-0 right-0 z-50 <?php echo esc_attr( $rumhora_header_class ); ?>">
+		<div class="header-container flex items-center justify-between gap-6 xl:px-14 md:px-8 px-5 md:py-5 py-3">
 
-			<!-- Logomark seul, centré dans la barre : masqué tant qu'on est sur le
-			     hero (voir .header-away-from-hero dans assets/sass/style.scss),
-			     remplace le logo complet partout ailleurs. Pas de lazyload : le
-			     header est fixed, donc toujours dans le viewport. -->
-			<a href="<?php echo esc_url( home_url() ); ?>" rel="home" data-barba class="header-logo-center" aria-label="<?php bloginfo( 'name' ); ?>">
-				<img src="<?php echo esc_url( get_template_directory_uri() . '/img/logo-icon.svg' ); ?>" alt="" aria-hidden="true">
-				<img src="<?php echo esc_url( get_template_directory_uri() . '/img/logo-icon-dark.svg' ); ?>" alt="" aria-hidden="true" class="header-logo-center-scrolled">
+			<!-- Logo. Pas de lazyload : le header est fixed, donc toujours dans le
+			     viewport dès le chargement — un chargement différé n'aurait jamais
+			     de sens ici. -->
+			<a href="<?php echo esc_url( home_url( '/' ) ); ?>" rel="home" data-barba class="site-logo flex-shrink-0">
+				<img src="<?php echo esc_url( get_template_directory_uri() . '/img/logo-mark.png' ); ?>"
+					alt="<?php bloginfo( 'name' ); ?>"
+					width="214" height="246"
+					fetchpriority="high">
 			</a>
 
-			<div class="logo-container w-full flex items-center justify-between">
-				<a href="<?php echo esc_url( home_url() ); ?>" rel="home" data-barba class="custom-logo-link">
-					<img src="<?php echo esc_url( get_template_directory_uri() . '/img/logo.svg' ); ?>" alt="<?php bloginfo( 'name' ); ?>" fetchpriority="high">
-				</a>
+			<!-- Navigation desktop -->
+			<nav id="site-navigation" class="site-nav hidden lg:block" aria-label="<?php esc_attr_e( 'Navigation principale', 'rumhora' ); ?>">
+				<?php rumhora_primary_nav( 'xl:gap-9 gap-6' ); ?>
+			</nav>
 
-				<div class="menu-container flex items-center gap-4">
-					<?php if ( $rumhora_lang_label && $rumhora_lang_url ) : ?>
-						<a href="<?php echo esc_url( $rumhora_lang_url ); ?>" id="header-lang-toggle" class="hidden md:inline-block lang-toggle hover-underline"><?php echo esc_html( $rumhora_lang_label ); ?></a>
-					<?php endif; ?>
+			<div class="header-actions flex items-center md:gap-5 gap-3 flex-shrink-0">
+				<?php if ( $rumhora_lang_label && $rumhora_lang_url ) : ?>
+					<a href="<?php echo esc_url( $rumhora_lang_url ); ?>" id="header-lang-toggle" class="lang-toggle hover-underline hidden md:inline-block"><?php echo esc_html( $rumhora_lang_label ); ?></a>
+				<?php endif; ?>
 
-					<!-- CTA réservation persistant. btn-tertiary en dur : c'est l'état
-					     correct sur un hero sombre, au tout premier paint ; header.js
-					     bascule ensuite vers btn-primary dès que le header quitte une
-					     section sombre. -->
-					<a href="<?php echo esc_url( home_url( '/book-a-table' ) ); ?>" id="header-book-btn" class="hidden md:inline-block btn btn-tertiary" data-barba><?php esc_html_e( 'Book a table', 'rumhora' ); ?></a>
+				<a href="<?php echo esc_url( $rumhora_book_url ); ?>" id="header-book-btn" class="btn btn-pill" data-barba><?php esc_html_e( 'Book Table', 'rumhora' ); ?></a>
 
-					<a id="mobile-menu-button" class="menu-mobile-button btn btn-tertiary"><?php esc_html_e( 'Menu', 'rumhora' ); ?></a>
-				</div>
+				<!-- Déclencheur du menu plein écran : visible uniquement là où la
+				     nav horizontale ne tient plus (< lg). -->
+				<button type="button" id="mobile-menu-button" class="menu-mobile-button lg:hidden" aria-controls="mobile-menu-overlay" aria-expanded="false">
+					<span class="menu-mobile-button__bar" aria-hidden="true"></span>
+					<span class="menu-mobile-button__bar" aria-hidden="true"></span>
+					<span class="screen-reader-text"><?php esc_html_e( 'Ouvrir le menu', 'rumhora' ); ?></span>
+				</button>
 			</div>
-
-			<?php rs_mobile_menu(); ?>
 		</div>
 	</header><!-- #masthead -->
+
+	<?php rs_mobile_menu(); ?>
 
 	<div data-barba="container"
 		data-barba-namespace="<?php echo esc_attr( rumhora_get_barba_namespace() ); ?>"

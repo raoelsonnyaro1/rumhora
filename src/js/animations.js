@@ -1573,6 +1573,11 @@ function initHeroIntro(onDone, curtainPromise) {
   const bottomRow = hero.querySelector('.hero-bottom-row');
   const bottomRowLine = hero.querySelector('.hero-bottom-row-line');
   const heroImg = hero.querySelector('picture img');
+  // Médias accompagnant le hero (photos en quinconce de rs_hero_split) :
+  // animés DANS la timeline d'intro plutôt que via .reveal/ScrollTrigger — le
+  // hero est en haut de page, un trigger au scroll s'y déclencherait de toute
+  // façon immédiatement, donc pendant que le container est encore invisible.
+  const mediaItems = Array.from(hero.querySelectorAll('.hero-media-item'));
 
   // Caché immédiatement (avant l'attente de l'image/des polices) pour éviter
   // que le texte n'apparaisse brièvement avant de se cacher puis de se
@@ -1597,6 +1602,10 @@ function initHeroIntro(onDone, curtainPromise) {
 
   if (bottomRowLine) {
     gsap.set(bottomRowLine, { scaleX: 0, transformOrigin: 'left center' });
+  }
+
+  if (mediaItems.length) {
+    gsap.set(mediaItems, { y: 70, opacity: 0 });
   }
 
   const run = () => {
@@ -1659,8 +1668,24 @@ function initHeroIntro(onDone, curtainPromise) {
       if (bottomRow) {
         tl.to(bottomRow, { y: 0, opacity: 1, duration: 0.9, ease: 'power3.out' });
       }
+
+      // Photos : démarrent en même temps que le titre (position 0.2) plutôt
+      // qu'à la fin de la timeline — les deux colonnes du hero doivent se
+      // composer ensemble, pas l'une après l'autre.
+      if (mediaItems.length) {
+        tl.to(mediaItems, {
+          y: 0,
+          opacity: 1,
+          duration: 1.1,
+          stagger: 0.18,
+          ease: 'power3.out',
+        }, 0.2);
+      }
     } catch (error) {
       console.error('Error in initHeroIntro run():', error);
+      // Les photos ne portent pas de texte, mais elles partent à opacity:0 —
+      // sans ce repli elles resteraient invisibles si la séquence plante.
+      if (mediaItems.length) gsap.set(mediaItems, { y: 0, opacity: 1 });
       // Le header porte la navigation : contrairement au texte du hero, il ne
       // doit jamais rester invisible si la séquence plante avant son tween.
       if (header) gsap.set(header, { y: 0, opacity: 1 });

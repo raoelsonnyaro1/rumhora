@@ -24,7 +24,7 @@ $rumhora_copyright = get_field( 'footer_copyright', 'option' ) ?: date( 'Y' ) . 
 
 		<!-- Logo -->
 		<div class="flex justify-center md:pb-10 pb-8 border-b border-cream/20 mb-5">
-			<img data-src="<?php echo esc_url( get_template_directory_uri() . '/img/logo-footer.svg' ); ?>" alt="<?php bloginfo( 'name' ); ?>" class="lazyload h-10 md:h-12 w-auto">
+			<img data-src="<?php echo esc_url( get_template_directory_uri() . '/img/logo-full.png' ); ?>" alt="<?php bloginfo( 'name' ); ?>" class="lazyload md:h-28 h-24 w-auto">
 		</div>
 
 		<div class="grid grid-cols-1 md:grid-cols-4 md:gap-20 gap-8 md:pb-5 pb-10 mb-5 border-b border-cream/20">
@@ -58,7 +58,7 @@ $rumhora_copyright = get_field( 'footer_copyright', 'option' ) ?: date( 'Y' ) . 
 							)
 						);
 						?>
-						<button type="submit" class="newsletter-reveal-item btn btn-white text-xs ml-4 mb-1 flex-shrink-0">
+						<button type="submit" class="newsletter-reveal-item btn-pill text-xs ml-4 mb-1 flex-shrink-0">
 							<?php esc_html_e( "S'inscrire", 'rumhora' ); ?>
 						</button>
 						<p class="form-ajax-message m-0" role="status" aria-live="polite"></p>

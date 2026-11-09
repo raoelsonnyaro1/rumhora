@@ -38,7 +38,7 @@ while ( have_posts() ) :
 			     grille titre/contenu utilisée dans les sections éditoriales. -->
 			<div class="hidden md:block"></div>
 
-			<div class="md:col-span-2 max-w-2xl text-reveal md:text-base text-sm font-serif-display wp-text-block-container">
+			<div class="md:col-span-2 max-w-2xl text-reveal md:text-base text-sm font-serif wp-text-block-container">
 				<div class="content">
 					<?php the_content(); ?>
 				</div>

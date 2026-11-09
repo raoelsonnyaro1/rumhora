@@ -112,6 +112,18 @@
 			return;
 		}
 
+		/**
+		 * Synchronise l'état accessible du menu. aria-hidden sur l'overlay ET
+		 * aria-expanded sur le bouton : sans aria-hidden, les liens du menu
+		 * restent annoncés par les lecteurs d'écran alors qu'ils sont
+		 * visuellement masqués (visibility:hidden ne suffit pas toujours selon
+		 * la combinaison navigateur/lecteur).
+		 */
+		function setMenuExpanded(expanded) {
+			menuButton.setAttribute('aria-expanded', String(expanded));
+			menuOverlay.setAttribute('aria-hidden', String(!expanded));
+		}
+
 		// Fonction pour animer l'ouverture du menu
 		function openMenu() {
 			if (isAnimating) return;
@@ -130,6 +142,10 @@
 
 			document.body.style.overflow = 'hidden';
 			menuOverlay.classList.add('active');
+			// État exposé aux technologies d'assistance : le bouton burger reste
+			// dans le DOM pendant que l'overlay est ouvert, c'est donc lui qui
+			// porte aria-expanded (et aria-controls, voir header.php).
+			setMenuExpanded(true);
 
 			if (typeof gsap !== 'undefined') {
 				// Les 2 colonnes glissent verticalement, colonne droite avec léger delay
@@ -202,6 +218,7 @@
 						delay: 0.1,
 						onComplete: () => {
 							menuOverlay.classList.remove('active');
+							setMenuExpanded(false);
 							gsap.set([menuImage, menuContent, menuLogo].filter(Boolean), { yPercent: 0 });
 							isAnimating = false;
 							window.dispatchEvent(new Event('menuClosed'));
@@ -210,12 +227,14 @@
 				} else {
 					gsap.delayedCall(0.8, () => {
 						menuOverlay.classList.remove('active');
+						setMenuExpanded(false);
 						isAnimating = false;
 						window.dispatchEvent(new Event('menuClosed'));
 					});
 				}
 			} else {
 				menuOverlay.classList.remove('active');
+				setMenuExpanded(false);
 				isAnimating = false;
 				window.dispatchEvent(new Event('menuClosed'));
 			}

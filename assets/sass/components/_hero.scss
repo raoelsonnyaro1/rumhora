@@ -1,40 +1,157 @@
 /**
- * Hero Section
+ * Hero
+ *
+ * Deux variantes cohabitent :
+ *   rs_hero()       hero plein écran classique (photo + titre + bande basse)
+ *   rs_hero_split() hero de l'accueil : texte à gauche, 2 photos en quinconce
+ *                   à droite (voir inc/components/rs-hero-split.php)
+ *
+ * Les styles communs (.section_hero, .scroll-down) valent pour les deux.
  */
 @use '../variables' as *;
 
 .section_hero {
- // Filet avant que la photo ne soit chargée (surtout visible en chargement à
- // froid, ex: Ctrl+Shift+R) : sans fond, le fond crème de la page apparaît en
- // flash derrière le texte blanc du hero le temps que l'image se peigne.
- // Vert (pas crème) : cohérent avec le reste des éléments sombres du site
- // (header, boutons) et sans le côté "masque uni" du fond vert déjà retiré
- // des autres photos — ici il ne s'agit que d'un filet, pas d'un effet visé.
- background-color: $dark;
-
- &_content {
-   p{
-    font-family: 'Recia';
-   }
- }
+  // Filet avant que la photo de fond ne soit peinte (surtout visible en
+  // chargement à froid) : sans ça, le fond de page apparaît en flash derrière
+  // le texte clair du hero.
+  background-color: $noir;
 }
-/* Scroll down indicator */
+
+/* Voile du hero « split » : assombrit la moitié gauche pour garantir le
+   contraste du titre quelle que soit la photo choisie par le client, et pose
+   une retombée sombre en bas pour la jonction avec la section suivante.
+   Deux dégradés plutôt qu'un voile uni : un aplat uniforme éteindrait aussi la
+   partie droite, là où les photos doivent rester lumineuses. */
+.hero-veil {
+  background:
+    linear-gradient(to right, rgba($noir, 0.92) 0%, rgba($noir, 0.65) 38%, rgba($noir, 0) 70%),
+    linear-gradient(to bottom, rgba($noir, 0.5) 0%, rgba($noir, 0) 25%, rgba($noir, 0.6) 100%);
+}
+
+/* ==========================================================================
+   Colonne texte
+   ========================================================================== */
+
+.hero-title {
+  font-family: 'Playfair Display', Georgia, serif;
+  font-size: clamp(38px, 4.6vw, 68px);
+  font-weight: 400;
+  line-height: 1.12;
+  letter-spacing: -0.01em;
+  color: $beige;
+  // Annule le décalage optique global des titres (voir style.scss) : ici le
+  // titre est posé sur une grille avec les boutons juste en dessous, un
+  // translate le désaligne visiblement de leur bord gauche.
+  transform: none;
+
+  // Mot mis en avant. <em> plutôt qu'une classe : c'est le bouton « italique »
+  // de l'éditeur, donc utilisable par le client sans lui apprendre de syntaxe.
+  // font-style remis à normal — on veut la couleur, pas l'italique.
+  em {
+    color: $jaune;
+    font-style: normal;
+  }
+}
+
+.hero-lead {
+  font-family: 'Montserrat', system-ui, sans-serif;
+  font-size: 15px;
+  font-weight: 400;
+  line-height: 1.75;
+  color: $gris;
+  max-width: 34ch;
+  transform: none;
+
+  @media (max-width: 767px) {
+    font-size: 14px;
+  }
+}
+
+/* Filet au-dessus des boutons : animé par initHeroIntro (scaleX 0 → 1). */
+.hero-bottom-row-line {
+  height: 1px;
+  width: 100%;
+  max-width: 22rem;
+  background-color: rgba($jaune, 0.35);
+  transform: scaleX(0);
+  transform-origin: left center;
+}
+
+/* ==========================================================================
+   Colonne photos (quinconce)
+   ==========================================================================
+   Grille à 2 colonnes plutôt qu'un positionnement absolu : les photos gardent
+   leur place dans le flux, donc la hauteur du hero reste calculable et la
+   composition se dégrade proprement sur mobile sans media query de repli.
+*/
+
+.hero-media {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  align-items: start;
+  gap: 12px;
+
+  @media (max-width: 1023px) {
+    max-width: 560px;
+    margin-inline: auto;
+  }
+}
+
+.hero-media-item {
+  position: relative;
+  overflow: hidden;
+  border-radius: 14px;
+  box-shadow: 0 30px 80px rgba(0, 0, 0, 0.55);
+  aspect-ratio: 268 / 324; // ratio des photos de la maquette
+
+  img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    display: block;
+  }
+
+  // La 2e photo est décalée vers le bas : c'est ce décalage qui fait la
+  // composition en quinconce de la maquette.
+  &--2 {
+    margin-top: 3.75rem;
+
+    @media (max-width: 1023px) {
+      margin-top: 2rem;
+    }
+  }
+}
+
+/* Sur très grand écran, la 2e photo déborde légèrement de la gouttière droite,
+   comme sur la maquette où elle est coupée par le bord de page. Contenu par
+   l'overflow:hidden de .section_hero, donc jamais de scroll horizontal. */
+@media (min-width: 1536px) {
+  .hero-media {
+    margin-right: -4rem;
+  }
+}
+
+/* ==========================================================================
+   Indicateur de scroll (rs_hero)
+   ========================================================================== */
+
 .scroll-down {
   display: inline-flex;
   flex-direction: column;
   align-items: center;
   gap: 8px;
-  color: white;
-  transition: transform 0.3s ease;
+  color: $texte;
+  transition: transform 0.3s ease, color 0.3s ease;
 
   &:hover {
     transform: translateY(-2px);
+    color: $jaune;
   }
 
   &__mouse {
     width: 22px;
     height: 34px;
-    border: 2px solid currentColor;
+    border: 1px solid currentColor;
     border-radius: 12px;
     position: relative;
     display: flex;
@@ -52,9 +169,10 @@
   }
 
   &__text {
+    font-family: 'Montserrat', system-ui, sans-serif;
     font-size: 9px;
     letter-spacing: 0.15em;
-    text-transform: capitalize;
+    text-transform: uppercase;
   }
 }
 

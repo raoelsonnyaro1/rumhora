@@ -39,3 +39,12 @@ Desktop.ini
 npm-debug.log*
 yarn-debug.log*
 yarn-error.log*
+
+# Sources graphiques et typographiques de la maquette.
+# Ignorées du dépôt mais CONSERVÉES sur le disque : ce sont les exports bruts
+# (PNG @2x, TTF Google Fonts) qui pèsent ~90 Mo pour un thème qui n'en sert
+# aucun tel quel. Ce qui est réellement servi vit dans img/ et assets/fonts/
+# (WebP et woff2 convertis), et c'est ce qui est versionné.
+assets/elements/
+assets/fonts/Montserrat,Playfair_Display/
+assets/fonts/Playfair_Display/

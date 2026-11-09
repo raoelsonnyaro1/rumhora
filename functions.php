@@ -235,6 +235,11 @@ require get_template_directory() . '/inc/template-tags.php';
 require get_template_directory() . '/inc/template-functions.php';
 
 /**
+ * Navigation principale (rendu + repli quand aucun menu n'est assigné).
+ */
+require get_template_directory() . '/inc/nav-menu.php';
+
+/**
  * Composants réutilisables (rs_*) — voir CLAUDE.md.
  */
 require get_template_directory() . '/inc/components.php';

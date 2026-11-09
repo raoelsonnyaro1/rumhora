@@ -16,6 +16,7 @@
 
 // Composants (un fichier par composant, voir CLAUDE.md)
 @use 'components/buttons';
+@use 'components/header';
 @use 'components/hero';
 @use 'components/form';
 @use 'components/flatpickr';
@@ -33,30 +34,48 @@
 /* ==========================================================================
    Polices
    ==========================================================================
-   Déposer les .woff2 dans assets/fonts/<Famille>/ puis déclarer les @font-face
-   ici. Les chemins sont relatifs à dist/styles.css (la CSS compilée vit dans
-   dist/, d'où le "../assets/fonts/").
+   Polices VARIABLES (un seul fichier par famille couvre toute la plage de
+   graisses), converties en woff2 depuis les .ttf Google Fonts fournis avec la
+   maquette — 973 Ko de TTF réduits à 404 Ko.
 
-   Placeholders à remplacer par les polices réelles de la maquette XD. Tant
-   qu'aucun fichier n'est présent, le navigateur retombe silencieusement sur la
-   pile système déclarée sur body plus bas.
+   Les chemins sont relatifs à dist/styles.css (la CSS compilée vit dans
+   dist/), d'où le "../assets/fonts/".
 
-@font-face {
-  font-family: 'Rumhora Sans';
-  src: url('../assets/fonts/RumhoraSans/RumhoraSans-Regular.woff2') format('woff2');
-  font-weight: 400;
-  font-style: normal;
-  font-display: swap;
-}
+   font-display: swap — le texte s'affiche immédiatement dans la police de
+   repli puis bascule. Les deux fichiers sont préchargés dans header.php, donc
+   la fenêtre de bascule reste très courte.
 
-@font-face {
-  font-family: 'Rumhora Serif';
-  src: url('../assets/fonts/RumhoraSerif/RumhoraSerif-Regular.woff2') format('woff2');
-  font-weight: 400;
-  font-style: normal;
-  font-display: swap;
-}
+   format('woff2') et PAS format('woff2-variations') : cette seconde syntaxe,
+   héritée des premières implémentations Safari, n'est pas reconnue par tous
+   les navigateurs — et une valeur de `format()` inconnue fait IGNORER la
+   source entière, donc la police ne se charge pas du tout. Un woff2 variable
+   se déclare simplement en 'woff2' ; c'est la plage `font-weight` ci-dessous
+   qui indique au navigateur qu'il peut interpoler les graisses.
 */
+
+@font-face {
+  font-family: 'Playfair Display';
+  src: url('../assets/fonts/PlayfairDisplay/PlayfairDisplay-Variable.woff2') format('woff2');
+  font-weight: 400 900;
+  font-style: normal;
+  font-display: swap;
+}
+
+@font-face {
+  font-family: 'Playfair Display';
+  src: url('../assets/fonts/PlayfairDisplay/PlayfairDisplay-Italic-Variable.woff2') format('woff2');
+  font-weight: 400 900;
+  font-style: italic;
+  font-display: swap;
+}
+
+@font-face {
+  font-family: 'Montserrat';
+  src: url('../assets/fonts/Montserrat/Montserrat-Variable.woff2') format('woff2');
+  font-weight: 100 900;
+  font-style: normal;
+  font-display: swap;
+}
 
 /* ==========================================================================
    Reset et base
@@ -66,22 +85,29 @@
   box-sizing: border-box;
   margin: 0;
   padding: 0;
-  border-color: $dark;
+  border-color: rgba($jaune, 0.3);
 }
 
 body {
-  font-family: 'Rumhora Sans', system-ui, -apple-system, sans-serif;
+  font-family: 'Montserrat', system-ui, -apple-system, sans-serif;
   font-weight: 400;
-  line-height: 1;
+  line-height: 1.6;
   color: $body-color;
   background-color: $body-bg;
   overflow-x: hidden;
-  letter-spacing: -0.019em;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
 }
 
 a {
   text-decoration: none;
+  color: inherit;
   transition: color 0.3s ease;
+}
+
+button {
+  font: inherit;
+  color: inherit;
 }
 
 /* Lien volontairement inerte (voir prevent() dans src/js/barba.js, qui
@@ -98,52 +124,53 @@ a {
 /* ==========================================================================
    Typographie
    ==========================================================================
-   Échelles à recalibrer sur la maquette XD. Les translate(-1px, -0.1em)
-   compensent l'approche optique de la police (le bearing gauche et la hauteur
-   d'x d'une police display laissent sinon un décalage visible par rapport aux
-   bords de section) — à réajuster, voire retirer, selon la police retenue.
+   Playfair Display pour les titres et les libellés de navigation/boutons,
+   Montserrat pour le texte courant — conformément à la maquette.
 */
 
-h1, h2 {
-  font-family: 'Rumhora Sans', system-ui, sans-serif;
-  font-size: clamp(45px, 6.5vw, 128px);
+h1, h2, h3, h4, h5, h6 {
+  font-family: 'Playfair Display', Georgia, serif;
   font-weight: 400;
-  color: $dark;
-  letter-spacing: -0.04em;
-  line-height: 0.9;
-  transform: translateX(-3px) translateY(-0.1em);
+  color: $beige;
+}
+
+h1, h2 {
+  font-size: clamp(38px, 4.6vw, 68px);
+  line-height: 1.12;
+  letter-spacing: -0.01em;
 }
 
 h3 {
-  font-family: 'Rumhora Sans', system-ui, sans-serif;
-  font-size: clamp(20px, 4vw, 64px);
-  font-weight: 400;
-  letter-spacing: -0.04em;
-  transform: translateX(-1px) translateY(-0.1em);
+  font-size: clamp(22px, 2.6vw, 38px);
+  line-height: 1.25;
 }
 
 h4 {
-  font-family: 'Rumhora Sans', system-ui, sans-serif;
-  font-size: 18px;
-  font-weight: 500;
-  text-transform: uppercase;
-  transform: translateX(-1px) translateY(-0.1em);
+  font-size: 20px;
+  line-height: 1.35;
 }
 
-h5, p {
-  transform: translateX(-1px) translateY(-0.1em);
+p {
+  line-height: 1.75;
 }
 
 @media (max-width: 768px) {
-  h3 { font-size: 18px; }
-  h4, h6, p { font-size: 14px; }
+  h4, h5, h6, p { font-size: 14px; }
 }
 
-/* Police secondaire (descriptions, citations) */
-.text-scrub,
-.font-serif-display {
-  font-family: 'Rumhora Serif', Georgia, serif;
-  font-weight: 400;
+/* Surtitre de section : petites capitales dorées très espacées. */
+.eyebrow {
+  font-family: 'Montserrat', system-ui, sans-serif;
+  font-size: 12px;
+  font-weight: 500;
+  letter-spacing: 0.2em;
+  text-transform: uppercase;
+  color: $jaune;
+}
+
+/* Texte secondaire */
+.text-muted {
+  color: $gris;
 }
 
 /* ==========================================================================
@@ -188,7 +215,7 @@ html.lenis body {
 /**
  * Scrollbar custom (voir src/js/components/rs-scroll.js) : piste + thumb.
  * mix-blend-mode sur le CONTENEUR (pas juste le thumb) : la piste transparente
- * et le thumb blanc s'inversent tous les deux selon ce qu'il y a dessous,
+ * et le thumb clair s'inversent tous les deux selon ce qu'il y a dessous,
  * restant visibles sur fond clair comme sombre sans logique JS pour basculer
  * une couleur.
  */
@@ -287,7 +314,7 @@ img.lazyload,
 img[data-src] {
   transition: filter 0.6s ease;
   filter: blur(6px);
-  background-color: $dark;
+  background-color: $depth-1;
 
   &.lazyloaded {
     filter: blur(0);
@@ -296,428 +323,19 @@ img[data-src] {
 }
 
 /* ==========================================================================
-   Header
-   ========================================================================== */
-
-.custom-logo-link {
-  display: block;
-  width: 100%;
-  position: relative;
-
-  img {
-    width: 100%;
-    height: auto;
-    transition: none; // piloté par GSAP (voir src/js/header.js)
-    display: block;
-  }
-}
-
-/**
- * Logomark seul, centré dans la barre du header (voir .header-container,
- * position:relative) — remplace le logo complet partout SAUF sur le hero
- * (voir .header-away-from-hero plus bas).
- *
- * Contient 2 images : une claire par défaut (sur fond sombre) et une sombre
- * superposée, révélée sur fond clair (.header-scrolled).
- *
- * Le centrage (xPercent/yPercent) ET le reveal (y, opacity) sont pilotés par
- * GSAP dans src/js/header.js — même profil que les boutons .btn. Pas de
- * transform/transition CSS ici : GSAP réécrit tout le transform à chaque tween
- * et ne connaît pas un transform posé en CSS, ce qui écraserait le centrage.
- */
-.header-logo-center {
-  position: absolute;
-  top: 50%;
-  left: 50%;
-  height: 40px; // même taille que le logo du footer (h-10 md:h-12)
-
-  @media (min-width: 768px) {
-    height: 48px;
-  }
-
-  width: auto;
-  opacity: 0;
-  pointer-events: none;
-  z-index: 3; // au-dessus de .logo-container (1) et .menu-container (2)
-
-  img {
-    width: auto;
-    height: 100%;
-    display: block;
-  }
-
-  &-scrolled {
-    position: absolute;
-    inset: 0;
-    width: 100%;
-    height: 100%;
-    opacity: 0;
-    object-fit: contain;
-    transition: opacity 0.4s ease;
-  }
-}
-
-#masthead {
-  position: fixed !important;
-  top: 0;
-  left: 0;
-  right: 0;
-  z-index: 50;
-  background-color: transparent;
-
-  // État initial caché posé en CSS, pas seulement par JS (voir
-  // gsap.set(header, {y:-40, opacity:0}) dans initHeroIntro) : sur un
-  // chargement lent/à froid, le header restait visible (logo cassé + boutons)
-  // le temps que le JS s'exécute et le cache. GSAP applique ensuite les mêmes
-  // valeurs de départ puis anime vers y:0/opacity:1 — aucun changement de
-  // comportement une fois le JS chargé, juste plus de flash avant.
-  opacity: 0;
-  transform: translateY(-40px);
-
-  .custom-logo-link {
-    transition: none;
-    display: block;
-    width: 200px;
-
-    @media (max-width: 768px) {
-      width: 140px;
-    }
-
-    img {
-      filter: invert(0); // par défaut : logo clair
-      transition: filter 0.3s ease, opacity 0.5s cubic-bezier(0.215, 0.61, 0.355, 1), transform 0.5s cubic-bezier(0.215, 0.61, 0.355, 1);
-    }
-  }
-
-  .header-logo-center img:not(.header-logo-center-scrolled) {
-    filter: invert(0);
-    transition: filter 0.3s ease;
-  }
-
-  // Variantes de couleur (champ ACF header_color, voir header.php)
-  &.header-black {
-    .custom-logo-link img,
-    .header-logo-center img:not(.header-logo-center-scrolled) {
-      filter: invert(1) !important;
-    }
-
-    #site-navigation a {
-      color: $dark;
-
-      &::after {
-        background-color: $dark;
-      }
-    }
-  }
-
-  &.header-white {
-    .custom-logo-link img,
-    .header-logo-center img:not(.header-logo-center-scrolled) {
-      filter: invert(0);
-    }
-  }
-
-  // header_color sert à rendre le logo lisible sur un fond CLAIR statique,
-  // mais ne doit jamais s'appliquer tant qu'on survole une section sombre
-  // (hero, galerie plein écran) : le logo y reste clair quel que soit
-  // header_color, sinon illisible sur la photo.
-  &:not(.header-scrolled) {
-    .custom-logo-link img,
-    .header-logo-center img:not(.header-logo-center-scrolled) {
-      filter: invert(0) !important;
-    }
-  }
-
-  // Header hors d'une section sombre : le logomark centré passe en version
-  // sombre. Les boutons basculent entre .btn-primary et .btn-tertiary (voir
-  // src/js/header.js).
-  &.header-scrolled {
-    .header-logo-center-scrolled {
-      opacity: 1;
-    }
-  }
-
-  // Logo complet (logomark + texte) visible uniquement sur le hero ; le
-  // logomark centré le remplace partout ailleurs.
-  &.header-away-from-hero {
-    .custom-logo-link img {
-      opacity: 0;
-      transform: translateY(10px);
-      pointer-events: none;
-    }
-
-    // opacity/transform pilotés par GSAP (voir src/js/header.js), pas ici.
-    .header-logo-center {
-      pointer-events: auto;
-    }
-  }
-
-  .header-container {
-    height: auto;
-  }
-
-  .logo-container {
-    position: relative;
-    z-index: 1;
-
-    h1 {
-      margin: 0;
-    }
-  }
-
-  .menu-container {
-    z-index: 2;
-    height: fit-content;
-  }
-
-  // Bascule de langue : claire par défaut (sur le hero), sombre une fois le
-  // header sur fond clair — même logique de contexte que le logomark central
-  // et les boutons juste à côté (voir src/js/header.js).
-  .lang-toggle {
-    color: $cream;
-    font-size: 14px;
-    text-transform: uppercase;
-    letter-spacing: 0.05em;
-  }
-
-  &.header-scrolled .lang-toggle {
-    color: $dark;
-  }
-
-  // Navigation desktop (si un menu horizontal est ajouté un jour ; le design
-  // actuel passe par le seul menu mobile plein écran)
-  #site-navigation {
-    ul {
-      list-style: none;
-      margin: 0;
-      padding: 0;
-      // display:flex vient de la classe Tailwind posée côté markup
-    }
-
-    .current-menu-item a,
-    .current_page_item a {
-      &::after,
-      &:not(:hover)::after {
-        transform: scaleX(1);
-        transform-origin: left;
-      }
-    }
-
-    a {
-      position: relative;
-      display: inline-block;
-      font-weight: 500;
-      font-size: 1rem;
-      text-decoration: none;
-      overflow: hidden;
-      transition: color 0.3s ease;
-      padding-bottom: 0.2rem;
-
-      // Soulignement : entre par la gauche, sort par la droite
-      &::after {
-        content: '';
-        position: absolute;
-        bottom: 0;
-        left: 0;
-        width: 100%;
-        height: 2px;
-        background-color: $white;
-        transform: scaleX(0);
-        transform-origin: left;
-        transition: transform 0.5s cubic-bezier(0.65, 0, 0.35, 1);
-      }
-
-      &:hover::after {
-        transform: scaleX(1);
-        transform-origin: left;
-      }
-
-      &:not(:hover)::after {
-        transform: scaleX(0);
-        transform-origin: right;
-      }
-    }
-  }
-
-  /* ---------- Menu mobile plein écran (voir rs_mobile_menu) ---------- */
-
-  .mobile-menu-overlay {
-    position: fixed;
-    top: 0;
-    left: 0;
-    width: 100%;
-    height: 100vh;
-    z-index: 200;
-    overflow: hidden;
-    display: grid;
-    grid-template-columns: 1fr 1fr;
-    visibility: hidden;
-
-    @media (max-width: 768px) {
-      grid-template-columns: 1fr;
-    }
-
-    &.active {
-      visibility: visible;
-    }
-  }
-
-  .mobile-menu-image {
-    position: relative;
-    overflow: hidden;
-
-    @media (max-width: 768px) {
-      display: none;
-    }
-
-    > img {
-      width: 100%;
-      height: 100%;
-      object-fit: cover;
-    }
-  }
-
-  .mobile-menu-content {
-    background-color: $dark;
-    display: flex;
-    flex-direction: column;
-    justify-content: center;
-    overflow-y: auto;
-    padding: 4rem 5rem;
-    position: relative;
-
-    @media (max-width: 768px) {
-      padding: 4rem 2rem;
-    }
-  }
-
-  .mobile-menu-close {
-    position: absolute;
-    top: 20px;
-    right: 20px;
-    cursor: pointer;
-  }
-
-  .mobile-menu-logo {
-    position: absolute;
-    top: 20px;
-    left: 20px;
-    display: block;
-    width: 200px;
-    // z-index explicite : .mobile-menu-image et ce lien reçoivent tous deux un
-    // transform GSAP (même translate(0,0) au repos, voir js/navigation.js), ce
-    // qui crée un nouveau contexte d'empilement — sans z-index ici, le logo
-    // (pourtant absolute) se retrouve peint SOUS l'image de fond.
-    z-index: 2;
-
-    @media (max-width: 768px) {
-      width: 140px;
-    }
-
-    img {
-      width: 100%;
-      height: auto;
-      display: block;
-      filter: invert(0); // logo clair, sur fond sombre
-    }
-  }
-
-  .mobile-menu-nav {
-    width: 100%;
-    display: flex;
-  }
-
-  .mobile-menu-list {
-    list-style: none;
-    padding: 0;
-    margin: 0;
-    display: flex;
-    flex-direction: column;
-    align-items: flex-start;
-
-    li a {
-      font-size: clamp(28px, 9vw, 50px);
-      font-weight: 400;
-      color: $cream;
-      line-height: 1.3;
-    }
-  }
-
-  .mobile-menu-item {
-    overflow: hidden; // nécessaire à l'effet de text-reveal
-  }
-
-  .mobile-menu-link {
-    opacity: 1;
-    transition: opacity 0.3s ease;
-
-    &.hover-underline::after {
-      bottom: 0;
-    }
-  }
-
-  // Au survol de la liste, les liens non survolés passent à 0.4. Le lien
-  // survolé doit rester à 1 : la règle suivante a la même spécificité, donc
-  // celle déclarée en second gagne.
-  .mobile-menu-list:hover .mobile-menu-link {
-    opacity: 0.4;
-  }
-
-  .mobile-menu-list .mobile-menu-link:hover {
-    opacity: 1;
-    color: $cream;
-  }
-
-  // État "en attente" pendant une transition Barba (voir setPendingMenuActive
-  // dans src/js/utils.js) : retour visuel immédiat au clic, sans attendre la
-  // fin du chargement — mêmes valeurs que le survol de la liste ci-dessus.
-  .mobile-menu-list.is-navigating .mobile-menu-link {
-    opacity: 0.4;
-  }
-
-  .mobile-menu-list.is-navigating .mobile-menu-item.is-navigating-active .mobile-menu-link {
-    opacity: 1;
-    color: $cream;
-
-    // La ligne ::after (voir .hover-underline) devient une barre de chargement
-    // qui balaie de gauche à droite en boucle tant que la page suivante n'est
-    // pas prête (is-navigating-active retiré par clearPendingMenuActive()).
-    &::after {
-      animation: menu-loading-sweep 1.1s ease-in-out infinite;
-    }
-  }
-
-  .current-menu-item .mobile-menu-link::after {
-    transform: scaleX(1) !important;
-    transform-origin: left !important;
-  }
-
-  .mobile-menu-link-wrapper {
-    overflow: hidden;
-    display: inline-block;
-  }
-}
-
-/* Barre de chargement : remplit depuis la gauche jusqu'à pleine largeur, puis
-   se retire par la droite, en boucle — un balayage gauche→droite continu en
-   réutilisant seulement scaleX + transform-origin. */
-@keyframes menu-loading-sweep {
-  0%     { transform: scaleX(0); transform-origin: left; }
-  50%    { transform: scaleX(1); transform-origin: left; }
-  50.01% { transform-origin: right; }
-  100%   { transform: scaleX(0); transform-origin: right; }
-}
-
-/* ==========================================================================
    Footer
    ========================================================================== */
 
 footer {
-  background-color: $dark;
+  background-color: $depth-1;
 }
 
 .footer-block > * {
   width: fit-content;
+}
+
+.footer-menu-link {
+  font-family: 'Playfair Display', Georgia, serif;
 }
 
 /* ==========================================================================
@@ -760,8 +378,8 @@ footer {
 
 /* Hook de l'animation d'entrée GSAP (translateY), voir initSlideUp().
    will-change pré-promeut l'élément dans sa propre couche de composition :
-   sans ça, un backdrop-filter porté par un descendant (ex: .btn-tertiary) ne
-   se met jamais à jour correctement pendant/après le transform animé. */
+   sans ça, un backdrop-filter porté par un descendant (ex: .btn-ghost) ne se
+   met jamais à jour correctement pendant/après le transform animé. */
 .slide-up {
   will-change: transform;
 }
@@ -781,12 +399,6 @@ footer {
    Utilitaires réutilisables
    ========================================================================== */
 
-.container {
-  max-width: 1200px;
-  margin: 0 auto;
-  padding: 0 1rem;
-}
-
 /* Soulignement au survol : entre par la gauche, sort par la droite. */
 .hover-underline {
   position: relative;
@@ -801,7 +413,7 @@ footer {
     bottom: -2px;
     left: 0;
     width: 100%;
-    height: 2px;
+    height: 1px;
     background-color: currentColor;
     transform: scaleX(0);
     transform-origin: left;
@@ -819,7 +431,7 @@ footer {
   }
 }
 
-/* Accordéon FAQ (voir rs_faq + initFaqAccordion) : wipe sombre haut→bas au
+/* Accordéon FAQ (voir rs_faq + initFaqAccordion) : wipe doré haut→bas au
    survol, sortie par le bas. */
 .faq-item {
   position: relative;
@@ -829,7 +441,7 @@ footer {
     content: '';
     position: absolute;
     inset: 0;
-    background-color: $dark;
+    background-color: $depth-1;
     transform: scaleY(0);
     transform-origin: bottom;
     transition: transform 0.5s cubic-bezier(0.77, 0, 0.175, 1);
@@ -838,21 +450,20 @@ footer {
 
   // Réservé aux appareils avec une vraie souris : au tactile, il n'y a pas de
   // "mouseleave" au relâchement du doigt — le tap qui ouvre/ferme une question
-  // resterait aussi visuellement bloqué dans cet état (fond déployé, texte
-  // clair) jusqu'au prochain tap ailleurs.
+  // resterait aussi visuellement bloqué dans cet état jusqu'au prochain tap
+  // ailleurs.
   @media (hover: hover) and (pointer: fine) {
     &:hover::before {
       transform: scaleY(1);
       transform-origin: top;
     }
 
-    &:hover .faq-question span,
-    &:hover .faq-answer p {
-      color: $cream;
+    &:hover .faq-question span {
+      color: $jaune;
     }
 
     &:hover .faq-icon span {
-      background-color: $cream;
+      background-color: $jaune;
     }
   }
 
@@ -883,15 +494,14 @@ footer {
 }
 
 .card {
-  background: $white;
-  border-radius: 0.5rem;
+  background-color: $depth-1;
+  border-radius: 14px;
   padding: 1.5rem;
-  box-shadow: 0 4px 20px rgba(0, 0, 0, 0.1);
   transition: transform 0.3s ease, box-shadow 0.3s ease;
 
   &:hover {
     transform: translateY(-2px);
-    box-shadow: 0 8px 30px rgba(0, 0, 0, 0.15);
+    box-shadow: 0 8px 30px rgba(0, 0, 0, 0.35);
   }
 }
 
@@ -903,15 +513,24 @@ footer {
   list-style-position: outside;
   margin-left: 1.5em;
   padding-left: 0;
-  line-height: 1;
-
-  @media (max-width: 768px) {
-    font-size: 14px;
-  }
 
   &::marker {
-    font-size: 1.5em;
+    color: $jaune;
   }
+}
+
+/* Masque visuellement un libellé tout en le laissant lisible aux lecteurs
+   d'écran (utilisé par le bouton burger, voir header.php). */
+.screen-reader-text {
+  position: absolute !important;
+  width: 1px;
+  height: 1px;
+  padding: 0;
+  margin: -1px;
+  overflow: hidden;
+  clip: rect(0, 0, 0, 0);
+  white-space: nowrap;
+  border: 0;
 }
 
 /* Curseur d'attente pendant une navigation Barba */
@@ -926,17 +545,22 @@ body.page-loading * {
    Fallback pour "100svh" (hauteur de viewport "small") : unité non supportée
    avant Safari 15.4 (certains iPad concernés) — une propriété CSS invalide est
    alors ignorée EN ENTIER, sans repli automatique sur 100vh. On réécrit donc
-   ici les classes Tailwind générées pour redéclarer height en 100vh AVANT
+   ici les classes Tailwind générées pour redéclarer la hauteur en 100vh AVANT
    100svh dans la même règle : ignoré proprement si "svh" n'est pas supporté
    (garde 100vh), sinon écrasé par 100svh juste après.
 
    !important nécessaire pour les variantes "md:" : Tailwind regroupe toutes
    ses classes responsives à la toute fin du CSS compilé (après ce bloc), donc
-   sa propre règle .md\:h-\[100svh\] gagnerait sinon par ordre de source.
+   sa propre règle gagnerait sinon par ordre de source.
 */
 .h-\[100svh\] {
   height: 100vh !important;
   height: 100svh !important;
+}
+
+.min-h-\[100svh\] {
+  min-height: 100vh !important;
+  min-height: 100svh !important;
 }
 
 .max-h-\[100svh\] {
@@ -950,8 +574,8 @@ body.page-loading * {
     height: 100svh !important;
   }
 
-  .md\:max-h-\[100svh\] {
-    max-height: 100vh !important;
-    max-height: 100svh !important;
+  .md\:min-h-\[100svh\] {
+    min-height: 100vh !important;
+    min-height: 100svh !important;
   }
 }

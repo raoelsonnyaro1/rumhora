@@ -1,6 +1,0 @@
-<!-- PLACEHOLDER — logomark seul, version CLAIRE (affichée sur fond sombre et
-     sur le hero). Voir .header-logo-center dans assets/sass/style.scss. -->
-<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 48 48" fill="none" role="img" aria-label="Rumhora">
-  <rect x="1" y="1" width="46" height="46" rx="4" stroke="#fff" stroke-width="2"/>
-  <path d="M14 34V14h9a6 6 0 0 1 0 12h-9m10 8-6-8" stroke="#fff" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
-</svg>
