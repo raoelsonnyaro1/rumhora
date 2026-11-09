@@ -1420,6 +1420,214 @@
  * d'un !important (voir les overrides "100svh" plus bas).
  */
 
+/**
+ * Carrousel d'événements (voir inc/components/rs-event-carousel.php).
+ *
+ * Particularité de mise en page : le slider s'étend jusqu'au BORD DROIT de
+ * l'écran, sans gouttière, pour que les cartes suivantes soient rognées par le
+ * bord de la fenêtre — c'est ce débordement qui signale qu'il y a autre chose
+ * à voir. Le bloc de titre et la navigation, eux, gardent les gouttières
+ * standard du site.
+ */
+
+.event-carousel {
+  background-color: #2A0F12;
+}
+
+.event-carousel__grid {
+  display: flex;
+  flex-direction: column;
+  gap: 2.5rem;
+  padding-left: 1.25rem;
+  padding-right: 0;
+}
+
+@media (min-width: 768px) {
+  .event-carousel__grid {
+    padding-left: 2rem;
+  }
+}
+
+@media (min-width: 1024px) {
+  .event-carousel__grid {
+    display: grid;
+    grid-template-columns: minmax(200px, 17rem) 1fr;
+    -moz-column-gap: 2.5rem;
+         column-gap: 2.5rem;
+    gap: 0;
+    align-items: center;
+  }
+}
+
+@media (min-width: 1280px) {
+  .event-carousel__grid {
+    padding-left: 3.5rem;
+  }
+}
+
+/* ==========================================================================
+   Bloc de titre
+   ========================================================================== */
+
+.event-carousel__title {
+  font-size: clamp(34px, 3.9vw, 56px);
+  line-height: 1.12;
+  color: #F4EDE4;
+}
+
+.event-carousel__title em {
+  color: #C6A75E;
+  font-style: normal;
+}
+
+/* ==========================================================================
+   Slider
+   ========================================================================== */
+
+.event-carousel__slider {
+  min-width: 0;
+}
+
+.event-carousel__swiper {
+  overflow: hidden;
+}
+
+/* ==========================================================================
+   Carte événement
+   ========================================================================== */
+
+.event-card {
+  height: auto;
+}
+
+.event-card__media {
+  position: relative;
+  aspect-ratio: 393/389;
+  border-radius: 14px;
+  overflow: hidden;
+}
+
+.event-card__media img {
+  width: 100%;
+  height: 100%;
+  -o-object-fit: cover;
+     object-fit: cover;
+  display: block;
+}
+
+.event-card__body {
+  display: flex;
+  align-items: flex-end;
+  justify-content: space-between;
+  gap: 1.5rem;
+}
+
+.event-card__date {
+  font-family: "Montserrat", system-ui, sans-serif;
+  font-size: 13px;
+  font-weight: 500;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  color: #C6A75E;
+}
+
+.event-card__title {
+  font-family: "Montserrat", system-ui, sans-serif;
+  font-size: 18px;
+  font-weight: 600;
+  line-height: 1.3;
+  color: #F4EDE4;
+  margin-top: 0.4rem;
+}
+
+.event-card__artist {
+  font-family: "Montserrat", system-ui, sans-serif;
+  font-size: 12px;
+  font-weight: 500;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  color: #A89B95;
+  margin-top: 0.35rem;
+}
+
+.event-card__cta {
+  flex-shrink: 0;
+  font-size: 14px;
+  padding: 10px 20px;
+}
+
+@media (max-width: 639px) {
+  .event-card__body {
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 1rem;
+  }
+}
+
+/* ==========================================================================
+   Navigation
+   ========================================================================== */
+
+.event-carousel__nav {
+  display: flex;
+  align-items: center;
+  justify-content: flex-end;
+  gap: 1.25rem;
+  margin-top: 2rem;
+  padding-inline: 1.25rem;
+}
+
+@media (min-width: 768px) {
+  .event-carousel__nav {
+    padding-inline: 2rem;
+  }
+}
+
+@media (min-width: 1280px) {
+  .event-carousel__nav {
+    padding-inline: 3.5rem;
+  }
+}
+
+.event-carousel__arrow {
+  background: none;
+  border: none;
+  padding: 0;
+  cursor: pointer;
+  color: #8A7F7A;
+  transition: color 0.3s ease, transform 0.3s ease;
+}
+
+.event-carousel__arrow svg {
+  width: 46px;
+  height: 20px;
+  display: block;
+}
+
+.event-carousel__arrow:hover {
+  color: #C6A75E;
+}
+
+.event-carousel__arrow.swiper-button-disabled {
+  opacity: 0.35;
+  cursor: default;
+  pointer-events: none;
+}
+
+/**
+ * Feuille maîtresse — compilée vers dist/styles.css
+ *
+ * Chaîne de build : sass (ce fichier) → dist/temp.css → tailwindcss CLI →
+ * dist/styles.css. Les directives @tailwind ci-dessous sont donc résolues par
+ * Tailwind APRÈS la compilation Sass (voir package.json, build:css).
+ *
+ * Conséquence importante sur l'ordre des règles : Tailwind place toutes ses
+ * utilitaires (et surtout les variantes responsives "md:", "lg:") À LA FIN du
+ * CSS produit, donc APRÈS tout ce qui est écrit ici. Une règle de ce fichier
+ * qui doit l'emporter sur un utilitaire Tailwind de même spécificité a besoin
+ * d'un !important (voir les overrides "100svh" plus bas).
+ */
+
 /* =========================================
    Formulaires (libellé flottant)
    =========================================

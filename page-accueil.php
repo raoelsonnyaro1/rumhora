@@ -119,4 +119,54 @@ rs_media_cluster(
 	)
 );
 
+/**
+ * « Upcoming Evenings » — carrousel d'événements.
+ *
+ * Les événements viennent d'un repeater ACF ; sans saisie, les trois
+ * événements de la maquette servent de repli pour que la section soit
+ * représentative avant même la mise en contenu.
+ */
+$rumhora_events = get_field( 'events_liste' );
+
+if ( ! $rumhora_events ) {
+	$rumhora_book_url = get_field( 'book_url', 'option' ) ?: home_url( '/book-a-table' );
+	$rumhora_events   = array(
+		array(
+			'date'        => __( 'Friday, Nov 10', 'rumhora' ),
+			'titre'       => __( 'Midnight Jazz Sessions', 'rumhora' ),
+			'intervenant' => __( 'Thabo & The Quintet', 'rumhora' ),
+			'image'       => get_template_directory_uri() . '/img/accueil-event-1.webp',
+		),
+		array(
+			'date'        => __( 'Saturday, Nov 18', 'rumhora' ),
+			'titre'       => __( 'Deep House Nights', 'rumhora' ),
+			'intervenant' => __( 'DJ Kaelo', 'rumhora' ),
+			'image'       => get_template_directory_uri() . '/img/accueil-event-2.webp',
+		),
+		array(
+			'date'        => __( 'Friday, Nov 24', 'rumhora' ),
+			'titre'       => __( 'Lounge & Vinyl', 'rumhora' ),
+			'intervenant' => __( 'Selecta Moyo', 'rumhora' ),
+			'image'       => get_template_directory_uri() . '/img/accueil-event-3.webp',
+		),
+	);
+
+	// Même CTA sur les trois : il mène à la réservation, pas à une page par
+	// événement — ces pages n'existent pas encore (voir la phase 2 du planning).
+	foreach ( $rumhora_events as &$rumhora_event ) {
+		$rumhora_event['bouton_texte'] = __( 'Reserve Lounge', 'rumhora' );
+		$rumhora_event['bouton_lien']  = $rumhora_book_url;
+	}
+	unset( $rumhora_event );
+}
+
+rs_event_carousel(
+	array(
+		'id'       => 'events',
+		'surtitre' => get_field( 'events_surtitre' ) ?: __( 'The lounge', 'rumhora' ),
+		'titre'    => get_field( 'events_titre' ) ?: '<em>' . __( 'Upcoming<br>Evenings', 'rumhora' ) . '</em>',
+		'events'   => $rumhora_events,
+	)
+);
+
 get_footer();

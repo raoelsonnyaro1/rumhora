@@ -1173,6 +1173,7 @@
     initGalerieThumbReveal,
     initGalerieSwipers,
     initCarousels,
+    initEventCarousels,
     initFadeInAnimations,
     initGsapFadeIn,
     initTextRevealAnimations,
@@ -1769,6 +1770,27 @@
           }
         }
       });
+    });
+  }
+  function initEventCarousels() {
+    if (typeof Swiper === "undefined") return;
+    document.querySelectorAll(".event-carousel__swiper").forEach((el) => {
+      if (el.swiper) return;
+      const prevEl = document.getElementById(`${el.id}-prev`);
+      const nextEl = document.getElementById(`${el.id}-next`);
+      new Swiper(el, __spreadValues({
+        slidesPerView: 1.08,
+        spaceBetween: 12,
+        grabCursor: true,
+        // Pas de loop : les flèches doivent pouvoir se désactiver en début et en
+        // fin de liste (voir .swiper-button-disabled), ce que le mode boucle
+        // rend impossible — il n'y a alors jamais de fin.
+        watchOverflow: true,
+        breakpoints: {
+          640: { slidesPerView: 1.6, spaceBetween: 14 },
+          1024: { slidesPerView: 2.25, spaceBetween: 16 }
+        }
+      }, prevEl && nextEl ? { navigation: { prevEl, nextEl } } : {}));
     });
   }
   function initVideoReveal() {

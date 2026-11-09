@@ -481,6 +481,178 @@
             "return_format": "array",
             "library": "all",
             "preview_size": "medium"
+        },
+        {
+            "key": "field_accueil_events_tab",
+            "label": "Upcoming Evenings",
+            "name": "",
+            "type": "tab",
+            "instructions": "",
+            "required": 0,
+            "conditional_logic": 0,
+            "wrapper": {
+                "width": "",
+                "class": "",
+                "id": ""
+            },
+            "placement": "top",
+            "endpoint": 0
+        },
+        {
+            "key": "field_accueil_events_surtitre",
+            "label": "Surtitre",
+            "name": "events_surtitre",
+            "type": "text",
+            "instructions": "Petite mention au-dessus du titre, affichée en capitales.",
+            "required": 0,
+            "conditional_logic": 0,
+            "wrapper": {
+                "width": "",
+                "class": "",
+                "id": ""
+            },
+            "default_value": "",
+            "placeholder": "The lounge"
+        },
+        {
+            "key": "field_accueil_events_titre",
+            "label": "Titre",
+            "name": "events_titre",
+            "type": "textarea",
+            "instructions": "Mettre le titre ENTIER en <em>italique</em> pour l'afficher en doré. Utiliser &lt;br&gt; pour forcer un retour à la ligne.",
+            "required": 0,
+            "conditional_logic": 0,
+            "wrapper": {
+                "width": "",
+                "class": "",
+                "id": ""
+            },
+            "default_value": "",
+            "rows": 2,
+            "new_lines": ""
+        },
+        {
+            "key": "field_accueil_events_liste",
+            "label": "Événements",
+            "name": "events_liste",
+            "type": "repeater",
+            "instructions": "Les cartes défilent horizontalement. Sans aucune ligne, les événements de la maquette s'affichent à titre de repli.",
+            "required": 0,
+            "conditional_logic": 0,
+            "wrapper": {
+                "width": "",
+                "class": "",
+                "id": ""
+            },
+            "layout": "block",
+            "min": 0,
+            "max": 0,
+            "button_label": "Ajouter un événement",
+            "sub_fields": [
+                {
+                    "key": "field_accueil_event_date",
+                    "label": "Date",
+                    "name": "date",
+                    "type": "text",
+                    "instructions": "Affichée en capitales au-dessus du titre (ex: Friday, Nov 10).",
+                    "required": 0,
+                    "conditional_logic": 0,
+                    "wrapper": {
+                        "width": "50",
+                        "class": "",
+                        "id": ""
+                    },
+                    "default_value": "",
+                    "placeholder": "",
+                    "parent_repeater": "field_accueil_events_liste"
+                },
+                {
+                    "key": "field_accueil_event_titre",
+                    "label": "Titre",
+                    "name": "titre",
+                    "type": "text",
+                    "instructions": "",
+                    "required": 0,
+                    "conditional_logic": 0,
+                    "wrapper": {
+                        "width": "50",
+                        "class": "",
+                        "id": ""
+                    },
+                    "default_value": "",
+                    "placeholder": "",
+                    "parent_repeater": "field_accueil_events_liste"
+                },
+                {
+                    "key": "field_accueil_event_intervenant",
+                    "label": "Intervenant",
+                    "name": "intervenant",
+                    "type": "text",
+                    "instructions": "Artiste, DJ ou groupe. Affiché en capitales sous le titre.",
+                    "required": 0,
+                    "conditional_logic": 0,
+                    "wrapper": {
+                        "width": "50",
+                        "class": "",
+                        "id": ""
+                    },
+                    "default_value": "",
+                    "placeholder": "",
+                    "parent_repeater": "field_accueil_events_liste"
+                },
+                {
+                    "key": "field_accueil_event_image",
+                    "label": "Photo",
+                    "name": "image",
+                    "type": "image",
+                    "instructions": "Cadrage carré (ratio ~1/1).",
+                    "required": 0,
+                    "conditional_logic": 0,
+                    "wrapper": {
+                        "width": "50",
+                        "class": "",
+                        "id": ""
+                    },
+                    "return_format": "array",
+                    "library": "all",
+                    "preview_size": "medium",
+                    "parent_repeater": "field_accueil_events_liste"
+                },
+                {
+                    "key": "field_accueil_event_btn_texte",
+                    "label": "Bouton — libellé",
+                    "name": "bouton_texte",
+                    "type": "text",
+                    "instructions": "Laisser vide pour masquer le bouton de cette carte.",
+                    "required": 0,
+                    "conditional_logic": 0,
+                    "wrapper": {
+                        "width": "50",
+                        "class": "",
+                        "id": ""
+                    },
+                    "default_value": "",
+                    "placeholder": "Reserve Lounge",
+                    "parent_repeater": "field_accueil_events_liste"
+                },
+                {
+                    "key": "field_accueil_event_btn_lien",
+                    "label": "Bouton — lien",
+                    "name": "bouton_lien",
+                    "type": "text",
+                    "instructions": "URL complète, ou ancre de la page courante.",
+                    "required": 0,
+                    "conditional_logic": 0,
+                    "wrapper": {
+                        "width": "50",
+                        "class": "",
+                        "id": ""
+                    },
+                    "default_value": "",
+                    "placeholder": "",
+                    "parent_repeater": "field_accueil_events_liste"
+                }
+            ]
         }
     ],
     "location": [

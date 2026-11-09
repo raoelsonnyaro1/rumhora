@@ -240,6 +240,7 @@ const ANIMATION_INITS = [
   initGalerieThumbReveal,
   initGalerieSwipers,
   initCarousels,
+  initEventCarousels,
   initFadeInAnimations,
   initGsapFadeIn,
   initTextRevealAnimations,
@@ -1194,6 +1195,45 @@ function initCarousels() {
           spaceBetween: 24,
         },
       },
+    });
+  });
+}
+
+/**
+ * Carrousels d'événements (rs_event_carousel).
+ *
+ * slidesPerView fractionnaire : la carte suivante est volontairement coupée
+ * par le bord du conteneur — qui va jusqu'au bord de l'écran — pour signaler
+ * qu'il y a autre chose à voir. Les flèches vivent HORS du conteneur Swiper
+ * (gouttière droite standard, voir rs-event-carousel.php), d'où la recherche
+ * par id plutôt que par querySelector sur la racine.
+ *
+ * Doit être rappelé après chaque transition Barba puisque le DOM est remplacé.
+ */
+function initEventCarousels() {
+  if (typeof Swiper === 'undefined') return;
+
+  document.querySelectorAll('.event-carousel__swiper').forEach((el) => {
+    // Défensif : Swiper repasserait sur un slider déjà monté après un
+    // ScrollTrigger.refresh() qui réappellerait la passe d'init.
+    if (el.swiper) return;
+
+    const prevEl = document.getElementById(`${el.id}-prev`);
+    const nextEl = document.getElementById(`${el.id}-next`);
+
+    new Swiper(el, {
+      slidesPerView: 1.08,
+      spaceBetween: 12,
+      grabCursor: true,
+      // Pas de loop : les flèches doivent pouvoir se désactiver en début et en
+      // fin de liste (voir .swiper-button-disabled), ce que le mode boucle
+      // rend impossible — il n'y a alors jamais de fin.
+      watchOverflow: true,
+      breakpoints: {
+        640: { slidesPerView: 1.6, spaceBetween: 14 },
+        1024: { slidesPerView: 2.25, spaceBetween: 16 },
+      },
+      ...(prevEl && nextEl ? { navigation: { prevEl, nextEl } } : {}),
     });
   });
 }

@@ -1,0 +1,203 @@
+/**
+ * Carrousel d'événements (voir inc/components/rs-event-carousel.php).
+ *
+ * Particularité de mise en page : le slider s'étend jusqu'au BORD DROIT de
+ * l'écran, sans gouttière, pour que les cartes suivantes soient rognées par le
+ * bord de la fenêtre — c'est ce débordement qui signale qu'il y a autre chose
+ * à voir. Le bloc de titre et la navigation, eux, gardent les gouttières
+ * standard du site.
+ */
+@use '../variables' as *;
+
+// Gouttières du site, reprises ici en variables : la section ne peut pas
+// utiliser les utilitaires de padding habituels, puisqu'elle n'en applique
+// qu'à GAUCHE (voir plus haut).
+$gutter-sm: 1.25rem; // px-5
+$gutter-md: 2rem;    // md:px-8
+$gutter-xl: 3.5rem;  // xl:px-14
+
+.event-carousel {
+  background-color: $depth-1;
+}
+
+.event-carousel__grid {
+  display: flex;
+  flex-direction: column;
+  gap: 2.5rem;
+  padding-left: $gutter-sm;
+  // Pas de padding-right : c'est le slider qui file jusqu'au bord.
+  padding-right: 0;
+
+  @media (min-width: 768px) {
+    padding-left: $gutter-md;
+  }
+
+  @media (min-width: 1024px) {
+    display: grid;
+    // Colonne de titre volontairement étroite : à la taille du titre, elle
+    // force le passage sur deux lignes de la maquette sans <br> codé en dur,
+    // donc sans le figer pour la traduction.
+    grid-template-columns: minmax(200px, 17rem) 1fr;
+    column-gap: 2.5rem;
+    gap: 0;
+    align-items: center;
+  }
+
+  @media (min-width: 1280px) {
+    padding-left: $gutter-xl;
+  }
+}
+
+/* ==========================================================================
+   Bloc de titre
+   ========================================================================== */
+
+.event-carousel__title {
+  font-size: clamp(34px, 3.9vw, 56px);
+  line-height: 1.12;
+  color: $heading;
+
+  // Sur cette section la maquette dore le titre entier : il suffit de le
+  // mettre entièrement en italique côté éditeur.
+  em {
+    color: $gold;
+    font-style: normal;
+  }
+}
+
+/* ==========================================================================
+   Slider
+   ========================================================================== */
+
+.event-carousel__slider {
+  // min-width:0 indispensable sur un enfant de grid : sans ça, la piste `1fr`
+  // ne peut pas devenir plus étroite que le contenu du slider, et la rangée
+  // déborde au lieu que Swiper rogne ses slides.
+  min-width: 0;
+}
+
+.event-carousel__swiper {
+  overflow: hidden;
+}
+
+/* ==========================================================================
+   Carte événement
+   ========================================================================== */
+
+.event-card {
+  height: auto; // les slides Swiper sont étirées par défaut
+
+  &__media {
+    position: relative;
+    aspect-ratio: 393 / 389; // ratio des cartes sur la maquette
+    border-radius: 14px;
+    overflow: hidden;
+
+    img {
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+      display: block;
+    }
+  }
+
+  &__body {
+    display: flex;
+    align-items: flex-end;
+    justify-content: space-between;
+    gap: 1.5rem;
+  }
+
+  &__date {
+    font-family: 'Montserrat', system-ui, sans-serif;
+    font-size: 13px;
+    font-weight: 500;
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
+    color: $gold;
+  }
+
+  &__title {
+    font-family: 'Montserrat', system-ui, sans-serif;
+    font-size: 18px;
+    font-weight: 600;
+    line-height: 1.3;
+    color: $heading;
+    margin-top: 0.4rem;
+  }
+
+  &__artist {
+    font-family: 'Montserrat', system-ui, sans-serif;
+    font-size: 12px;
+    font-weight: 500;
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
+    color: $secondary;
+    margin-top: 0.35rem;
+  }
+
+  &__cta {
+    flex-shrink: 0;
+    font-size: 14px;
+    padding: 10px 20px;
+  }
+
+  // Sous 640px la carte devient étroite : le CTA passe sous le texte plutôt
+  // que de comprimer les deux sur une seule ligne.
+  @media (max-width: 639px) {
+    &__body {
+      flex-direction: column;
+      align-items: flex-start;
+      gap: 1rem;
+    }
+  }
+}
+
+/* ==========================================================================
+   Navigation
+   ========================================================================== */
+
+.event-carousel__nav {
+  display: flex;
+  align-items: center;
+  justify-content: flex-end;
+  gap: 1.25rem;
+  margin-top: 2rem;
+  padding-inline: $gutter-sm;
+
+  @media (min-width: 768px) {
+    padding-inline: $gutter-md;
+  }
+
+  @media (min-width: 1280px) {
+    padding-inline: $gutter-xl;
+  }
+}
+
+.event-carousel__arrow {
+  background: none;
+  border: none;
+  padding: 0;
+  cursor: pointer;
+  color: $neutral;
+  transition: color 0.3s ease, transform 0.3s ease;
+
+  svg {
+    width: 46px;
+    height: 20px;
+    display: block;
+  }
+
+  &:hover {
+    color: $gold;
+  }
+
+  // Swiper pose cette classe en début/fin de liste : la flèche inactive reste
+  // visible mais clairement inopérante, plutôt que de disparaître et de faire
+  // sauter la mise en page.
+  &.swiper-button-disabled {
+    opacity: 0.35;
+    cursor: default;
+    pointer-events: none;
+  }
+}
