@@ -70,4 +70,29 @@ rs_text_media(
 	)
 );
 
+/**
+ * « Featured chef » — portrait, texte et citation en composition superposée.
+ */
+$rumhora_chef_image = get_field( 'chef_image' );
+if ( ! $rumhora_chef_image ) {
+	$rumhora_chef_image = get_template_directory_uri() . '/img/accueil-chef.webp';
+}
+
+rs_portrait_quote(
+	array(
+		'id'       => 'chef',
+		'surtitre' => get_field( 'chef_surtitre' ) ?: __( 'Featured chef', 'rumhora' ),
+		'titre'    => get_field( 'chef_titre' ) ?: sprintf(
+			/* translators: %s : fin du titre, affichée en doré. */
+			__( 'The Chef %s', 'rumhora' ),
+			'<em>' . __( 'behind the experience', 'rumhora' ) . '</em>'
+		),
+		'texte'    => get_field( 'chef_texte' ) ?: __( 'Born and raised in South Africa, Chef Naledi Mokoena brings together refined technique and deep cultural influences through a cuisine that feels both elegant and heartfelt. Having trained in acclaimed kitchens across Cape Town and abroad, she has developed a culinary style rooted in bold flavours, seasonality, and authenticity.', 'rumhora' ),
+		// Apostrophe typographique (’) et non droite : c'est la forme correcte
+		// dans une citation, et elle évite d'avoir à l'échapper ici.
+		'citation' => get_field( 'chef_citation' ) ?: __( 'Food is about bringing people together through moments they’ll always remember.', 'rumhora' ),
+		'image'    => $rumhora_chef_image,
+	)
+);
+
 get_footer();

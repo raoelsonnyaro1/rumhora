@@ -1,0 +1,163 @@
+/**
+ * Section « portrait + citation » (voir inc/components/rs-portrait-quote.php).
+ *
+ * Composition superposée : les quatre blocs occupent la MÊME ligne de grille
+ * et se chevauchent, plutôt que d'être positionnés en absolute. La hauteur de
+ * la section reste ainsi pilotée par le portrait — le plus haut des quatre —
+ * au lieu d'être fixée à la main, et la mise en page se replie toute seule en
+ * pile quand la grille est désactivée sous `lg`.
+ */
+@use '../variables' as *;
+
+.portrait-quote {
+  background-color: $depth-1;
+  // Le portrait chevauche volontairement les autres blocs ; sans ça, un
+  // débordement d'un pixel au resize ferait apparaître une barre horizontale.
+  overflow: hidden;
+}
+
+.portrait-quote__grid {
+  display: flex;
+  flex-direction: column;
+  gap: 2.5rem;
+
+  @media (min-width: 1024px) {
+    display: grid;
+    // 12 colonnes : les proportions de la maquette (portrait sur 5 colonnes
+    // à partir de la 4e, citation sur les 4 dernières) s'y expriment
+    // directement en numéros de colonne.
+    grid-template-columns: repeat(12, 1fr);
+    column-gap: 1.5rem;
+    gap: 0;
+  }
+}
+
+/* ==========================================================================
+   Bloc éditorial
+   ========================================================================== */
+
+.portrait-quote__text {
+  @media (min-width: 1024px) {
+    grid-column: 1 / 7;
+    grid-row: 1;
+  }
+}
+
+.portrait-quote__title {
+  font-size: clamp(34px, 3.9vw, 56px);
+  line-height: 1.14;
+  color: $heading;
+
+  // Partie mise en avant du titre, en doré (« behind the experience »).
+  // font-style remis à normal : on veut la couleur, pas l'italique.
+  em {
+    color: $gold;
+    font-style: normal;
+  }
+}
+
+.portrait-quote__body {
+  font-family: 'Montserrat', system-ui, sans-serif;
+  font-size: 14px;
+  line-height: 1.75;
+  color: $body-text;
+  // Colonne étroite, nettement plus courte que le titre : c'est ce décalage
+  // de mesure qui structure la composition de la maquette.
+  max-width: 33ch;
+
+  @media (max-width: 767px) {
+    font-size: 13px;
+  }
+}
+
+/* ==========================================================================
+   Cartouche décoratif
+   ==========================================================================
+   Rectangle arrondi dans le ton immédiatement plus clair que le fond, posé
+   derrière le portrait. Purement graphique : masqué dès que la composition se
+   déplie, où il n'aurait plus rien à habiller.
+*/
+
+.portrait-quote__decor {
+  display: none;
+
+  @media (min-width: 1024px) {
+    display: block;
+    grid-column: 8 / 10;
+    grid-row: 1;
+    justify-self: start;
+    align-self: start;
+    margin-top: 4.5rem;
+    // Carré d'environ 190px, comme sur la maquette. max-width ET aspect-ratio :
+    // sans la largeur maximale, la piste de grille étire le cartouche en
+    // rectangle dès que le viewport s'élargit.
+    width: 100%;
+    max-width: 190px;
+    aspect-ratio: 1 / 1;
+    border-radius: 20px;
+    background-color: $depth-2;
+  }
+}
+
+/* ==========================================================================
+   Portrait
+   ========================================================================== */
+
+.portrait-quote__portrait {
+  @media (min-width: 1024px) {
+    grid-column: 4 / 9;
+    grid-row: 1;
+    margin-top: 8rem;
+    // Au-dessus du titre et du cartouche, qu'il chevauche tous les deux.
+    z-index: 2;
+  }
+
+  @media (max-width: 1023px) {
+    max-width: 420px;
+    width: 100%;
+    margin-inline: auto;
+  }
+}
+
+.portrait-quote__frame {
+  aspect-ratio: 365 / 512; // ratio du portrait sur la maquette
+  border-radius: 14px;
+  overflow: hidden;
+
+  img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    display: block;
+  }
+}
+
+/* ==========================================================================
+   Citation
+   ========================================================================== */
+
+.portrait-quote__quote {
+  font-family: 'Playfair Display', Georgia, serif;
+  font-size: clamp(20px, 1.9vw, 28px);
+  font-weight: 400;
+  line-height: 1.45;
+  color: $gold;
+  margin: 0;
+
+  // Pas de guillemets en ::before/::after ici : .text-reveal fait passer le
+  // contenu par SplitText, qui le redécoupe en <div> de ligne — les
+  // pseudo-éléments se retrouvent alors éjectés sur leurs propres lignes,
+  // au-dessus et en dessous de la citation. Ils sont donc intégrés au texte
+  // côté PHP (voir rs_portrait_quote).
+
+  @media (min-width: 1024px) {
+    grid-column: 9 / 13;
+    grid-row: 1;
+    // Calée en bas de la ligne, dont la hauteur est donnée par le portrait :
+    // la citation suit donc automatiquement la taille de la photo, sans
+    // décalage codé en dur à réajuster à chaque breakpoint.
+    align-self: end;
+    margin-bottom: 5rem;
+    z-index: 2;
+  }
+}

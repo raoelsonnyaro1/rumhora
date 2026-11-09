@@ -213,6 +213,82 @@
             "wrapper": { "width": "50", "class": "", "id": "" },
             "default_value": "",
             "placeholder": ""
+        },
+        {
+            "key": "field_accueil_chef_tab",
+            "label": "Featured chef",
+            "name": "",
+            "type": "tab",
+            "instructions": "",
+            "required": 0,
+            "conditional_logic": 0,
+            "wrapper": { "width": "", "class": "", "id": "" },
+            "placement": "top",
+            "endpoint": 0
+        },
+        {
+            "key": "field_accueil_chef_surtitre",
+            "label": "Surtitre",
+            "name": "chef_surtitre",
+            "type": "text",
+            "instructions": "Petite mention au-dessus du titre, affichée en capitales.",
+            "required": 0,
+            "conditional_logic": 0,
+            "wrapper": { "width": "", "class": "", "id": "" },
+            "default_value": "",
+            "placeholder": "Featured chef"
+        },
+        {
+            "key": "field_accueil_chef_titre",
+            "label": "Titre",
+            "name": "chef_titre",
+            "type": "textarea",
+            "instructions": "Mettre une partie du titre en <em>italique</em> l'affiche en doré.",
+            "required": 0,
+            "conditional_logic": 0,
+            "wrapper": { "width": "", "class": "", "id": "" },
+            "default_value": "",
+            "rows": 2,
+            "new_lines": ""
+        },
+        {
+            "key": "field_accueil_chef_texte",
+            "label": "Biographie",
+            "name": "chef_texte",
+            "type": "textarea",
+            "instructions": "Colonne volontairement étroite (~33 caractères par ligne) : viser 8 à 10 lignes.",
+            "required": 0,
+            "conditional_logic": 0,
+            "wrapper": { "width": "", "class": "", "id": "" },
+            "default_value": "",
+            "rows": 6,
+            "new_lines": ""
+        },
+        {
+            "key": "field_accueil_chef_image",
+            "label": "Portrait",
+            "name": "chef_image",
+            "type": "image",
+            "instructions": "Cadrage portrait (ratio ~5/7). Sans portrait, toute la section est masquée. Si vide, la photo de la maquette est utilisée.",
+            "required": 0,
+            "conditional_logic": 0,
+            "wrapper": { "width": "", "class": "", "id": "" },
+            "return_format": "array",
+            "library": "all",
+            "preview_size": "medium"
+        },
+        {
+            "key": "field_accueil_chef_citation",
+            "label": "Citation",
+            "name": "chef_citation",
+            "type": "textarea",
+            "instructions": "Saisir le texte SANS guillemets : ils sont ajoutés automatiquement et suivent la langue du site.",
+            "required": 0,
+            "conditional_logic": 0,
+            "wrapper": { "width": "", "class": "", "id": "" },
+            "default_value": "",
+            "rows": 3,
+            "new_lines": ""
         }
     ],
     "location": [
