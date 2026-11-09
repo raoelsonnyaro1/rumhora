@@ -95,4 +95,28 @@ rs_portrait_quote(
 	)
 );
 
+/**
+ * « Chef's universe » — grappe de deux photos et bloc éditorial.
+ *
+ * Le titre est entouré d'un <em> complet : il s'affiche donc intégralement en
+ * doré, comme sur la maquette (voir .media-cluster__title em).
+ */
+$rumhora_univers_images = array( get_field( 'univers_image_1' ), get_field( 'univers_image_2' ) );
+if ( ! array_filter( $rumhora_univers_images ) ) {
+	$rumhora_univers_images = array(
+		get_template_directory_uri() . '/img/accueil-univers-1.webp',
+		get_template_directory_uri() . '/img/accueil-univers-2.webp',
+	);
+}
+
+rs_media_cluster(
+	array(
+		'id'       => 'univers',
+		'surtitre' => get_field( 'univers_surtitre' ) ?: __( 'Chef’s universe', 'rumhora' ),
+		'titre'    => get_field( 'univers_titre' ) ?: '<em>' . __( 'A culinary world<br>of bold flavours', 'rumhora' ) . '</em>',
+		'texte'    => get_field( 'univers_texte' ) ?: __( 'Inspired by South Africa’s rich culinary heritage, Chef Naledi combines locally sourced ingredients, contemporary techniques, and vibrant flavours to craft dishes full of character and balance. Her approach celebrates simplicity, precision, and the beauty of thoughtful cooking in every detail.', 'rumhora' ),
+		'images'   => $rumhora_univers_images,
+	)
+);
+
 get_footer();

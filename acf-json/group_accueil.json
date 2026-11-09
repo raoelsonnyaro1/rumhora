@@ -10,7 +10,11 @@
             "instructions": "",
             "required": 0,
             "conditional_logic": 0,
-            "wrapper": { "width": "", "class": "", "id": "" },
+            "wrapper": {
+                "width": "",
+                "class": "",
+                "id": ""
+            },
             "placement": "top",
             "endpoint": 0
         },
@@ -22,7 +26,11 @@
             "instructions": "Titre principal. Mettre un mot en <em>italique</em> l'affiche en doré. Utiliser &lt;br&gt; pour forcer un retour à la ligne. Si vide, le titre de la maquette s'affiche.",
             "required": 0,
             "conditional_logic": 0,
-            "wrapper": { "width": "", "class": "", "id": "" },
+            "wrapper": {
+                "width": "",
+                "class": "",
+                "id": ""
+            },
             "default_value": "",
             "rows": 2,
             "new_lines": ""
@@ -35,7 +43,11 @@
             "instructions": "Une à deux lignes sous le titre. Révélée ligne par ligne juste après le titre.",
             "required": 0,
             "conditional_logic": 0,
-            "wrapper": { "width": "", "class": "", "id": "" },
+            "wrapper": {
+                "width": "",
+                "class": "",
+                "id": ""
+            },
             "default_value": "",
             "rows": 3,
             "new_lines": ""
@@ -48,7 +60,11 @@
             "instructions": "Photo d'ambiance très sombre, format paysage, au moins 2400px de large. C'est l'image LCP de la page : à compresser avant l'envoi. Si vide, l'image de la maquette est utilisée.",
             "required": 0,
             "conditional_logic": 0,
-            "wrapper": { "width": "", "class": "", "id": "" },
+            "wrapper": {
+                "width": "",
+                "class": "",
+                "id": ""
+            },
             "return_format": "array",
             "library": "all",
             "preview_size": "medium"
@@ -61,7 +77,11 @@
             "instructions": "Photo de gauche de la paire en quinconce. Cadrage portrait (ratio ~4/5).",
             "required": 0,
             "conditional_logic": 0,
-            "wrapper": { "width": "50", "class": "", "id": "" },
+            "wrapper": {
+                "width": "50",
+                "class": "",
+                "id": ""
+            },
             "return_format": "array",
             "library": "all",
             "preview_size": "medium"
@@ -74,7 +94,11 @@
             "instructions": "Photo de droite de la paire en quinconce. Même cadrage portrait que la photo 1.",
             "required": 0,
             "conditional_logic": 0,
-            "wrapper": { "width": "50", "class": "", "id": "" },
+            "wrapper": {
+                "width": "50",
+                "class": "",
+                "id": ""
+            },
             "return_format": "array",
             "library": "all",
             "preview_size": "medium"
@@ -87,7 +111,11 @@
             "instructions": "Laisser vide pour masquer ce bouton.",
             "required": 0,
             "conditional_logic": 0,
-            "wrapper": { "width": "50", "class": "", "id": "" },
+            "wrapper": {
+                "width": "50",
+                "class": "",
+                "id": ""
+            },
             "default_value": "",
             "placeholder": "Book A Table"
         },
@@ -99,7 +127,11 @@
             "instructions": "URL complète, ou ancre de la page courante (ex: #menu).",
             "required": 0,
             "conditional_logic": 0,
-            "wrapper": { "width": "50", "class": "", "id": "" },
+            "wrapper": {
+                "width": "50",
+                "class": "",
+                "id": ""
+            },
             "default_value": "",
             "placeholder": ""
         },
@@ -111,7 +143,11 @@
             "instructions": "Laisser vide pour masquer ce bouton.",
             "required": 0,
             "conditional_logic": 0,
-            "wrapper": { "width": "50", "class": "", "id": "" },
+            "wrapper": {
+                "width": "50",
+                "class": "",
+                "id": ""
+            },
             "default_value": "",
             "placeholder": "Explore Menu"
         },
@@ -123,7 +159,11 @@
             "instructions": "URL complète, ou ancre de la page courante.",
             "required": 0,
             "conditional_logic": 0,
-            "wrapper": { "width": "50", "class": "", "id": "" },
+            "wrapper": {
+                "width": "50",
+                "class": "",
+                "id": ""
+            },
             "default_value": "",
             "placeholder": ""
         },
@@ -135,7 +175,11 @@
             "instructions": "",
             "required": 0,
             "conditional_logic": 0,
-            "wrapper": { "width": "", "class": "", "id": "" },
+            "wrapper": {
+                "width": "",
+                "class": "",
+                "id": ""
+            },
             "placement": "top",
             "endpoint": 0
         },
@@ -147,7 +191,11 @@
             "instructions": "Petite mention au-dessus du titre, affichée en capitales.",
             "required": 0,
             "conditional_logic": 0,
-            "wrapper": { "width": "", "class": "", "id": "" },
+            "wrapper": {
+                "width": "",
+                "class": "",
+                "id": ""
+            },
             "default_value": "",
             "placeholder": "About us"
         },
@@ -159,7 +207,11 @@
             "instructions": "Mettre un mot en <em>italique</em> l'affiche en doré.",
             "required": 0,
             "conditional_logic": 0,
-            "wrapper": { "width": "", "class": "", "id": "" },
+            "wrapper": {
+                "width": "",
+                "class": "",
+                "id": ""
+            },
             "default_value": "",
             "rows": 2,
             "new_lines": ""
@@ -172,7 +224,11 @@
             "instructions": "Paragraphe de présentation. La colonne est volontairement étroite (~36 caractères par ligne) : viser 4 à 6 lignes.",
             "required": 0,
             "conditional_logic": 0,
-            "wrapper": { "width": "", "class": "", "id": "" },
+            "wrapper": {
+                "width": "",
+                "class": "",
+                "id": ""
+            },
             "default_value": "",
             "rows": 5,
             "new_lines": ""
@@ -185,7 +241,11 @@
             "instructions": "Format paysage (ratio ~5/4). Si vide, la photo de la maquette est utilisée.",
             "required": 0,
             "conditional_logic": 0,
-            "wrapper": { "width": "", "class": "", "id": "" },
+            "wrapper": {
+                "width": "",
+                "class": "",
+                "id": ""
+            },
             "return_format": "array",
             "library": "all",
             "preview_size": "medium"
@@ -198,7 +258,11 @@
             "instructions": "Laisser vide pour masquer le bouton.",
             "required": 0,
             "conditional_logic": 0,
-            "wrapper": { "width": "50", "class": "", "id": "" },
+            "wrapper": {
+                "width": "50",
+                "class": "",
+                "id": ""
+            },
             "default_value": "",
             "placeholder": "Discover Our Story"
         },
@@ -210,7 +274,11 @@
             "instructions": "URL complète, ou ancre de la page courante.",
             "required": 0,
             "conditional_logic": 0,
-            "wrapper": { "width": "50", "class": "", "id": "" },
+            "wrapper": {
+                "width": "50",
+                "class": "",
+                "id": ""
+            },
             "default_value": "",
             "placeholder": ""
         },
@@ -222,7 +290,11 @@
             "instructions": "",
             "required": 0,
             "conditional_logic": 0,
-            "wrapper": { "width": "", "class": "", "id": "" },
+            "wrapper": {
+                "width": "",
+                "class": "",
+                "id": ""
+            },
             "placement": "top",
             "endpoint": 0
         },
@@ -234,7 +306,11 @@
             "instructions": "Petite mention au-dessus du titre, affichée en capitales.",
             "required": 0,
             "conditional_logic": 0,
-            "wrapper": { "width": "", "class": "", "id": "" },
+            "wrapper": {
+                "width": "",
+                "class": "",
+                "id": ""
+            },
             "default_value": "",
             "placeholder": "Featured chef"
         },
@@ -246,7 +322,11 @@
             "instructions": "Mettre une partie du titre en <em>italique</em> l'affiche en doré.",
             "required": 0,
             "conditional_logic": 0,
-            "wrapper": { "width": "", "class": "", "id": "" },
+            "wrapper": {
+                "width": "",
+                "class": "",
+                "id": ""
+            },
             "default_value": "",
             "rows": 2,
             "new_lines": ""
@@ -259,7 +339,11 @@
             "instructions": "Colonne volontairement étroite (~33 caractères par ligne) : viser 8 à 10 lignes.",
             "required": 0,
             "conditional_logic": 0,
-            "wrapper": { "width": "", "class": "", "id": "" },
+            "wrapper": {
+                "width": "",
+                "class": "",
+                "id": ""
+            },
             "default_value": "",
             "rows": 6,
             "new_lines": ""
@@ -272,7 +356,11 @@
             "instructions": "Cadrage portrait (ratio ~5/7). Sans portrait, toute la section est masquée. Si vide, la photo de la maquette est utilisée.",
             "required": 0,
             "conditional_logic": 0,
-            "wrapper": { "width": "", "class": "", "id": "" },
+            "wrapper": {
+                "width": "",
+                "class": "",
+                "id": ""
+            },
             "return_format": "array",
             "library": "all",
             "preview_size": "medium"
@@ -285,10 +373,114 @@
             "instructions": "Saisir le texte SANS guillemets : ils sont ajoutés automatiquement et suivent la langue du site.",
             "required": 0,
             "conditional_logic": 0,
-            "wrapper": { "width": "", "class": "", "id": "" },
+            "wrapper": {
+                "width": "",
+                "class": "",
+                "id": ""
+            },
             "default_value": "",
             "rows": 3,
             "new_lines": ""
+        },
+        {
+            "key": "field_accueil_univers_tab",
+            "label": "Chef's universe",
+            "name": "",
+            "type": "tab",
+            "instructions": "",
+            "required": 0,
+            "conditional_logic": 0,
+            "wrapper": {
+                "width": "",
+                "class": "",
+                "id": ""
+            },
+            "placement": "top",
+            "endpoint": 0
+        },
+        {
+            "key": "field_accueil_univers_surtitre",
+            "label": "Surtitre",
+            "name": "univers_surtitre",
+            "type": "text",
+            "instructions": "Petite mention au-dessus du titre, affichée en capitales.",
+            "required": 0,
+            "conditional_logic": 0,
+            "wrapper": {
+                "width": "",
+                "class": "",
+                "id": ""
+            },
+            "default_value": "",
+            "placeholder": "Chef's universe"
+        },
+        {
+            "key": "field_accueil_univers_titre",
+            "label": "Titre",
+            "name": "univers_titre",
+            "type": "textarea",
+            "instructions": "Mettre le titre ENTIER en <em>italique</em> pour l'afficher intégralement en doré, comme sur la maquette. Utiliser &lt;br&gt; pour forcer un retour à la ligne.",
+            "required": 0,
+            "conditional_logic": 0,
+            "wrapper": {
+                "width": "",
+                "class": "",
+                "id": ""
+            },
+            "default_value": "",
+            "rows": 2,
+            "new_lines": ""
+        },
+        {
+            "key": "field_accueil_univers_texte",
+            "label": "Texte",
+            "name": "univers_texte",
+            "type": "textarea",
+            "instructions": "Colonne large (~54 caractères par ligne) : viser 4 à 6 lignes.",
+            "required": 0,
+            "conditional_logic": 0,
+            "wrapper": {
+                "width": "",
+                "class": "",
+                "id": ""
+            },
+            "default_value": "",
+            "rows": 5,
+            "new_lines": ""
+        },
+        {
+            "key": "field_accueil_univers_image_1",
+            "label": "Photo 1 (grande)",
+            "name": "univers_image_1",
+            "type": "image",
+            "instructions": "Photo du haut, format paysage (ratio ~5/4).",
+            "required": 0,
+            "conditional_logic": 0,
+            "wrapper": {
+                "width": "50",
+                "class": "",
+                "id": ""
+            },
+            "return_format": "array",
+            "library": "all",
+            "preview_size": "medium"
+        },
+        {
+            "key": "field_accueil_univers_image_2",
+            "label": "Photo 2 (petite)",
+            "name": "univers_image_2",
+            "type": "image",
+            "instructions": "Photo décalée en bas à gauche, cadrage carré.",
+            "required": 0,
+            "conditional_logic": 0,
+            "wrapper": {
+                "width": "50",
+                "class": "",
+                "id": ""
+            },
+            "return_format": "array",
+            "library": "all",
+            "preview_size": "medium"
         }
     ],
     "location": [

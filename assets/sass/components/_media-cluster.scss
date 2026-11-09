@@ -1,0 +1,136 @@
+/**
+ * Section « grappe de médias + bloc éditorial »
+ * (voir inc/components/rs-media-cluster.php).
+ *
+ * La grappe est une composition art-dirigée : deux photos et un cartouche qui
+ * se chevauchent selon des proportions précises. Elle est donc posée en
+ * pourcentages DANS un conteneur à aspect-ratio fixe, plutôt qu'en grille —
+ * les trois éléments conservent ainsi exactement leurs positions relatives à
+ * toutes les tailles, sans breakpoint intermédiaire à régler.
+ */
+@use '../variables' as *;
+
+.media-cluster {
+  background-color: $depth-1;
+}
+
+.media-cluster__grid {
+  display: flex;
+  flex-direction: column;
+  gap: 3rem;
+
+  @media (min-width: 1024px) {
+    display: grid;
+    grid-template-columns: repeat(12, 1fr);
+    column-gap: 1.5rem;
+    gap: 0;
+    align-items: center;
+  }
+}
+
+/* ==========================================================================
+   Grappe de médias
+   ========================================================================== */
+
+.media-cluster__media {
+  @media (min-width: 1024px) {
+    grid-column: 1 / 6;
+  }
+
+  @media (max-width: 1023px) {
+    max-width: 440px;
+    width: 100%;
+    margin-inline: auto;
+  }
+}
+
+// Les règles des enfants sont imbriquées ici, donc à DEUX classes de
+// spécificité : les photos portent aussi .reveal, dont la règle
+// (`position: relative; width: 100%`) est émise APRÈS les composants dans le
+// CSS compilé — voir l'ordre des @use en tête de style.scss. À spécificité
+// égale, .reveal l'emporterait et écraserait tout le positionnement absolu.
+.media-cluster__stage {
+  position: relative;
+  // Boîte englobante de la composition sur la maquette (364 x 437). C'est elle
+  // qui donne sa hauteur à la colonne ; les enfants sont en absolute et ne
+  // participent donc pas au flux.
+  aspect-ratio: 364 / 437;
+
+  .media-cluster__photo {
+    position: absolute;
+    border-radius: 14px;
+    overflow: hidden;
+
+    img {
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+      display: block;
+    }
+
+    // Grande photo, en haut à droite de la composition.
+    &--1 {
+      left: 17.9%;
+      top: 0;
+      width: 82.1%;
+      height: 55.8%;
+    }
+
+    // Petite photo, décalée en bas à gauche. Au-dessus des deux autres
+    // éléments, qu'elle chevauche.
+    &--2 {
+      left: 0;
+      top: 41.4%;
+      width: 47.8%;
+      height: 39.4%;
+      z-index: 2;
+    }
+  }
+
+  .media-cluster__decor {
+    position: absolute;
+    left: 35.4%;
+    top: 66.4%;
+    width: 39.8%;
+    height: 33.6%;
+    border-radius: 18px;
+    background-color: $depth-2;
+  }
+}
+
+/* ==========================================================================
+   Bloc éditorial
+   ========================================================================== */
+
+.media-cluster__content {
+  @media (min-width: 1024px) {
+    grid-column: 7 / 13;
+  }
+}
+
+.media-cluster__title {
+  font-size: clamp(34px, 4.1vw, 58px);
+  line-height: 1.14;
+  color: $heading;
+
+  // Partie mise en avant du titre. Sur cette section la maquette dore le titre
+  // ENTIER : il suffit alors de le mettre entièrement en italique côté éditeur.
+  em {
+    color: $gold;
+    font-style: normal;
+  }
+}
+
+.media-cluster__text {
+  font-family: 'Montserrat', system-ui, sans-serif;
+  font-size: 15px;
+  line-height: 1.75;
+  color: $body-text;
+  // Mesure plus large que sur les autres sections : ici le texte accompagne la
+  // composition au lieu de lui faire contrepoint.
+  max-width: 54ch;
+
+  @media (max-width: 767px) {
+    font-size: 14px;
+  }
+}
