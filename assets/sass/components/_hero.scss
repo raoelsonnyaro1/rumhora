@@ -14,7 +14,7 @@
   // Filet avant que la photo de fond ne soit peinte (surtout visible en
   // chargement à froid) : sans ça, le fond de page apparaît en flash derrière
   // le texte clair du hero.
-  background-color: $noir;
+  background-color: $base;
 }
 
 /* Voile du hero « split » : assombrit la moitié gauche pour garantir le
@@ -24,8 +24,8 @@
    partie droite, là où les photos doivent rester lumineuses. */
 .hero-veil {
   background:
-    linear-gradient(to right, rgba($noir, 0.92) 0%, rgba($noir, 0.65) 38%, rgba($noir, 0) 70%),
-    linear-gradient(to bottom, rgba($noir, 0.5) 0%, rgba($noir, 0) 25%, rgba($noir, 0.6) 100%);
+    linear-gradient(to right, rgba($base, 0.82) 0%, rgba($base, 0.4) 40%, rgba($base, 0) 68%),
+    linear-gradient(to bottom, rgba($base, 0.25) 0%, rgba($base, 0) 30%, rgba($base, 0.4) 100%);
 }
 
 /* ==========================================================================
@@ -38,7 +38,7 @@
   font-weight: 400;
   line-height: 1.12;
   letter-spacing: -0.01em;
-  color: $beige;
+  color: $heading;
   // Annule le décalage optique global des titres (voir style.scss) : ici le
   // titre est posé sur une grille avec les boutons juste en dessous, un
   // translate le désaligne visiblement de leur bord gauche.
@@ -48,7 +48,7 @@
   // de l'éditeur, donc utilisable par le client sans lui apprendre de syntaxe.
   // font-style remis à normal — on veut la couleur, pas l'italique.
   em {
-    color: $jaune;
+    color: $gold;
     font-style: normal;
   }
 }
@@ -58,7 +58,7 @@
   font-size: 15px;
   font-weight: 400;
   line-height: 1.75;
-  color: $gris;
+  color: $body-text;
   max-width: 34ch;
   transform: none;
 
@@ -67,12 +67,14 @@
   }
 }
 
-/* Filet au-dessus des boutons : animé par initHeroIntro (scaleX 0 → 1). */
+/* Filet horizontal optionnel, animé par initHeroIntro (scaleX 0 → 1).
+   Non utilisé par le hero de l'accueil — la maquette n'en a pas — mais conservé
+   pour rs_hero(), dont la bande basse s'appuie dessus. */
 .hero-bottom-row-line {
   height: 1px;
   width: 100%;
   max-width: 22rem;
-  background-color: rgba($jaune, 0.35);
+  background-color: rgba($gold, 0.35);
   transform: scaleX(0);
   transform-origin: left center;
 }
@@ -90,6 +92,14 @@
   grid-template-columns: 1fr 1fr;
   align-items: start;
   gap: 12px;
+
+  // width:100% indispensable avec le margin-inline:auto ci-dessous : un
+  // `margin` horizontal automatique annule l'étirement par défaut d'un enfant
+  // de grid (justify-self passe de stretch à auto), et l'élément retombe alors
+  // sur sa largeur de CONTENU — nulle ici, puisque les photos n'ont qu'un
+  // aspect-ratio et aucune largeur intrinsèque. Résultat sans ça : une colonne
+  // de 12px (le seul gap) et deux photos à 0px de large.
+  width: 100%;
 
   @media (max-width: 1023px) {
     max-width: 560px;
@@ -140,12 +150,12 @@
   flex-direction: column;
   align-items: center;
   gap: 8px;
-  color: $texte;
+  color: $body-text;
   transition: transform 0.3s ease, color 0.3s ease;
 
   &:hover {
     transform: translateY(-2px);
-    color: $jaune;
+    color: $gold;
   }
 
   &__mouse {

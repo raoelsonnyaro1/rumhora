@@ -109,19 +109,20 @@ function rs_hero_split( $args = array() ) {
 
 		<div class="relative z-10 w-full grid lg:grid-cols-2 grid-cols-1 items-center xl:gap-12 gap-8 xl:px-14 md:px-8 px-5 md:pt-32 pt-28 md:pb-16 pb-12">
 
-			<!-- Colonne texte -->
-			<div class="section_hero_content max-w-xl">
+			<!-- Colonne texte. Pas de max-width ici : le titre doit pouvoir occuper
+			     toute la colonne pour tenir sur 2 lignes comme dans la maquette
+			     (c'est .hero-lead qui borne sa propre largeur de mesure). -->
+			<div class="section_hero_content">
 				<?php if ( $titre ) : ?>
-					<h1 class="hero-title m-0"><?php echo wp_kses_post( $titre ); ?></h1>
+					<h1 class="hero-title"><?php echo wp_kses_post( $titre ); ?></h1>
 				<?php endif; ?>
 
 				<?php if ( $description ) : ?>
-					<p class="text-reveal hero-lead md:mt-8 mt-6 m-0"><?php echo wp_kses_post( $description ); ?></p>
+					<p class="text-reveal hero-lead md:mt-8 mt-6"><?php echo wp_kses_post( $description ); ?></p>
 				<?php endif; ?>
 
 				<?php if ( $boutons ) : ?>
-					<div class="hero-bottom-row-line md:mt-14 mt-10"></div>
-					<div class="hero-bottom-row flex flex-wrap items-center md:gap-12 gap-8 md:mt-10 mt-8">
+					<div class="hero-bottom-row flex flex-wrap items-center md:gap-14 gap-8 md:mt-16 mt-10">
 						<?php foreach ( $boutons as $bouton ) : ?>
 							<?php
 							// data-barba omis pour une ancre (#...) : Barba ne doit pas
@@ -142,7 +143,11 @@ function rs_hero_split( $args = array() ) {
 			<!-- Colonne photos : quinconce, la 2e décalée vers le bas et la droite -->
 			<div class="hero-media relative">
 				<?php foreach ( array_slice( $images, 0, 2 ) as $i => $image ) : ?>
-					<figure class="hero-media-item hero-media-item--<?php echo (int) ( $i + 1 ); ?> m-0">
+					<!-- Pas de `m-0` ici : cet utilitaire Tailwind est émis APRÈS le
+					     SCSS compilé et écraserait le margin-top qui décale la 2e
+					     photo (voir .hero-media-item--2). Le reset global `*{margin:0}`
+					     suffit de toute façon. -->
+					<figure class="hero-media-item hero-media-item--<?php echo (int) ( $i + 1 ); ?>">
 						<img data-src="<?php echo esc_url( $image['url'] ); ?>"
 							alt="<?php echo esc_attr( $image['alt'] ?? '' ); ?>"
 							class="lazyload w-full h-full object-cover">

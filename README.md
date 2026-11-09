@@ -87,20 +87,41 @@ Chacun documente ses arguments dans son en-tête de fichier.
 
 | Token | Hex | Rôle |
 |---|---|---|
-| `$rouge` / `dark` | `#8C2D34` | fond sombre dominant |
-| `$beige` / `cream` | `#F4EDE4` | fond clair dominant |
-| `$jaune` / `accent` | `#C6A75E` | accent chaud, CTA |
-| `$texte` / `on-dark` | `#D8CFC4` | texte sur fond sombre |
-| `$gris` / `muted` | `#A89B95` | texte secondaire, bordures |
+| `$base` / `page` | `#140506` | fond de page |
+| `$depth-1` / `depth-1` | `#2A0F12` | surfaces posées sur le fond (cartes, sections) |
+| `$depth-2` / `depth-2` | `#3A1F1A` | variante plus claire |
+| `$light` / `light` | `#F5EFE6` | surface claire (blocs inversés) |
+| `$heading` / `heading` | `#F4EDE4` | titres |
+| `$body-text` / `body-text` | `#D8CFC4` | texte courant |
+| `$secondary` / `secondary` | `#A89B95` | texte secondaire |
+| `$neutral` / `neutral` | `#8A7F7A` | mentions discrètes, séparateurs |
+| `$gold` / `gold` | `#C6A75E` | filets, CTA, mot mis en avant |
+| `$accent` / `accent` | `#B11827` | rouge vif, signaux forts |
+| `$soft-accent` / `soft-accent` | `#8C2D34` | rouge sourd (fougère du logo) |
+
+**`#D6AF2E` (« Gold — don't use ») est écarté par le design** : volontairement
+absent de `_variables.scss` et de `tailwind.config.js`, et le commentaire qui
+l'explique est en `//` (non émis par Sass). `grep -i d6af2e dist/styles.css`
+doit donc toujours rendre 0 — toute occurrence signale un vrai usage.
+
+Alias sémantiques disponibles en plus : `dark`, `surface`, `surface-alt`,
+`on-dark`, `muted`.
+
+Seule entorse aux noms du design : « Base » est exposé en Tailwind sous `page`
+et non `base`. Tailwind génère `text-*` depuis `fontSize` ET `textColor` ; une
+couleur `base` produirait un second `.text-base` qui ajouterait `color:#140506`
+à tous les usages de `text-base` comme **taille** de police.
 
 Déclarée dans `assets/sass/_variables.scss` **et** `tailwind.config.js` — les
 deux doivent rester synchronisés.
 
 ## Personnalisation initiale
 
-Les placeholders restants sont listés en fin de [CLAUDE.md](CLAUDE.md) :
-polices (`assets/fonts/` + bloc `@font-face` dans `style.scss`), logos
-(`img/*.svg`), échelles typographiques, et les Options du Thème côté admin.
+Palette, polices (Montserrat + Playfair Display) et logos sont déjà ceux du
+projet. Restent à renseigner côté admin : les Options du Thème (adresse,
+téléphone, réseaux sociaux, lien de réservation) et les contenus ACF de chaque
+page. Voir la fin de [CLAUDE.md](CLAUDE.md) pour les éléments encore
+provisoires (favicon notamment).
 
 ## Licence
 

@@ -44,7 +44,7 @@ function rs_contact_cta( $args = array() ) {
 
 			<?php if ( $titre ) : ?>
 				<div class="absolute top-0 left-0 md:p-8 p-5 cta-title-overlay">
-					<h2 class="text-cream m-0"><?php echo wp_kses_post( $titre ); ?></h2>
+					<h2 class="text-heading m-0"><?php echo wp_kses_post( $titre ); ?></h2>
 				</div>
 			<?php endif; ?>
 		</div>

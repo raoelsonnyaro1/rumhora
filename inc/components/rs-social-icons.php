@@ -66,11 +66,11 @@ function rs_social_icons( $args = array() ) {
 		// l'INTÉRIEUR de la boîte et se ferait recouvrir par le voile ::before
 		// de .social-icon-wipe ; le ring se dessine à l'extérieur, jamais
 		// affecté par un pseudo-élément interne.
-		$circle_class = 'bg-dark text-cream social-icon-wipe hover:ring-2 hover:ring-cream';
+		$circle_class = 'bg-dark text-heading social-icon-wipe hover:ring-2 hover:ring-heading';
 	} elseif ( 'outline-dark' === $variant ) {
 		$circle_class = 'border border-dark/40 text-dark hover:bg-dark/10 hover:border-dark transition-colors';
 	} else {
-		$circle_class = 'border border-cream/60 text-cream hover:bg-cream/20 hover:border-cream transition-colors';
+		$circle_class = 'border border-heading/60 text-heading hover:bg-heading/20 hover:border-heading transition-colors';
 	}
 
 	foreach ( $icons as $icon ) :

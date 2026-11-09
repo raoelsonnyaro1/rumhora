@@ -61,20 +61,30 @@ Les couleurs sont déclarées **deux fois**, et doivent rester synchronisées :
 
 | Token | Hex | Rôle |
 |---|---|---|
-| `$rouge` / `dark` | `#8C2D34` | fond sombre dominant (header, footer, overlays) |
-| `$beige` / `cream` | `#F4EDE4` | fond clair dominant |
-| `$jaune` / `accent` | `#C6A75E` | accent chaud, CTA, détails |
-| `$texte` / `on-dark` | `#D8CFC4` | texte et éléments posés **sur** un fond sombre |
-| `$gris` / `muted` | `#A89B95` | texte secondaire, bordures discrètes |
+| `$base` / `page` | `#140506` | fond de page |
+| `$depth-1` / `depth-1` | `#2A0F12` | surfaces posées sur le fond (cartes, sections) |
+| `$depth-2` / `depth-2` | `#3A1F1A` | variante plus claire |
+| `$light` / `light` | `#F5EFE6` | surface claire (blocs inversés) |
+| `$heading` / `heading` | `#F4EDE4` | titres |
+| `$body-text` / `body-text` | `#D8CFC4` | texte courant |
+| `$secondary` / `secondary` | `#A89B95` | texte secondaire |
+| `$neutral` / `neutral` | `#8A7F7A` | mentions discrètes, séparateurs |
+| `$gold` / `gold` | `#C6A75E` | filets, CTA, mot mis en avant |
+| `$accent` / `accent` | `#B11827` | rouge vif, signaux forts |
+| `$soft-accent` / `soft-accent` | `#8C2D34` | rouge sourd (fougère du logo) |
 
-Les deux jeux de noms pointent vers les mêmes valeurs : `bg-rouge` et `bg-dark`
-sont équivalents côté markup. **Préférer le rôle sémantique** (`dark`, `cream`,
-`accent`) pour tout ce qui est réutilisable — le nom de marque ne se justifie
-que lorsqu'une teinte précise est voulue pour elle-même.
+**`#D6AF2E` (« Gold — don't use ») est écarté par le design** : volontairement
+absent de `_variables.scss` et de `tailwind.config.js`, et le commentaire qui
+l'explique est en `//` (non émis par Sass). `grep -i d6af2e dist/styles.css`
+doit donc toujours rendre 0 — toute occurrence signale un vrai usage.
 
-Pour du texte sur fond sombre, `text-on-dark` (`#D8CFC4`) est plus juste que
-`text-cream` (`#F4EDE4`, un blanc plus franc) — le footer et le hero utilisent
-encore `text-cream`, à arbitrer sur la maquette.
+Alias sémantiques disponibles en plus : `dark`, `surface`, `surface-alt`,
+`on-dark`, `muted`.
+
+Seule entorse aux noms du design : « Base » est exposé en Tailwind sous `page`
+et non `base`. Tailwind génère `text-*` depuis `fontSize` ET `textColor` ; une
+couleur `base` produirait un second `.text-base` qui ajouterait `color:#140506`
+à tous les usages de `text-base` comme **taille** de police.
 
 ## Structure
 
@@ -166,12 +176,29 @@ Toute logique de page doit donc vivre dans `src/js/`, pas dans un template.
 
 ## À faire avant de démarrer l'intégration
 
-Le thème est livré en starter : plusieurs éléments sont des **placeholders**
-explicitement marqués, à remplacer avec les assets de la maquette XD. La
-palette, elle, est déjà celle du projet (voir le tableau plus haut).
+Palette, polices et logos sont ceux du projet. Restent provisoires :
 
-- `assets/sass/style.scss` — `@font-face` (bloc commenté) et échelles typo
-- `assets/fonts/` — déposer les `.woff2`
-- `img/logo*.svg`, `img/favicon.svg` — logos
-- Options du Thème (ACF) — adresse, téléphone, réseaux, `rid` OpenTable
-- `page-exemple.php` — template de démo, à dupliquer puis supprimer
+- `img/favicon.svg` — placeholder, à exporter depuis le logo
+- `page-exemple.php` — template de démonstration, à supprimer une fois les
+  vraies pages écrites
+- Options du Thème (ACF) — adresse, téléphone, réseaux, `rid` OpenTable, lien
+  « Book Table »
+
+Les exports bruts de la maquette (`assets/elements/`, TTF Google Fonts) sont
+sur le disque mais exclus du dépôt : ~90 Mo dont rien n'est servi tel quel.
+Ce qui est réellement servi vit dans `img/` (WebP) et `assets/fonts/` (woff2).
+
+## Vérifier un rendu sans navigateur
+
+Le site Local tourne derrière le vhost `rhumora.local`, qui ne résout pas
+toujours depuis un shell. Chrome en headless sait contourner ça :
+
+```bash
+chrome --headless=new --disable-gpu --hide-scrollbars   --window-size=1440,900 --screenshot=out.png   --host-resolver-rules="MAP rhumora.local 127.0.0.1"   --virtual-time-budget=9000 "http://rhumora.local/"
+```
+
+⚠ `--window-size` en dessous de **500 px CSS est ignoré** : Chrome rend à 500
+et *recadre* l'image à la largeur demandée. Une capture « 390px » montre donc
+un faux débordement à droite. Pour vérifier une vraie largeur mobile, mesurer
+le DOM (`getBoundingClientRect`, `scrollWidth`) depuis une page de test servie
+**depuis le thème** — donc même origine — plutôt que se fier aux pixels.

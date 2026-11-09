@@ -66,18 +66,18 @@ function rs_hero( $args = array() ) {
 
 		<div class="relative z-10 h-full flex flex-col justify-end md:px-5 px-[10px]">
 			<div class="lg:pb-8 pb-4 section_hero_content md:w-1/2 w-3/4">
-				<h1 class="text-cream lg:mb-8 mb-4"><?php echo wp_kses_post( $hero_titre ); ?></h1>
+				<h1 class="text-heading lg:mb-8 mb-4"><?php echo wp_kses_post( $hero_titre ); ?></h1>
 				<?php if ( $hero_description ) : ?>
-					<p class="text-reveal text-cream lg:text-xl text-base m-0 mt-3"><?php echo wp_kses_post( $hero_description ); ?></p>
+					<p class="text-reveal text-heading lg:text-xl text-base m-0 mt-3"><?php echo wp_kses_post( $hero_description ); ?></p>
 				<?php endif; ?>
 			</div>
 
-			<div class="hero-bottom-row-line h-px bg-cream"></div>
+			<div class="hero-bottom-row-line h-px bg-heading"></div>
 
 			<div class="hero-bottom-row grid grid-cols-3">
 				<div class="md:py-5 py-3">
 					<?php if ( $hero_col1_texte ) : ?>
-						<p class="text-cream m-0 lg:text-base text-sm"><?php echo wp_kses_post( $hero_col1_texte ); ?></p>
+						<p class="text-heading m-0 lg:text-base text-sm"><?php echo wp_kses_post( $hero_col1_texte ); ?></p>
 					<?php endif; ?>
 				</div>
 

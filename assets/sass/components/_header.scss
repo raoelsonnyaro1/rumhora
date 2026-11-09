@@ -27,7 +27,7 @@
   // Une fois le header sorti du hero, un fond translucide flouté le détache du
   // contenu qui défile dessous (classe posée par src/js/header.js).
   &.header-scrolled {
-    background-color: rgba($noir, 0.85);
+    background-color: rgba($base, 0.85);
     backdrop-filter: blur(12px);
     -webkit-backdrop-filter: blur(12px);
   }
@@ -61,7 +61,7 @@
     font-family: 'Playfair Display', Georgia, serif;
     font-size: 17px;
     font-weight: 400;
-    color: $texte;
+    color: $body-text;
     white-space: nowrap;
     padding-bottom: 0.3rem;
     transition: color 0.3s ease;
@@ -74,14 +74,14 @@
       left: 0;
       width: 100%;
       height: 1px;
-      background-color: $jaune;
+      background-color: $gold;
       transform: scaleX(0);
       transform-origin: left;
       transition: transform 0.45s cubic-bezier(0.65, 0, 0.35, 1);
     }
 
     &:hover {
-      color: $jaune;
+      color: $gold;
 
       &::after {
         transform: scaleX(1);
@@ -100,7 +100,7 @@
   // transition Barba, puisque le header n'est jamais rechargé.
   .current-menu-item > .nav-link,
   .current_page_item > .nav-link {
-    color: $jaune;
+    color: $gold;
 
     &::after,
     &:not(:hover)::after {
@@ -114,13 +114,13 @@
 .lang-toggle {
   font-family: 'Playfair Display', Georgia, serif;
   font-size: 15px;
-  color: $texte;
+  color: $body-text;
   text-transform: uppercase;
   letter-spacing: 0.08em;
   transition: color 0.3s ease;
 
   &:hover {
-    color: $jaune;
+    color: $gold;
   }
 }
 
@@ -145,12 +145,12 @@
     display: block;
     width: 100%;
     height: 1px;
-    background-color: $texte;
+    background-color: $body-text;
     transition: background-color 0.3s ease, transform 0.3s ease;
   }
 
   &:hover &__bar {
-    background-color: $jaune;
+    background-color: $gold;
   }
 }
 
@@ -195,7 +195,7 @@
 }
 
 .mobile-menu-content {
-  background-color: $noir;
+  background-color: $base;
   display: flex;
   flex-direction: column;
   justify-content: center;
@@ -234,14 +234,14 @@
   right: 1.75rem;
   font-size: 2.5rem;
   line-height: 1;
-  color: $texte;
+  color: $body-text;
   background: none;
   border: none;
   cursor: pointer;
   transition: color 0.3s ease;
 
   &:hover {
-    color: $jaune;
+    color: $gold;
   }
 }
 
@@ -263,7 +263,7 @@
     font-family: 'Playfair Display', Georgia, serif;
     font-size: clamp(28px, 7vw, 44px);
     font-weight: 400;
-    color: $beige;
+    color: $heading;
     line-height: 1.45;
   }
 }
@@ -278,7 +278,7 @@
 
   &.hover-underline::after {
     bottom: 0;
-    background-color: $jaune;
+    background-color: $gold;
   }
 }
 
@@ -291,7 +291,7 @@
 
 .mobile-menu-list .mobile-menu-link:hover {
   opacity: 1;
-  color: $jaune;
+  color: $gold;
 }
 
 // État « en attente » pendant une transition Barba (voir setPendingMenuActive
@@ -303,7 +303,7 @@
 
 .mobile-menu-list.is-navigating .mobile-menu-item.is-navigating-active .mobile-menu-link {
   opacity: 1;
-  color: $jaune;
+  color: $gold;
 
   // Le filet ::after devient une barre de chargement qui balaie de gauche à
   // droite en boucle tant que la page suivante n'est pas prête
@@ -314,7 +314,7 @@
 }
 
 .mobile-menu-list .current-menu-item .mobile-menu-link {
-  color: $jaune;
+  color: $gold;
 
   &::after {
     transform: scaleX(1) !important;

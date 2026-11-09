@@ -1,6 +1,10 @@
 /**
  * Design system — variables
  *
+ * Les noms ci-dessous sont ceux de la bibliothèque de couleurs de la maquette :
+ * c'est la source de vérité partagée avec le design, à ne pas renommer au gré
+ * du code.
+ *
  * Toute couleur déclarée ici doit AUSSI l'être dans tailwind.config.js
  * (theme.extend.colors) pour rester utilisable en classe utilitaire côté
  * markup : ce fichier sert les partials SCSS, tailwind.config.js sert le
@@ -8,44 +12,56 @@
  */
 
 /* ==========================================================================
-   Palette de marque — source de vérité
+   Fonds
    ========================================================================== */
 
-$jaune: #C6A75E; // or : accent, filets, CTA, mot mis en avant dans les titres
-$beige: #F4EDE4; // titres et éléments clairs sur fond sombre
-$gris:  #A89B95; // texte secondaire, bordures discrètes
-$texte: #D8CFC4; // texte courant sur fond sombre
-$rouge: #8C2D34; // rouge de marque (fougère du logo), accent ponctuel
+$base:    #140506; // Base — fond de page
+$depth-1: #2A0F12; // depth tone 1 — surfaces posées sur le fond (cartes, sections)
+$depth-2: #3A1F1A; // depth tone 2 — variante plus claire
+$light:   #F5EFE6; // Light — surface claire (rares blocs inversés)
 
-/* Tons sombres.
-   $noir est échantillonné sur le fond du hero de la maquette (moyenne
-   #170909) ; $depth-1 et $depth-2 viennent directement des SVG
-   "Rectangle-depth-tone" fournis avec les éléments graphiques, et servent aux
-   surfaces posées PAR-DESSUS le fond (cartes, sections, encarts). */
-$noir:    #170909; // fond de page
-$depth-1: #2A0F12; // surface — depth tone 1
-$depth-2: #3A1F1A; // surface — depth tone 2 (variante plus claire)
+/* ==========================================================================
+   Textes
+   ========================================================================== */
+
+$heading:   #F4EDE4; // Heading (warm ivory) — titres
+$body-text: #D8CFC4; // Body Text (muted ivory) — texte courant
+$secondary: #A89B95; // Secondary text (soft taupe-grey) — texte secondaire
+$neutral:   #8A7F7A; // Neutral — mentions discrètes, séparateurs
+
+/* ==========================================================================
+   Accents
+   ========================================================================== */
+
+$gold:        #C6A75E; // Gold — filets, CTA, mot mis en avant dans les titres
+$accent:      #B11827; // Accent — rouge vif, à réserver aux signaux forts
+$soft-accent: #8C2D34; // Soft accent — rouge sourd (fougère du logo)
+
+// ⚠ Gold (don't use) : #D6AF2E est présent dans la bibliothèque de la maquette
+// mais explicitement ÉCARTÉ par le design. Volontairement non déclaré ici —
+// une variable existante finirait par être utilisée.
+//
+// Commentaire `//` et non `/* */` : Sass conserve les seconds dans la sortie.
+// Ainsi cette valeur n'apparaît NULLE PART dans dist/styles.css, et un
+// `grep -i d6af2e dist/styles.css` qui remonte quelque chose signale forcément
+// un vrai usage — ce qui en fait un test utilisable tel quel.
 
 /* ==========================================================================
    Alias sémantiques
    ==========================================================================
-   Les composants parlent en rôles ("dark", "accent", "on-dark") plutôt qu'en
-   noms de couleur : un changement de palette ne demande alors de toucher
-   qu'au bloc ci-dessus. Les deux jeux de noms sont exposés en Tailwind, donc
-   `bg-noir` et `bg-dark` sont équivalents côté markup — préférer le rôle
-   sémantique pour tout ce qui est réutilisable.
+   Les composants parlent en rôles ("surface", "on-dark") plutôt qu'en noms de
+   couleur partout où le rôle est plus parlant que la teinte. Les deux jeux de
+   noms sont exposés en Tailwind et pointent vers les mêmes valeurs.
 */
 
-$dark:        $noir;
+$dark:        $base;
 $surface:     $depth-1;
 $surface-alt: $depth-2;
-$cream:       $beige;
-$accent:      $jaune;
-$muted:       $gris;
-$on-dark:     $texte;
+$on-dark:     $body-text;
+$muted:       $secondary;
 
-$body-bg:    $noir;
-$body-color: $texte;
+$body-bg:    $base;
+$body-color: $body-text;
 
 /* Neutres (hors palette de marque) */
 $white:       #fff;
@@ -61,5 +77,5 @@ $extra-black: #000;
    À GARDER SYNCHRONISÉ À LA MAIN avec la palette ci-dessus.
 */
 
-$dark-url:  '%23D8CFC4'; // $texte — chevron sur fond sombre (cas par défaut)
-$cream-url: '%23C6A75E'; // $jaune — chevron doré, variante accentuée
+$body-text-url: '%23D8CFC4'; // $body-text — chevron sur fond sombre (défaut)
+$gold-url:      '%23C6A75E'; // $gold — chevron doré, variante accentuée

@@ -17,6 +17,10 @@
 /**
  * Design system — variables
  *
+ * Les noms ci-dessous sont ceux de la bibliothèque de couleurs de la maquette :
+ * c'est la source de vérité partagée avec le design, à ne pas renommer au gré
+ * du code.
+ *
  * Toute couleur déclarée ici doit AUSSI l'être dans tailwind.config.js
  * (theme.extend.colors) pour rester utilisable en classe utilitaire côté
  * markup : ce fichier sert les partials SCSS, tailwind.config.js sert le
@@ -24,23 +28,23 @@
  */
 
 /* ==========================================================================
-   Palette de marque — source de vérité
+   Fonds
    ========================================================================== */
 
-/* Tons sombres.
-   $noir est échantillonné sur le fond du hero de la maquette (moyenne
-   #170909) ; $depth-1 et $depth-2 viennent directement des SVG
-   "Rectangle-depth-tone" fournis avec les éléments graphiques, et servent aux
-   surfaces posées PAR-DESSUS le fond (cartes, sections, encarts). */
+/* ==========================================================================
+   Textes
+   ========================================================================== */
+
+/* ==========================================================================
+   Accents
+   ========================================================================== */
 
 /* ==========================================================================
    Alias sémantiques
    ==========================================================================
-   Les composants parlent en rôles ("dark", "accent", "on-dark") plutôt qu'en
-   noms de couleur : un changement de palette ne demande alors de toucher
-   qu'au bloc ci-dessus. Les deux jeux de noms sont exposés en Tailwind, donc
-   `bg-noir` et `bg-dark` sont équivalents côté markup — préférer le rôle
-   sémantique pour tout ce qui est réutilisable.
+   Les composants parlent en rôles ("surface", "on-dark") plutôt qu'en noms de
+   couleur partout où le rôle est plus parlant que la teinte. Les deux jeux de
+   noms sont exposés en Tailwind et pointent vers les mêmes valeurs.
 */
 
 /* Neutres (hors palette de marque) */
@@ -112,7 +116,7 @@
 }
 
 .btn-pill:hover {
-  color: #170909;
+  color: #140506;
 }
 
 .btn-pill:hover::before {
@@ -145,7 +149,7 @@
   font-weight: 400;
   line-height: 1;
   color: #F4EDE4;
-  padding-right: 34px;
+  padding-right: 16px;
   cursor: pointer;
   transition: color 0.35s ease;
 }
@@ -178,7 +182,7 @@
 @media (max-width: 767px) {
   .btn-circle {
     font-size: 15px;
-    padding-right: 30px;
+    padding-right: 13px;
   }
 
   .btn-circle__arc {
@@ -230,7 +234,7 @@
 }
 
 .btn:hover {
-  color: #170909;
+  color: #140506;
   border-color: #C6A75E;
 }
 
@@ -240,13 +244,13 @@
 }
 
 .btn.btn-primary {
-  color: #170909;
+  color: #140506;
   background-color: #C6A75E;
   border-color: #C6A75E;
 }
 
 .btn.btn-primary::before {
-  background: #170909;
+  background: #140506;
 }
 
 .btn.btn-primary:hover {
@@ -290,7 +294,7 @@
 }
 
 .social-icon-wipe:hover {
-  color: #170909;
+  color: #140506;
 }
 
 .social-icon-wipe:hover::before {
@@ -337,7 +341,7 @@
 }
 
 #masthead.header-scrolled {
-  background-color: rgba(23, 9, 9, 0.85);
+  background-color: rgba(20, 5, 6, 0.85);
   backdrop-filter: blur(12px);
   -webkit-backdrop-filter: blur(12px);
 }
@@ -504,7 +508,7 @@
 }
 
 .mobile-menu-content {
-  background-color: #170909;
+  background-color: #140506;
   display: flex;
   flex-direction: column;
   justify-content: center;
@@ -675,7 +679,7 @@
  */
 
 .section_hero {
-  background-color: #170909;
+  background-color: #140506;
 }
 
 /* Voile du hero « split » : assombrit la moitié gauche pour garantir le
@@ -685,7 +689,7 @@
    partie droite, là où les photos doivent rester lumineuses. */
 
 .hero-veil {
-  background: linear-gradient(to right, rgba(23, 9, 9, 0.92) 0%, rgba(23, 9, 9, 0.65) 38%, rgba(23, 9, 9, 0) 70%), linear-gradient(to bottom, rgba(23, 9, 9, 0.5) 0%, rgba(23, 9, 9, 0) 25%, rgba(23, 9, 9, 0.6) 100%);
+  background: linear-gradient(to right, rgba(20, 5, 6, 0.82) 0%, rgba(20, 5, 6, 0.4) 40%, rgba(20, 5, 6, 0) 68%), linear-gradient(to bottom, rgba(20, 5, 6, 0.25) 0%, rgba(20, 5, 6, 0) 30%, rgba(20, 5, 6, 0.4) 100%);
 }
 
 /* ==========================================================================
@@ -712,7 +716,7 @@
   font-size: 15px;
   font-weight: 400;
   line-height: 1.75;
-  color: #A89B95;
+  color: #D8CFC4;
   max-width: 34ch;
   transform: none;
 }
@@ -723,7 +727,9 @@
   }
 }
 
-/* Filet au-dessus des boutons : animé par initHeroIntro (scaleX 0 → 1). */
+/* Filet horizontal optionnel, animé par initHeroIntro (scaleX 0 → 1).
+   Non utilisé par le hero de l'accueil — la maquette n'en a pas — mais conservé
+   pour rs_hero(), dont la bande basse s'appuie dessus. */
 
 .hero-bottom-row-line {
   height: 1px;
@@ -747,6 +753,7 @@
   grid-template-columns: 1fr 1fr;
   align-items: start;
   gap: 12px;
+  width: 100%;
 }
 
 @media (max-width: 1023px) {
@@ -909,7 +916,7 @@
 
 .reservation-form .form-field {
   position: relative;
-  border-bottom: 1px solid rgba(23, 9, 9, 0.25) !important;
+  border-bottom: 1px solid rgba(20, 5, 6, 0.25) !important;
   padding-top: 20px;
   padding-bottom: 6px;
   margin-bottom: 4px;
@@ -922,7 +929,7 @@
   font-family: "General Sans", sans-serif;
   font-size: 14px;
   font-weight: 500;
-  color: #170909;
+  color: #140506;
   transform-origin: left top;
   transition: transform 0.25s ease;
   pointer-events: none;
@@ -935,7 +942,7 @@
   font-family: "General Sans", sans-serif;
   font-size: 13px;
   font-weight: 500;
-  color: #170909 !important;
+  color: #140506 !important;
   background: transparent !important;
   border: none !important;
   outline: none !important;
@@ -975,14 +982,14 @@
 
 .reservation-form .form-field select option {
   background-color: #F4EDE4;
-  color: #170909;
+  color: #140506;
   padding: 10px 14px;
 }
 
 .reservation-form .form-field select option:hover,
 .reservation-form .form-field select option:checked,
 .reservation-form .form-field select option:focus {
-  background-color: rgba(23, 9, 9, 0.12);
+  background-color: rgba(20, 5, 6, 0.12);
 }
 
 .reservation-form .form-field input:focus ~ label, .reservation-form .form-field input:not(:-moz-placeholder) ~ label, .reservation-form .form-field textarea:focus ~ label, .reservation-form .form-field textarea:not(:-moz-placeholder) ~ label {
@@ -1022,7 +1029,7 @@
   font-size: 14px;
   padding: 12px 16px;
   border-radius: 4px;
-  background-color: #170909;
+  background-color: #140506;
   color: #F4EDE4;
   opacity: 0;
   transform: translateY(-8px);
@@ -1054,7 +1061,7 @@
   font-family: "General Sans", sans-serif;
   font-size: 13px;
   font-weight: 500;
-  color: #170909;
+  color: #140506;
   background: transparent;
   border: none;
   outline: none;
@@ -1077,7 +1084,7 @@
   z-index: 20;
   margin-top: 8px;
   background-color: #F4EDE4;
-  border: 1px solid rgba(23, 9, 9, 0.15);
+  border: 1px solid rgba(20, 5, 6, 0.15);
   box-shadow: 0 8px 24px rgba(0, 0, 0, 0.08);
   list-style: none;
   margin-left: 0;
@@ -1100,13 +1107,13 @@
   font-family: "General Sans", sans-serif;
   font-size: 13px;
   font-weight: 500;
-  color: #170909;
+  color: #140506;
   cursor: pointer;
   transition: background-color 0.15s ease;
 }
 
 .reservation-form .custom-select .custom-select-option:hover, .reservation-form .custom-select .custom-select-option.is-selected {
-  background-color: rgba(23, 9, 9, 0.12);
+  background-color: rgba(20, 5, 6, 0.12);
 }
 
 .reservation-form .custom-select.has-value label {
@@ -1136,17 +1143,17 @@
 }
 
 .reservation-form.reservation-form-cream .form-field select option {
-  color: #170909;
+  color: #140506;
 }
 
 .reservation-form.reservation-form-cream .form-ajax-message {
   background-color: #F4EDE4;
-  color: #170909;
+  color: #140506;
 }
 
 .reservation-form .form-field-checkbox {
   cursor: pointer;
-  color: #170909;
+  color: #140506;
   font-size: 14px;
 }
 
@@ -1162,7 +1169,7 @@
   width: 18px;
   height: 18px;
   margin-top: 1px;
-  border: 1.5px solid #170909;
+  border: 1.5px solid #140506;
   border-radius: 3px;
   position: relative;
   cursor: pointer;
@@ -1170,7 +1177,7 @@
 }
 
 .reservation-form .form-field-checkbox input[type=checkbox]:checked {
-  background-color: #170909;
+  background-color: #140506;
 }
 
 .reservation-form .form-field-checkbox input[type=checkbox]:checked::after {
@@ -1186,7 +1193,7 @@
 }
 
 .reservation-form .form-field-checkbox input[type=checkbox]:focus-visible {
-  outline: 2px solid #170909;
+  outline: 2px solid #140506;
   outline-offset: 2px;
 }
 
@@ -1214,7 +1221,7 @@
 
 .flatpickr-calendar {
   background-color: #F4EDE4;
-  border: 1px solid rgba(23, 9, 9, 0.15);
+  border: 1px solid rgba(20, 5, 6, 0.15);
   box-shadow: 0 8px 24px rgba(0, 0, 0, 0.08);
   border-radius: 0;
   font-family: "General Sans", sans-serif;
@@ -1229,8 +1236,8 @@
 }
 
 .flatpickr-months .flatpickr-month {
-  color: #170909;
-  fill: #170909;
+  color: #140506;
+  fill: #140506;
 }
 
 .flatpickr-months .flatpickr-current-month {
@@ -1242,19 +1249,19 @@
 .flatpickr-months .flatpickr-current-month input.cur-year {
   font-family: "General Sans", sans-serif;
   font-weight: 500;
-  color: #170909;
+  color: #140506;
 }
 
 .flatpickr-months .flatpickr-prev-month,
 .flatpickr-months .flatpickr-next-month {
-  color: #170909;
-  fill: #170909;
+  color: #140506;
+  fill: #140506;
 }
 
 .flatpickr-months .flatpickr-prev-month:hover,
 .flatpickr-months .flatpickr-next-month:hover {
-  color: #170909;
-  fill: #170909;
+  color: #140506;
+  fill: #140506;
   opacity: 0.6;
 }
 
@@ -1263,14 +1270,14 @@
 }
 
 span.flatpickr-weekday {
-  color: rgba(23, 9, 9, 0.6);
+  color: rgba(20, 5, 6, 0.6);
   font-family: "General Sans", sans-serif;
   font-size: 12px;
   font-weight: 500;
 }
 
 .flatpickr-day {
-  color: #170909;
+  color: #140506;
   font-family: "General Sans", sans-serif;
   font-size: 13px;
   font-weight: 500;
@@ -1278,26 +1285,26 @@ span.flatpickr-weekday {
 }
 
 .flatpickr-day.today {
-  border-color: rgba(23, 9, 9, 0.4);
+  border-color: rgba(20, 5, 6, 0.4);
 }
 
 .flatpickr-day:hover, .flatpickr-day:focus {
-  background-color: rgba(23, 9, 9, 0.12);
+  background-color: rgba(20, 5, 6, 0.12);
   border-color: transparent;
 }
 
 .flatpickr-day.selected, .flatpickr-day.selected:hover, .flatpickr-day.selected:focus {
-  background-color: #170909;
-  border-color: #170909;
+  background-color: #140506;
+  border-color: #140506;
   color: #F4EDE4;
 }
 
 .flatpickr-day.prevMonthDay, .flatpickr-day.nextMonthDay {
-  color: rgba(23, 9, 9, 0.3);
+  color: rgba(20, 5, 6, 0.3);
 }
 
 .flatpickr-day.flatpickr-disabled, .flatpickr-day.flatpickr-disabled:hover {
-  color: rgba(23, 9, 9, 0.2);
+  color: rgba(20, 5, 6, 0.2);
 }
 
 /**
@@ -1313,25 +1320,25 @@ span.flatpickr-weekday {
 
 .flatpickr-time input,
 .flatpickr-time .flatpickr-time-separator {
-  color: #170909;
+  color: #140506;
   font-size: 14px;
   font-weight: 500;
 }
 
 .flatpickr-time .numInputWrapper:hover {
-  background: rgba(23, 9, 9, 0.06);
+  background: rgba(20, 5, 6, 0.06);
 }
 
 .flatpickr-time .numInputWrapper span.arrowUp:after {
-  border-bottom-color: #170909;
+  border-bottom-color: #140506;
 }
 
 .flatpickr-time .numInputWrapper span.arrowDown:after {
-  border-top-color: #170909;
+  border-top-color: #140506;
 }
 
 .flatpickr-time .numInputWrapper span:hover {
-  background: rgba(23, 9, 9, 0.12);
+  background: rgba(20, 5, 6, 0.12);
 }
 
 /**
@@ -1388,7 +1395,7 @@ span.flatpickr-weekday {
   align-items: center;
   justify-content: center;
   border-radius: 999px;
-  background: #170909;
+  background: #140506;
   color: white;
   cursor: pointer;
   border: none;
@@ -1453,15 +1460,15 @@ span.flatpickr-weekday {
 }
 
 .media-reveal-overlay div:nth-child(1) {
-  background-color: #645854;
+  background-color: #625652;
 }
 
 .media-reveal-overlay div:nth-child(2) {
-  background-color: #3e312e;
+  background-color: #3b2d2c;
 }
 
 .media-reveal-overlay div:nth-child(3) {
-  background-color: #170909;
+  background-color: #140506;
 }
 
 /**
@@ -1532,7 +1539,7 @@ span.flatpickr-weekday {
   justify-content: center;
   border: none;
   border-radius: 999px;
-  background: #170909;
+  background: #140506;
   color: white;
   cursor: pointer;
   overflow: hidden;
@@ -1561,7 +1568,7 @@ span.flatpickr-weekday {
 }
 
 .scroll-video-mute-toggle:hover {
-  color: #170909;
+  color: #140506;
 }
 
 .scroll-video-mute-toggle:hover::before {
@@ -1602,7 +1609,7 @@ span.flatpickr-weekday {
   align-items: center;
   justify-content: center;
   border-radius: 999px;
-  background: #170909;
+  background: #140506;
   color: white;
   cursor: pointer;
   overflow: hidden;
@@ -1636,7 +1643,7 @@ span.flatpickr-weekday {
 }
 
 .scroll-video-youtube-link:hover {
-  color: #170909;
+  color: #140506;
 }
 
 .scroll-video-youtube-link:hover::before {
@@ -2665,39 +2672,34 @@ video {
   border-top-width: 1px;
 }
 
-.border-cream{
+.border-dark{
+  --tw-border-opacity: 1;
+  border-color: rgb(20 5 6 / var(--tw-border-opacity, 1));
+}
+
+.border-dark\/20{
+  border-color: rgb(20 5 6 / 0.2);
+}
+
+.border-dark\/40{
+  border-color: rgb(20 5 6 / 0.4);
+}
+
+.border-heading{
   --tw-border-opacity: 1;
   border-color: rgb(244 237 228 / var(--tw-border-opacity, 1));
 }
 
-.border-cream\/20{
+.border-heading\/20{
   border-color: rgb(244 237 228 / 0.2);
 }
 
-.border-cream\/40{
+.border-heading\/40{
   border-color: rgb(244 237 228 / 0.4);
 }
 
-.border-cream\/60{
+.border-heading\/60{
   border-color: rgb(244 237 228 / 0.6);
-}
-
-.border-dark{
-  --tw-border-opacity: 1;
-  border-color: rgb(23 9 9 / var(--tw-border-opacity, 1));
-}
-
-.border-dark\/20{
-  border-color: rgb(23 9 9 / 0.2);
-}
-
-.border-dark\/40{
-  border-color: rgb(23 9 9 / 0.4);
-}
-
-.bg-cream{
-  --tw-bg-opacity: 1;
-  background-color: rgb(244 237 228 / var(--tw-bg-opacity, 1));
 }
 
 .bg-current{
@@ -2706,11 +2708,16 @@ video {
 
 .bg-dark{
   --tw-bg-opacity: 1;
-  background-color: rgb(23 9 9 / var(--tw-bg-opacity, 1));
+  background-color: rgb(20 5 6 / var(--tw-bg-opacity, 1));
 }
 
 .bg-dark\/30{
-  background-color: rgb(23 9 9 / 0.3);
+  background-color: rgb(20 5 6 / 0.3);
+}
+
+.bg-heading{
+  --tw-bg-opacity: 1;
+  background-color: rgb(244 237 228 / var(--tw-bg-opacity, 1));
 }
 
 .bg-gradient-to-b{
@@ -2895,22 +2902,22 @@ video {
   line-height: 1.625;
 }
 
-.text-cream{
+.text-dark{
+  --tw-text-opacity: 1;
+  color: rgb(20 5 6 / var(--tw-text-opacity, 1));
+}
+
+.text-heading{
   --tw-text-opacity: 1;
   color: rgb(244 237 228 / var(--tw-text-opacity, 1));
 }
 
-.text-cream\/60{
+.text-heading\/60{
   color: rgb(244 237 228 / 0.6);
 }
 
-.text-cream\/80{
+.text-heading\/80{
   color: rgb(244 237 228 / 0.8);
-}
-
-.text-dark{
-  --tw-text-opacity: 1;
-  color: rgb(23 9 9 / var(--tw-text-opacity, 1));
 }
 
 .opacity-60{
@@ -2922,7 +2929,7 @@ video {
 }
 
 .outline-dark{
-  outline-color: #170909;
+  outline-color: #140506;
 }
 
 .ring{
@@ -3021,7 +3028,7 @@ body {
   font-weight: 400;
   line-height: 1.6;
   color: #D8CFC4;
-  background-color: #170909;
+  background-color: #140506;
   overflow-x: hidden;
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
@@ -3526,22 +3533,22 @@ body.page-loading * {
   }
 }
 
-.hover\:border-cream:hover{
+.hover\:border-dark:hover{
+  --tw-border-opacity: 1;
+  border-color: rgb(20 5 6 / var(--tw-border-opacity, 1));
+}
+
+.hover\:border-heading:hover{
   --tw-border-opacity: 1;
   border-color: rgb(244 237 228 / var(--tw-border-opacity, 1));
 }
 
-.hover\:border-dark:hover{
-  --tw-border-opacity: 1;
-  border-color: rgb(23 9 9 / var(--tw-border-opacity, 1));
-}
-
-.hover\:bg-cream\/20:hover{
-  background-color: rgb(244 237 228 / 0.2);
-}
-
 .hover\:bg-dark\/10:hover{
-  background-color: rgb(23 9 9 / 0.1);
+  background-color: rgb(20 5 6 / 0.1);
+}
+
+.hover\:bg-heading\/20:hover{
+  background-color: rgb(244 237 228 / 0.2);
 }
 
 .hover\:ring-2:hover{
@@ -3550,7 +3557,7 @@ body.page-loading * {
   box-shadow: var(--tw-ring-offset-shadow), var(--tw-ring-shadow), var(--tw-shadow, 0 0 #0000);
 }
 
-.hover\:ring-cream:hover{
+.hover\:ring-heading:hover{
   --tw-ring-opacity: 1;
   --tw-ring-color: rgb(244 237 228 / var(--tw-ring-opacity, 1));
 }
@@ -3584,8 +3591,8 @@ body.page-loading * {
     margin-top: 2.5rem;
   }
 
-  .md\:mt-14{
-    margin-top: 3.5rem;
+  .md\:mt-16{
+    margin-top: 4rem;
   }
 
   .md\:mt-8{
@@ -3652,8 +3659,8 @@ body.page-loading * {
     gap: 2.5rem;
   }
 
-  .md\:gap-12{
-    gap: 3rem;
+  .md\:gap-14{
+    gap: 3.5rem;
   }
 
   .md\:gap-20{

@@ -20,14 +20,14 @@ $rumhora_copyright = get_field( 'footer_copyright', 'option' ) ?: date( 'Y' ) . 
 
 <footer class="header-dark-section relative overflow-hidden flex flex-col">
 
-	<div class="relative z-10 flex flex-col flex-1 md:px-5 px-[10px] md:pt-10 pt-8 text-cream">
+	<div class="relative z-10 flex flex-col flex-1 md:px-5 px-[10px] md:pt-10 pt-8 text-heading">
 
 		<!-- Logo -->
-		<div class="flex justify-center md:pb-10 pb-8 border-b border-cream/20 mb-5">
+		<div class="flex justify-center md:pb-10 pb-8 border-b border-heading/20 mb-5">
 			<img data-src="<?php echo esc_url( get_template_directory_uri() . '/img/logo-full.png' ); ?>" alt="<?php bloginfo( 'name' ); ?>" class="lazyload md:h-28 h-24 w-auto">
 		</div>
 
-		<div class="grid grid-cols-1 md:grid-cols-4 md:gap-20 gap-8 md:pb-5 pb-10 mb-5 border-b border-cream/20">
+		<div class="grid grid-cols-1 md:grid-cols-4 md:gap-20 gap-8 md:pb-5 pb-10 mb-5 border-b border-heading/20">
 
 			<!-- Colonne gauche : menu footer -->
 			<nav id="footer-nav" class="md:col-start-1">
@@ -37,7 +37,7 @@ $rumhora_copyright = get_field( 'footer_copyright', 'option' ) ?: date( 'Y' ) . 
 						'theme_location' => 'menu-footer',
 						'container'      => false,
 						'menu_class'     => 'flex flex-col gap-2',
-						'link_class'     => 'hover-underline text-cream text-base md:text-lg font-medium footer-menu-link',
+						'link_class'     => 'hover-underline text-heading text-base md:text-lg font-medium footer-menu-link',
 						'fallback_cb'    => false,
 					)
 				);
@@ -78,7 +78,7 @@ $rumhora_copyright = get_field( 'footer_copyright', 'option' ) ?: date( 'Y' ) . 
 		     ("top 80%", voir initTextRevealAnimations) une fois arrivé en bas,
 		     ce qui laisserait le reveal bloqué à opacity:0 pour toujours. -->
 		<div class="pb-5">
-			<div class="text-xs md:text-sm text-cream/80 leading-relaxed">
+			<div class="text-xs md:text-sm text-heading/80 leading-relaxed">
 				<?php if ( $rumhora_address ) : ?>
 					<p class="text-reveal m-0" data-reveal-start="95%"><?php echo esc_html( $rumhora_address ); ?></p>
 				<?php endif; ?>
@@ -92,11 +92,11 @@ $rumhora_copyright = get_field( 'footer_copyright', 'option' ) ?: date( 'Y' ) . 
 				<div class="flex items-center gap-3 mt-4">
 					<?php if ( $rumhora_phone ) : ?>
 						<!-- WhatsApp : numéro sans le "+", format attendu par wa.me -->
-						<a href="https://wa.me/<?php echo esc_attr( preg_replace( '/[^0-9]/', '', $rumhora_phone ) ); ?>" target="_blank" rel="noopener" aria-label="<?php esc_attr_e( 'WhatsApp', 'rumhora' ); ?>" class="w-8 h-8 rounded-full flex items-center justify-center border border-cream/60 hover:bg-cream/20 hover:border-cream transition-colors">
+						<a href="https://wa.me/<?php echo esc_attr( preg_replace( '/[^0-9]/', '', $rumhora_phone ) ); ?>" target="_blank" rel="noopener" aria-label="<?php esc_attr_e( 'WhatsApp', 'rumhora' ); ?>" class="w-8 h-8 rounded-full flex items-center justify-center border border-heading/60 hover:bg-heading/20 hover:border-heading transition-colors">
 							<img data-src="<?php echo esc_url( get_template_directory_uri() . '/img/icon/whatsapp.svg' ); ?>" alt="" class="lazyload w-4 h-4">
 						</a>
 					<?php endif; ?>
-					<a href="mailto:<?php echo esc_attr( $rumhora_email ); ?>" aria-label="<?php esc_attr_e( 'Email', 'rumhora' ); ?>" class="w-8 h-8 rounded-full flex items-center justify-center border border-cream/60 hover:bg-cream/20 hover:border-cream transition-colors">
+					<a href="mailto:<?php echo esc_attr( $rumhora_email ); ?>" aria-label="<?php esc_attr_e( 'Email', 'rumhora' ); ?>" class="w-8 h-8 rounded-full flex items-center justify-center border border-heading/60 hover:bg-heading/20 hover:border-heading transition-colors">
 						<img data-src="<?php echo esc_url( get_template_directory_uri() . '/img/icon/mail.svg' ); ?>" alt="" class="lazyload w-4 h-4">
 					</a>
 				</div>
@@ -105,7 +105,7 @@ $rumhora_copyright = get_field( 'footer_copyright', 'option' ) ?: date( 'Y' ) . 
 	</div>
 
 	<!-- Barre copyright -->
-	<div class="relative z-10 border-t border-cream/20 md:px-5 px-[10px] py-3 flex justify-between items-center text-cream/60 text-xs">
+	<div class="relative z-10 border-t border-heading/20 md:px-5 px-[10px] py-3 flex justify-between items-center text-heading/60 text-xs">
 		<span><?php echo esc_html( $rumhora_copyright ); ?></span>
 		<a href="<?php echo esc_url( home_url( '/mentions-legales' ) ); ?>" class="hover-underline"><?php esc_html_e( 'Mentions légales', 'rumhora' ); ?></a>
 	</div>

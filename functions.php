@@ -220,6 +220,13 @@ function rumhora_scripts() {
 add_action( 'wp_enqueue_scripts', 'rumhora_scripts' );
 
 /**
+ * Coquilles ACF, chargées EN PREMIER : tout le reste du thème appelle
+ * get_field(), y compris au niveau des templates. Sans ACF actif, l'absence de
+ * ce require donne un écran blanc fatal, admin comprise.
+ */
+require get_template_directory() . '/inc/acf-fallback.php';
+
+/**
  * Implement the Custom Header feature.
  */
 require get_template_directory() . '/inc/custom-header.php';

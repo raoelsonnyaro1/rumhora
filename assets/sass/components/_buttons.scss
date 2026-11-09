@@ -19,9 +19,9 @@
   font-size: 16px;
   font-weight: 400;
   line-height: 1;
-  color: $jaune;
+  color: $gold;
   padding: 13px 26px;
-  border: 1px solid $jaune;
+  border: 1px solid $gold;
   border-radius: 999px;
   white-space: nowrap;
   cursor: pointer;
@@ -37,7 +37,7 @@
     content: '';
     position: absolute;
     inset: 0;
-    background-color: $jaune;
+    background-color: $gold;
     transform: scaleY(0);
     transform-origin: bottom;
     transition: transform 0.45s cubic-bezier(0.77, 0, 0.175, 1);
@@ -45,7 +45,7 @@
   }
 
   &:hover {
-    color: $noir;
+    color: $base;
 
     &::before {
       transform: scaleY(1);
@@ -76,8 +76,11 @@
   font-size: 17px;
   font-weight: 400;
   line-height: 1;
-  color: $beige;
-  padding-right: 34px;
+  color: $heading;
+  // L'arc fait 44px de large et est calé à droite : ce padding ne réserve que
+  // la part qui DÉPASSE du texte, le reste (28px) chevauche volontairement le
+  // libellé, comme sur la maquette.
+  padding-right: 16px;
   cursor: pointer;
   transition: color 0.35s ease;
 
@@ -93,13 +96,13 @@
     transform: translateY(-50%);
     width: 44px;
     height: 51px;
-    color: $jaune;
+    color: $gold;
     pointer-events: none;
     transition: transform 0.45s cubic-bezier(0.33, 1, 0.68, 1), color 0.35s ease;
   }
 
   &:hover {
-    color: $jaune;
+    color: $gold;
 
     // L'arc glisse vers la droite : il « libère » le libellé plutôt que de
     // l'enfermer, ce qui lit comme une invitation à cliquer.
@@ -110,7 +113,7 @@
 
   @media (max-width: 767px) {
     font-size: 15px;
-    padding-right: 30px;
+    padding-right: 13px;
 
     &__arc {
       width: 38px;
@@ -127,8 +130,8 @@
   font-family: 'Playfair Display', Georgia, serif;
   display: inline-block;
   padding: 14px 24px;
-  color: $texte;
-  border: 1px solid rgba($jaune, 0.5);
+  color: $body-text;
+  border: 1px solid rgba($gold, 0.5);
   text-align: center;
   cursor: pointer;
   position: relative;
@@ -155,7 +158,7 @@
     content: '';
     position: absolute;
     inset: 0;
-    background: $jaune;
+    background: $gold;
     transform: scaleX(0);
     transform-origin: right;
     transition: transform 0.5s cubic-bezier(0.77, 0, 0.175, 1);
@@ -163,8 +166,8 @@
   }
 
   &:hover {
-    color: $noir;
-    border-color: $jaune;
+    color: $base;
+    border-color: $gold;
 
     &::before {
       transform: scaleX(1);
@@ -174,31 +177,31 @@
 
   /* Variantes */
   &.btn-primary {
-    color: $noir;
-    background-color: $jaune;
-    border-color: $jaune;
+    color: $base;
+    background-color: $gold;
+    border-color: $gold;
 
     // Le voile par défaut remplirait en doré un bouton déjà doré : on
     // l'inverse en sombre, pour que le survol se voie quand même.
     &::before {
-      background: $noir;
+      background: $base;
     }
 
     &:hover {
-      color: $jaune;
+      color: $gold;
     }
   }
 
   &.btn-ghost {
-    color: $texte;
-    background-color: rgba($beige, 0.06);
+    color: $body-text;
+    background-color: rgba($heading, 0.06);
     backdrop-filter: blur(10px);
     -webkit-backdrop-filter: blur(10px);
     // Force le rendu GPU dès le premier paint pour éviter le bug Chrome où le
     // blur ne s'affiche pas tant qu'aucun scroll n'a forcé un repaint.
     transform: translateZ(0);
     will-change: backdrop-filter, transform;
-    border-color: rgba($beige, 0.35);
+    border-color: rgba($heading, 0.35);
   }
 }
 
@@ -220,7 +223,7 @@
     content: '';
     position: absolute;
     inset: 0;
-    background: $jaune;
+    background: $gold;
     transform: scaleX(0);
     transform-origin: right;
     transition: transform 0.5s cubic-bezier(0.77, 0, 0.175, 1);
@@ -228,7 +231,7 @@
   }
 
   &:hover {
-    color: $noir;
+    color: $base;
 
     &::before {
       transform: scaleX(1);

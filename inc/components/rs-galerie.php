@@ -109,10 +109,10 @@ function rs_galerie( $args = array() ) {
 
 			<!-- Barre basse : titre à gauche, vignettes à droite -->
 			<div class="section_galerie-content absolute bottom-0 left-0 right-0 z-10 md:px-5 px-[10px] md:pb-5 pb-[10px]">
-				<div class="flex flex-col-reverse md:flex-row md:items-end gap-4 lg:pb-8 pb-4 <?php echo $has_text ? 'border-b border-cream' : ''; ?>">
+				<div class="flex flex-col-reverse md:flex-row md:items-end gap-4 lg:pb-8 pb-4 <?php echo $has_text ? 'border-b border-heading' : ''; ?>">
 					<?php if ( $titre ) : ?>
 						<div class="flex-1">
-							<h2 class="text-cream m-0" data-reveal-start="95%"><?php echo wp_kses_post( $titre ); ?></h2>
+							<h2 class="text-heading m-0" data-reveal-start="95%"><?php echo wp_kses_post( $titre ); ?></h2>
 						</div>
 					<?php endif; ?>
 
@@ -139,7 +139,7 @@ function rs_galerie( $args = array() ) {
 				<?php if ( $description || $bouton ) : ?>
 					<div class="flex flex-col md:flex-row md:items-end md:justify-between gap-4 md:gap-8 mt-4 md:mt-8">
 						<?php if ( $description ) : ?>
-							<p class="text-reveal text-cream lg:text-lg text-base max-w-lg font-serif" data-reveal-start="95%"><?php echo wp_kses_post( $description ); ?></p>
+							<p class="text-reveal text-heading lg:text-lg text-base max-w-lg font-serif" data-reveal-start="95%"><?php echo wp_kses_post( $description ); ?></p>
 						<?php endif; ?>
 
 						<?php if ( $bouton ) : ?>

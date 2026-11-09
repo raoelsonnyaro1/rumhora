@@ -62,7 +62,7 @@ function rs_mobile_menu() {
 				?>
 			</nav>
 
-			<a href="<?php echo esc_url( $book_url ); ?>" class="btn btn-pill mobile-menu-cta" data-barba>
+			<a href="<?php echo esc_url( $book_url ); ?>" class="btn-pill mobile-menu-cta" data-barba>
 				<?php esc_html_e( 'Book Table', 'rumhora' ); ?>
 			</a>
 		</div>

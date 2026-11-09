@@ -74,8 +74,8 @@ function rs_carousel( $args = array() ) {
 								     par-dessus, il assombrirait la photo pour rien. -->
 								<div class="absolute inset-x-0 bottom-0 h-2/3 bg-gradient-to-t from-black/40 to-transparent pointer-events-none"></div>
 								<div class="absolute bottom-0 left-0 right-0 flex items-end md:p-5 p-4">
-									<div class="border-b border-cream/40 w-full pb-2 md:pb-3">
-										<span class="text-cream lg:text-xl text-base m-0"><?php echo esc_html( $slide['nom'] ); ?></span>
+									<div class="border-b border-heading/40 w-full pb-2 md:pb-3">
+										<span class="text-heading lg:text-xl text-base m-0"><?php echo esc_html( $slide['nom'] ); ?></span>
 									</div>
 								</div>
 							<?php endif; ?>

@@ -2,7 +2,7 @@
  * Tailwind sert ici de couche d'utilitaires (layout, espacements, responsive)
  * par-dessus le design system Sass : les couleurs/polices déclarées ci-dessous
  * DOIVENT rester synchronisées avec assets/sass/_variables.scss — c'est ce
- * fichier qui rend `bg-dark`, `text-accent`, etc. utilisables côté markup, et
+ * fichier qui rend `bg-base`, `text-gold`, etc. utilisables côté markup, et
  * _variables.scss qui les rend utilisables dans les partials SCSS.
  *
  * Résolu APRÈS la compilation Sass (voir package.json, build:css), donc
@@ -10,17 +10,33 @@
  */
 
 // ⚠ Miroir de la palette de assets/sass/_variables.scss — à mettre à jour
-// ensemble. Noms de marque et alias sémantiques pointent vers les mêmes
-// valeurs : `bg-noir` et `bg-dark` sont équivalents côté markup — préférer le
-// rôle sémantique pour tout ce qui est réutilisable.
-const jaune = '#C6A75E';
-const beige = '#F4EDE4';
-const gris = '#A89B95';
-const texte = '#D8CFC4';
-const rouge = '#8C2D34';
-const noir = '#170909';
-const depth1 = '#2A0F12';
-const depth2 = '#3A1F1A';
+// ensemble. Les noms sont ceux de la bibliothèque de couleurs de la maquette.
+//
+// « Gold (don't use) » (#D6AF2E) est volontairement absent : le design l'a
+// écarté, et une entrée ici finirait par être utilisée.
+//
+// Seule exception aux noms du design : « Base » est exposé en `page` et non en
+// `base`. Tailwind génère `text-*` à la fois depuis fontSize et textColor ;
+// une couleur nommée `base` produirait un second `.text-base` qui ajouterait
+// `color: #140506` à toutes les utilisations de `text-base` comme TAILLE de
+// police — du texte quasi noir sur fond sombre. Le nom `$base` reste en
+// revanche celui du SCSS, où aucune collision n'est possible.
+const colors = {
+  // Fonds
+  page: '#140506',
+  'depth-1': '#2A0F12',
+  'depth-2': '#3A1F1A',
+  light: '#F5EFE6',
+  // Textes
+  heading: '#F4EDE4',
+  'body-text': '#D8CFC4',
+  secondary: '#A89B95',
+  neutral: '#8A7F7A',
+  // Accents
+  gold: '#C6A75E',
+  accent: '#B11827',
+  'soft-accent': '#8C2D34',
+};
 
 module.exports = {
   content: [
@@ -40,23 +56,14 @@ module.exports = {
         'h-tall': { raw: '(min-height: 820px)' },
       },
       colors: {
-        // Noms de marque
-        jaune,
-        beige,
-        gris,
-        texte,
-        rouge,
-        noir,
-        'depth-1': depth1,
-        'depth-2': depth2,
-        // Alias sémantiques (voir _variables.scss)
-        dark: noir,
-        surface: depth1,
-        'surface-alt': depth2,
-        cream: beige,
-        accent: jaune,
-        muted: gris,
-        'on-dark': texte,
+        ...colors,
+        // Alias sémantiques, pour les cas où le rôle est plus parlant que la
+        // teinte (voir _variables.scss).
+        dark: colors.page,
+        surface: colors['depth-1'],
+        'surface-alt': colors['depth-2'],
+        'on-dark': colors['body-text'],
+        muted: colors.secondary,
       },
       fontFamily: {
         // Polices variables (voir les @font-face dans assets/sass/style.scss).
@@ -64,8 +71,8 @@ module.exports = {
         serif: ['"Playfair Display"', 'Georgia', 'serif'],
       },
       letterSpacing: {
-        // Interlettrage large des petits labels en capitales (nav mobile,
-        // slogan, surtitres de section).
+        // Interlettrage large des petits labels en capitales (surtitres de
+        // section, slogan).
         wider: '0.12em',
         widest: '0.2em',
       },
