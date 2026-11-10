@@ -100,16 +100,16 @@ function rs_text_media( $args = array() ) {
 				<?php endif; ?>
 			</div>
 
-			<!-- Colonne photo. Le voile (.text-media__scrim) garantit le contraste
-			     du titre là où il chevauche la photo : sans lui, la lisibilité
-			     dépendrait de l'image choisie par le client. -->
+			<!-- Colonne photo. Volontairement SANS voile ni dégradé là où le titre
+			     la chevauche : la photo est rendue fidèlement, telle qu'elle a été
+			     chargée. C'est donc au choix de l'image de garantir le contraste du
+			     titre — prévoir une zone sombre sur son tiers gauche. -->
 			<?php if ( $image ) : ?>
 				<div class="text-media__media">
 					<div class="reveal text-media__frame">
 						<img data-src="<?php echo esc_url( $image['url'] ); ?>"
 							alt="<?php echo esc_attr( $image['alt'] ?? '' ); ?>"
 							class="lazyload">
-						<span class="text-media__scrim" aria-hidden="true"></span>
 					</div>
 				</div>
 			<?php endif; ?>
