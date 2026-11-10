@@ -14,6 +14,10 @@
 // directement var(--gutter), la source unique déclarée dans style.scss, au
 // lieu d'en recopier les valeurs — qui divergeaient dès qu'on y touchait.
 
+// Gouttière entre le bloc de titre et le slider. En variable parce que la
+// largeur de la 1re piste s'en déduit.
+$gap: 2.5rem;
+
 .event-carousel {
   background-color: $depth-1;
 }
@@ -21,26 +25,29 @@
 .event-carousel__grid {
   display: flex;
   flex-direction: column;
-  gap: 2.5rem;
+  gap: $gap;
   padding-left: var(--gutter);
   // Pas de padding-right : c'est le slider qui file jusqu'au bord.
   padding-right: 0;
 
   @media (min-width: 1024px) {
     display: grid;
-    // Colonne de titre volontairement étroite : à la taille du titre, elle
-    // force le passage sur deux lignes de la maquette sans <br> codé en dur,
-    // donc sans le figer pour la traduction.
+    // La 1re piste ne sert plus qu'à placer le DÉBUT du slider : le bloc de
+    // titre, lui, est posé sur toute la largeur et déborde par-dessus (voir
+    // .event-carousel__head). Elle est donc bien plus étroite que le titre.
     //
-    // min-content comme plancher, et non une valeur fixe : c'est la largeur du
-    // MOT le plus long du titre, qui suit donc la taille de police. Avec le
-    // 17rem d'avant, « Upcoming » (environ 330px à 1440) ne tenait pas dans ses
-    // 272px et le navigateur coupait en plein mot — « Upcomi / ng / Evening /
-    // s ». Le plafond est en % de la grille pour la même raison : il doit
-    // suivre la largeur disponible, qui a changé avec les gouttières.
-    grid-template-columns: minmax(min-content, 32%) 1fr;
-    column-gap: 2.5rem;
+    // 11vw moins le gap : sur la maquette le slider démarre à 21.8% de la
+    // largeur, pour une gouttière à 10.8% — soit 11% de piste, gap compris.
+    // En vw et non en % de la grille : les deux repères de la maquette sont
+    // des fractions de la LARGEUR D'ÉCRAN, pas de la zone de contenu.
+    grid-template-columns: calc(11vw - #{$gap}) 1fr;
+    // `gap` D'ABORD, `column-gap` ENSUITE : `gap` est une propriété raccourcie
+    // qui réécrit AUSSI column-gap. Déclaré après, il remettait la gouttière
+    // entre les pistes à zéro — le slider démarrait alors 40px trop à gauche,
+    // et sa position dérivait avec la largeur au lieu de rester à 21.8%.
+    // Le 0 ne sert qu'à annuler le `gap` vertical hérité de la version empilée.
     gap: 0;
+    column-gap: $gap;
     align-items: center;
   }
 }
@@ -48,6 +55,20 @@
 /* ==========================================================================
    Bloc de titre
    ========================================================================== */
+
+/* Posé sur TOUTE la largeur de la grille et au-dessus du slider : le titre
+   déborde donc de sa piste et se superpose à la première carte, comme sur la
+   maquette. La borne de largeur le coupe en deux lignes — au-dessus de
+   « Upcoming » (22.9vw au corps du site) et en dessous de « Upcoming
+   Evenings » (46vw), elle tient la césure sans <br> codé en dur. */
+.event-carousel__head {
+  @media (min-width: 1024px) {
+    grid-column: 1 / -1;
+    grid-row: 1;
+    max-width: 30vw;
+    z-index: 2;
+  }
+}
 
 .event-carousel__title {
   // Taille et interlignage hérités de h1/h2 (voir style.scss).
@@ -70,6 +91,11 @@
   // ne peut pas devenir plus étroite que le contenu du slider, et la rangée
   // déborde au lieu que Swiper rogne ses slides.
   min-width: 0;
+
+  @media (min-width: 1024px) {
+    grid-column: 2 / 3;
+    grid-row: 1;
+  }
 }
 
 .event-carousel__swiper {
