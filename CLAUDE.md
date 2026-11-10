@@ -106,7 +106,7 @@ pas que la typographie — toutes les cotes relevées sur la maquette y passent.
 |---|---|---|
 | Titres 96 pt | **128 px** | `h1, h2` (style.scss) |
 | Descriptions 22 pt | **29.33 px** | `p` (style.scss) |
-| Arrondi des cadres 35 pt | **46.67 px** | `$radius-media` (_variables.scss) |
+| Arrondi des cadres 25 pt | **33.33 px** | `$radius-media` (_variables.scss) |
 | Marges de section 125 pt | **166.67 px** | `$pad-desktop` (_text-media.scss) |
 
 Ne jamais reporter tel quel un nombre lu dans XD — c'est l'erreur qui a figé
