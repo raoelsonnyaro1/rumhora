@@ -6,6 +6,11 @@
  * la section reste ainsi pilotée par le portrait — le plus haut des quatre —
  * au lieu d'être fixée à la main, et la mise en page se replie toute seule en
  * pile quand la grille est désactivée sous `lg`.
+ *
+ * Ordre d'empilement à partir de lg :
+ *   3  bloc éditorial — le TITRE se pose sur la photo
+ *   2  portrait, citation
+ *   1  cartouche décoratif
  */
 @use '../variables' as *;
 
@@ -40,6 +45,10 @@
   @media (min-width: 1024px) {
     grid-column: 1 / 7;
     grid-row: 1;
+    // AU-DESSUS du portrait (z-index 2) : c'est le titre qui se pose sur la
+    // photo, pas l'inverse. Avant ça, la photo rognait la fin du titre et le
+    // bord droit du paragraphe.
+    z-index: 3;
   }
 }
 
@@ -53,6 +62,19 @@
     color: $gold;
     font-style: normal;
   }
+
+  // Borne la césure pour que les DEUX lignes mordent franchement sur la photo.
+  // Sur toute la largeur du bloc (100%), le titre se coupe en « The Chef behind
+  // the / experience » : la 1re ligne dépasse de 321px mais passe au-dessus du
+  // bord haut de la photo, et la 2e n'en traverse que 22px — le chevauchement
+  // ne se voit pas. À 82%, la coupe devient « The Chef behind / the
+  // experience », soit 200px et 142px de traversée.
+  //
+  // En % du bloc et non en px : le bord gauche de la photo est lui-même une
+  // fraction de la grille, les deux restent donc alignés à toutes les largeurs.
+  @media (min-width: 1024px) {
+    max-width: 82%;
+  }
 }
 
 .portrait-quote__body {
@@ -62,6 +84,15 @@
   // Colonne étroite, nettement plus courte que le titre : c'est ce décalage
   // de mesure qui structure la composition de la maquette.
   max-width: 33ch;
+
+  // Contrairement au titre, le paragraphe ne doit PAS mordre sur la photo :
+  // du texte courant par-dessus une image se lit mal, et c'est ce débordement
+  // (27px) que la photo rognait jusqu'ici. Le portrait démarre à la colonne 4
+  // sur 12, soit exactement la moitié de ce bloc (colonnes 1 à 6) : 48% le
+  // laisse s'arrêter juste avant, avec la gouttière pour marge.
+  @media (min-width: 1024px) {
+    max-width: min(33ch, 48%);
+  }
 }
 
 /* ==========================================================================

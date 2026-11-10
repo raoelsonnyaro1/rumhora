@@ -1307,6 +1307,11 @@
  * la section reste ainsi pilotée par le portrait — le plus haut des quatre —
  * au lieu d'être fixée à la main, et la mise en page se replie toute seule en
  * pile quand la grille est désactivée sous `lg`.
+ *
+ * Ordre d'empilement à partir de lg :
+ *   3  bloc éditorial — le TITRE se pose sur la photo
+ *   2  portrait, citation
+ *   1  cartouche décoratif
  */
 
 .portrait-quote {
@@ -1338,6 +1343,7 @@
   .portrait-quote__text {
     grid-column: 1/7;
     grid-row: 1;
+    z-index: 3;
   }
 }
 
@@ -1350,10 +1356,22 @@
   font-style: normal;
 }
 
+@media (min-width: 1024px) {
+  .portrait-quote__title {
+    max-width: 82%;
+  }
+}
+
 .portrait-quote__body {
   font-family: "Montserrat", system-ui, sans-serif;
   color: #D8CFC4;
   max-width: 33ch;
+}
+
+@media (min-width: 1024px) {
+  .portrait-quote__body {
+    max-width: min(33ch, 48%);
+  }
 }
 
 /* ==========================================================================
