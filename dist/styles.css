@@ -1309,8 +1309,8 @@
  * pile quand la grille est désactivée sous `lg`.
  *
  * Ordre d'empilement à partir de lg :
- *   3  bloc éditorial — le TITRE se pose sur la photo
- *   2  portrait, citation
+ *   3  bloc éditorial et citation — ils se posent sur la photo
+ *   2  portrait
  *   1  cartouche décoratif
  */
 
@@ -1452,11 +1452,11 @@
 
 @media (min-width: 1024px) {
   .portrait-quote__quote {
-    grid-column: 9/13;
+    grid-column: 8/13;
     grid-row: 1;
     align-self: end;
     margin-bottom: 5rem;
-    z-index: 2;
+    z-index: 3;
   }
 }
 

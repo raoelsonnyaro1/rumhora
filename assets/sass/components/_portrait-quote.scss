@@ -8,8 +8,8 @@
  * pile quand la grille est désactivée sous `lg`.
  *
  * Ordre d'empilement à partir de lg :
- *   3  bloc éditorial — le TITRE se pose sur la photo
- *   2  portrait, citation
+ *   3  bloc éditorial et citation — ils se posent sur la photo
+ *   2  portrait
  *   1  cartouche décoratif
  */
 @use '../variables' as *;
@@ -184,13 +184,19 @@
   // côté PHP (voir rs_portrait_quote).
 
   @media (min-width: 1024px) {
-    grid-column: 9 / 13;
+    // Démarre une colonne AVANT la fin du portrait (8 au lieu de 9, le portrait
+    // s'arrêtant à la 9e) : le début de chaque ligne se pose ainsi sur la photo.
+    grid-column: 8 / 13;
     grid-row: 1;
     // Calée en bas de la ligne, dont la hauteur est donnée par le portrait :
     // la citation suit donc automatiquement la taille de la photo, sans
-    // décalage codé en dur à réajuster à chaque breakpoint.
+    // décalage codé en dur à réajuster à chaque breakpoint. Elle croise donc le
+    // bas du portrait, sa partie la plus sombre.
     align-self: end;
     margin-bottom: 5rem;
-    z-index: 2;
+    // Au-dessus du portrait (2) comme le bloc éditorial. Explicite plutôt que
+    // de compter sur l'ordre du DOM : la citation est rendue après le portrait
+    // aujourd'hui, mais rien ne garantit que ça ne bougera pas.
+    z-index: 3;
   }
 }
