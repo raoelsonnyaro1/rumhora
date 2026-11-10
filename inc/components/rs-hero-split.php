@@ -138,7 +138,7 @@ function rs_hero_split( $args = array() ) {
 							$is_anchor = 0 === strpos( $lien, '#' );
 							?>
 							<a href="<?php echo esc_url( $lien ); ?>" class="btn-circle"<?php echo $is_anchor ? '' : ' data-barba'; ?>>
-								<span class="btn-circle__label"><?php echo esc_html( $bouton['texte'] ?? '' ); ?></span>
+								<?php rs_slide_label( $bouton['texte'] ?? '', 'btn-circle__label' ); ?>
 								<?php rs_circle_arc(); ?>
 							</a>
 						<?php endforeach; ?>

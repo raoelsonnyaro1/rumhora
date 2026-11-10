@@ -96,7 +96,7 @@ function rs_text_media( $args = array() ) {
 					?>
 					<div class="md:mt-12 mt-9 fade-in" data-fade-delay="0.25">
 						<a href="<?php echo esc_url( $bouton_lien ); ?>" class="btn-circle"<?php echo $is_anchor ? '' : ' data-barba'; ?>>
-							<span class="btn-circle__label"><?php echo esc_html( $bouton_texte ); ?></span>
+							<?php rs_slide_label( $bouton_texte, 'btn-circle__label' ); ?>
 							<?php rs_circle_arc(); ?>
 						</a>
 					</div>

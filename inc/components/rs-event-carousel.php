@@ -109,7 +109,7 @@ function rs_event_carousel( $args = array() ) {
 
 									<?php if ( ! empty( $event['bouton_texte'] ) && $lien ) : ?>
 										<a href="<?php echo esc_url( $lien ); ?>" class="btn-pill event-card__cta"<?php echo $is_anchor ? '' : ' data-barba'; ?>>
-											<?php echo esc_html( $event['bouton_texte'] ); ?>
+											<?php rs_slide_label( $event['bouton_texte'] ); ?>
 										</a>
 									<?php endif; ?>
 								</div>

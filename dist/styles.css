@@ -92,7 +92,75 @@
  *   .btn-pill    pilule à filet doré (CTA « Book Table » du header)
  *   .btn-circle  libellé chevauchant un arc doré (CTA du hero)
  *   .btn         bouton rectangulaire générique, avec voile au survol
+ *   .btn-slide   libellé qui glisse verticalement au survol (voir rs_slide_label)
+ *
+ * Tous les boutons sont DORÉS au repos.
  */
+
+/* ==========================================================================
+   Libellé à glissement vertical
+   ==========================================================================
+   Deux copies du texte dans une boîte rognée : la visible sort par le haut,
+   la copie entre par le bas. Le markup vient de rs_slide_label().
+
+   La boîte est posée ici et non sur le bouton : c'est elle qui doit rogner,
+   et elle seule — un overflow:hidden sur le bouton rognerait aussi la bordure
+   ou l'arc.
+*/
+
+.btn-slide {
+  position: relative;
+  display: inline-block;
+  overflow: hidden;
+  line-height: 1.35;
+  vertical-align: top;
+}
+
+.btn-slide__in {
+  display: block;
+  transition: transform 0.45s cubic-bezier(0.33, 1, 0.68, 1);
+}
+
+.btn-slide__in--dup {
+  position: absolute;
+  inset: 0;
+  transform: translateY(100%);
+}
+
+/* État survolé, porté par le bouton et non par la boîte : c'est tout le bouton
+   qui est la cible de survol, pas seulement les lettres. :focus-visible inclus
+   pour que l'effet existe aussi au clavier. */
+
+.btn-pill:hover .btn-slide__in, .btn-pill:focus-visible .btn-slide__in,
+.btn-circle:hover .btn-slide__in, .btn-circle:focus-visible .btn-slide__in,
+.btn:hover .btn-slide__in, .btn:focus-visible .btn-slide__in {
+  transform: translateY(-100%);
+}
+
+.btn-pill:hover .btn-slide__in--dup, .btn-pill:focus-visible .btn-slide__in--dup,
+.btn-circle:hover .btn-slide__in--dup, .btn-circle:focus-visible .btn-slide__in--dup,
+.btn:hover .btn-slide__in--dup, .btn:focus-visible .btn-slide__in--dup {
+  transform: translateY(0);
+}
+
+/* Le glissement est un pur ornement : en mouvement réduit, les deux copies
+   reprennent leur position de repos. Couper la seule `transition` ne suffirait
+   pas — le libellé serait alors remplacé par sa copie d'un coup sec, ce qui est
+   plus brutal que l'animation qu'on cherchait à éviter. */
+
+@media (prefers-reduced-motion: reduce) {
+  .btn-pill:hover .btn-slide__in, .btn-pill:focus-visible .btn-slide__in,
+  .btn-circle:hover .btn-slide__in, .btn-circle:focus-visible .btn-slide__in,
+  .btn:hover .btn-slide__in, .btn:focus-visible .btn-slide__in {
+    transform: none;
+  }
+
+  .btn-pill:hover .btn-slide__in--dup, .btn-pill:focus-visible .btn-slide__in--dup,
+  .btn-circle:hover .btn-slide__in--dup, .btn-circle:focus-visible .btn-slide__in--dup,
+  .btn:hover .btn-slide__in--dup, .btn:focus-visible .btn-slide__in--dup {
+    transform: translateY(100%);
+  }
+}
 
 /* ==========================================================================
    Pilule dorée
@@ -107,7 +175,7 @@
   font-weight: 400;
   line-height: 1;
   color: #C6A75E;
-  padding: 13px 26px;
+  padding: 10px 26px;
   border: 1px solid #C6A75E;
   border-radius: 999px;
   white-space: nowrap;
@@ -141,7 +209,7 @@
 @media (max-width: 767px) {
   .btn-pill {
     font-size: 14px;
-    padding: 10px 20px;
+    padding: 7.5px 20px;
   }
 }
 
@@ -162,14 +230,13 @@
   font-size: 17px;
   font-weight: 400;
   line-height: 1;
-  color: #F4EDE4;
+  color: #C6A75E;
   padding-right: 16px;
   cursor: pointer;
   transition: color 0.35s ease;
 }
 
 .btn-circle__label {
-  position: relative;
   z-index: 1;
 }
 
@@ -183,10 +250,6 @@
   color: #C6A75E;
   pointer-events: none;
   transition: transform 0.45s cubic-bezier(0.33, 1, 0.68, 1), color 0.35s ease;
-}
-
-.btn-circle:hover {
-  color: #C6A75E;
 }
 
 .btn-circle:hover .btn-circle__arc {
@@ -213,7 +276,7 @@
   font-family: "Playfair Display", Georgia, serif;
   display: inline-block;
   padding: 14px 24px;
-  color: #D8CFC4;
+  color: #C6A75E;
   border: 1px solid rgba(198, 167, 94, 0.5);
   text-align: center;
   cursor: pointer;

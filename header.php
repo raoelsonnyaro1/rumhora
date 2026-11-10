@@ -120,7 +120,7 @@ $rumhora_book_url = get_field( 'book_url', 'option' ) ?: home_url( '/book-a-tabl
 					<a href="<?php echo esc_url( $rumhora_lang_url ); ?>" id="header-lang-toggle" class="lang-toggle hover-underline hidden md:inline-block"><?php echo esc_html( $rumhora_lang_label ); ?></a>
 				<?php endif; ?>
 
-				<a href="<?php echo esc_url( $rumhora_book_url ); ?>" id="header-book-btn" class="btn-pill" data-barba><?php esc_html_e( 'Book Table', 'rumhora' ); ?></a>
+				<a href="<?php echo esc_url( $rumhora_book_url ); ?>" id="header-book-btn" class="btn-pill" data-barba><?php rs_slide_label( __( 'Book Table', 'rumhora' ) ); ?></a>
 
 				<!-- Déclencheur du menu plein écran : visible uniquement là où la
 				     nav horizontale ne tient plus (< lg). -->

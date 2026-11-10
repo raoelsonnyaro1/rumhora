@@ -4,8 +4,85 @@
  *   .btn-pill    pilule à filet doré (CTA « Book Table » du header)
  *   .btn-circle  libellé chevauchant un arc doré (CTA du hero)
  *   .btn         bouton rectangulaire générique, avec voile au survol
+ *   .btn-slide   libellé qui glisse verticalement au survol (voir rs_slide_label)
+ *
+ * Tous les boutons sont DORÉS au repos.
  */
 @use '../variables' as *;
+
+/* ==========================================================================
+   Libellé à glissement vertical
+   ==========================================================================
+   Deux copies du texte dans une boîte rognée : la visible sort par le haut,
+   la copie entre par le bas. Le markup vient de rs_slide_label().
+
+   La boîte est posée ici et non sur le bouton : c'est elle qui doit rogner,
+   et elle seule — un overflow:hidden sur le bouton rognerait aussi la bordure
+   ou l'arc.
+*/
+
+// Interlignage de la boîte glissante. 1 serait la valeur « juste » pour un
+// libellé sur une ligne, mais l'overflow qui rend le glissement possible
+// rognerait alors les jambages (le « y » de « Discover Our Story »).
+$slide-line-height: 1.35;
+
+.btn-slide {
+  position: relative;
+  display: inline-block;
+  overflow: hidden;
+  line-height: $slide-line-height;
+  // Sans ça, la boîte inline-block est alignée sur la ligne de base du parent
+  // et le libellé se décale verticalement par rapport à l'arc.
+  vertical-align: top;
+
+  &__in {
+    display: block;
+    // Les deux copies héritent de `color` du bouton : une transition de couleur
+    // au survol (le remplissage de .btn-pill) les emporte toutes les deux sans
+    // qu'il y ait à la déclarer ici.
+    transition: transform 0.45s cubic-bezier(0.33, 1, 0.68, 1);
+  }
+
+  // Copie en attente, calée exactement sur la même boîte, un cran plus bas.
+  &__in--dup {
+    position: absolute;
+    inset: 0;
+    transform: translateY(100%);
+  }
+}
+
+/* État survolé, porté par le bouton et non par la boîte : c'est tout le bouton
+   qui est la cible de survol, pas seulement les lettres. :focus-visible inclus
+   pour que l'effet existe aussi au clavier. */
+.btn-pill:hover, .btn-pill:focus-visible,
+.btn-circle:hover, .btn-circle:focus-visible,
+.btn:hover, .btn:focus-visible {
+  .btn-slide__in {
+    transform: translateY(-100%);
+  }
+
+  .btn-slide__in--dup {
+    transform: translateY(0);
+  }
+}
+
+/* Le glissement est un pur ornement : en mouvement réduit, les deux copies
+   reprennent leur position de repos. Couper la seule `transition` ne suffirait
+   pas — le libellé serait alors remplacé par sa copie d'un coup sec, ce qui est
+   plus brutal que l'animation qu'on cherchait à éviter. */
+@media (prefers-reduced-motion: reduce) {
+  .btn-pill:hover, .btn-pill:focus-visible,
+  .btn-circle:hover, .btn-circle:focus-visible,
+  .btn:hover, .btn:focus-visible {
+    .btn-slide__in {
+      transform: none;
+    }
+
+    .btn-slide__in--dup {
+      transform: translateY(100%);
+    }
+  }
+}
 
 /* ==========================================================================
    Pilule dorée
@@ -20,7 +97,10 @@
   font-weight: 400;
   line-height: 1;
   color: $gold;
-  padding: 13px 26px;
+  // 10px et non 13px : la boîte .btn-slide ouvre l'interlignage à 1.35 pour
+  // loger les jambages, ce qui rend le libellé ~5.6px plus haut. Le padding
+  // compense pour que la hauteur rendue du bouton ne bouge pas (44px).
+  padding: 10px 26px;
   border: 1px solid $gold;
   border-radius: 999px;
   white-space: nowrap;
@@ -55,7 +135,7 @@
 
   @media (max-width: 767px) {
     font-size: 14px;
-    padding: 10px 20px;
+    padding: 7.5px 20px; // même compensation qu'au-dessus, hauteur rendue 36px
   }
 }
 
@@ -76,7 +156,7 @@
   font-size: 17px;
   font-weight: 400;
   line-height: 1;
-  color: $heading;
+  color: $gold;
   // L'arc fait 44px de large et est calé à droite : ce padding ne réserve que
   // la part qui DÉPASSE du texte, le reste (28px) chevauche volontairement le
   // libellé, comme sur la maquette.
@@ -84,8 +164,9 @@
   cursor: pointer;
   transition: color 0.35s ease;
 
+  // Au-dessus de l'arc, qu'il chevauche. La boîte glissante elle-même est
+  // décrite plus haut (.btn-slide) ; cette classe ne porte que l'empilement.
   &__label {
-    position: relative;
     z-index: 1;
   }
 
@@ -101,9 +182,9 @@
     transition: transform 0.45s cubic-bezier(0.33, 1, 0.68, 1), color 0.35s ease;
   }
 
+  // Pas de changement de couleur au survol : le libellé est déjà doré au repos,
+  // c'est le glissement vertical (.btn-slide) qui porte la réponse au survol.
   &:hover {
-    color: $gold;
-
     // L'arc glisse vers la droite : il « libère » le libellé plutôt que de
     // l'enfermer, ce qui lit comme une invitation à cliquer.
     .btn-circle__arc {
@@ -130,7 +211,7 @@
   font-family: 'Playfair Display', Georgia, serif;
   display: inline-block;
   padding: 14px 24px;
-  color: $body-text;
+  color: $gold;
   border: 1px solid rgba($gold, 0.5);
   text-align: center;
   cursor: pointer;
