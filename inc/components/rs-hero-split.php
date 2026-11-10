@@ -107,7 +107,13 @@ function rs_hero_split( $args = array() ) {
 		     la photo choisie par le client. -->
 		<div class="hero-veil absolute inset-0 pointer-events-none" aria-hidden="true"></div>
 
-		<div class="relative z-10 w-full grid lg:grid-cols-2 grid-cols-1 items-center xl:gap-12 gap-8 xl:px-14 md:px-8 px-5 md:pt-32 pt-28 md:pb-16 pb-12">
+		<!-- hero-grid : à partir de lg, le bloc texte et la grappe de photos
+		     partagent la MÊME ligne de grille et se chevauchent volontairement —
+		     le titre passe par-dessus la première photo, et la seconde file
+		     au-delà du bord droit de l'écran. Toute la géométrie est dans
+		     _hero.scss ; les classes Tailwind ne portent ici que les gouttières
+		     et le rythme vertical. -->
+		<div class="hero-grid relative z-10 w-full grid items-center xl:gap-12 gap-8 xl:px-14 md:px-8 px-5 md:pt-32 pt-28 md:pb-16 pb-12">
 
 			<!-- Colonne texte. Pas de max-width ici : le titre doit pouvoir occuper
 			     toute la colonne pour tenir sur 2 lignes comme dans la maquette

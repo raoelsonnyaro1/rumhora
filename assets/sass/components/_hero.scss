@@ -23,8 +23,12 @@
    Deux dégradés plutôt qu'un voile uni : un aplat uniforme éteindrait aussi la
    partie droite, là où les photos doivent rester lumineuses. */
 .hero-veil {
+  // La zone sombre court plus loin vers la droite (jusqu'à 72%) que ne
+  // l'exigerait le seul fond : le titre déborde maintenant sur la première
+  // photo, et doit rester lisible quelle que soit la photo choisie par le
+  // client — on ne peut pas compter sur une image sombre à cet endroit.
   background:
-    linear-gradient(to right, rgba($base, 0.82) 0%, rgba($base, 0.4) 40%, rgba($base, 0) 68%),
+    linear-gradient(to right, rgba($base, 0.86) 0%, rgba($base, 0.62) 38%, rgba($base, 0.18) 58%, rgba($base, 0) 72%),
     linear-gradient(to bottom, rgba($base, 0.25) 0%, rgba($base, 0) 30%, rgba($base, 0.4) 100%);
 }
 
@@ -79,23 +83,87 @@
    composition se dégrade proprement sur mobile sans media query de repli.
 */
 
+/* ==========================================================================
+   Composition superposée (>= lg)
+   ==========================================================================
+   Le bloc texte et la grappe de photos occupent la MÊME ligne de grille :
+
+   - le texte est posé sur TOUTE la largeur (grid-column: 1 / -1) mais borné
+     par une max-width, ce qui le laisse déborder sur la première photo sans
+     jamais courir jusqu'au bord ;
+   - la grappe n'occupe que la 2e piste, et un margin-right négatif la fait
+     sortir de la gouttière : la seconde photo est alors coupée par le bord de
+     l'écran, pas par une marge.
+
+   Les photos restent DANS le flux de la grille : c'est leur hauteur qui donne
+   sa hauteur à la section, ce qu'un positionnement absolu aurait fait perdre.
+*/
+
+// grid-template-columns est déclaré ICI et non via une classe Tailwind
+// (`grid-cols-1` / `lg:grid-cols-2`) : les utilitaires Tailwind sont émis
+// APRÈS les composants dans le CSS compilé et, à spécificité égale, écrasaient
+// la grille à deux pistes — la 2e colonne tombait à 0 et les photos
+// disparaissaient.
+.hero-grid {
+  grid-template-columns: 1fr;
+}
+
+@media (min-width: 1024px) {
+  .hero-grid {
+    // 2e piste plus large que la 1re : c'est ce qui fait démarrer les photos
+    // avant le milieu, sous la fin du titre.
+    grid-template-columns: 1fr 1.45fr;
+  }
+
+  .section_hero_content {
+    grid-column: 1 / -1;
+    grid-row: 1;
+    // Au-dessus des photos, qu'il chevauche.
+    z-index: 3;
+    // Borne la ligne la plus longue du titre : au-delà, elle courrait
+    // jusqu'au bord droit au lieu de s'arrêter sur la première photo.
+    max-width: 56%;
+  }
+
+  .hero-media {
+    grid-column: 2 / 3;
+    grid-row: 1;
+  }
+}
+
 .hero-media {
   display: grid;
   grid-template-columns: 1fr 1fr;
   align-items: start;
   gap: 12px;
 
-  // width:100% indispensable avec le margin-inline:auto ci-dessous : un
-  // `margin` horizontal automatique annule l'étirement par défaut d'un enfant
-  // de grid (justify-self passe de stretch à auto), et l'élément retombe alors
-  // sur sa largeur de CONTENU — nulle ici, puisque les photos n'ont qu'un
-  // aspect-ratio et aucune largeur intrinsèque. Résultat sans ça : une colonne
-  // de 12px (le seul gap) et deux photos à 0px de large.
-  width: 100%;
-
   @media (max-width: 1023px) {
+    // width:100% indispensable avec le margin-inline:auto : un `margin`
+    // horizontal automatique annule l'étirement par défaut d'un enfant de grid
+    // (justify-self passe de stretch à auto), et l'élément retombe alors sur sa
+    // largeur de CONTENU — nulle ici, puisque les photos n'ont qu'un
+    // aspect-ratio et aucune largeur intrinsèque. Résultat sans ça : une
+    // colonne de 12px (le seul gap) et deux photos à 0px de large.
+    width: 100%;
     max-width: 560px;
     margin-inline: auto;
+  }
+
+  // Débord à droite : la valeur dépasse la gouttière du breakpoint, pour que la
+  // 2e photo soit franchement coupée par le bord de l'écran. Contenu par
+  // l'overflow:hidden de .section_hero, donc jamais de scroll horizontal.
+  //
+  // width:auto EST NÉCESSAIRE ICI : avec une largeur explicite (100%), la marge
+  // négative n'élargit que la boîte de MARGE, pas l'élément — il reste calé sur
+  // la largeur de sa piste et ne déborde pas d'un pixel. Rendu à `auto`, il
+  // s'étire sur « piste + marge négative » et file bien jusqu'au-delà du bord.
+  @media (min-width: 1024px) {
+    width: auto;
+    margin-right: -4rem; // gouttière md = 2rem
+  }
+
+  @media (min-width: 1280px) {
+    margin-right: -6rem; // gouttière xl = 3.5rem
   }
 }
 
@@ -121,15 +189,6 @@
     @media (max-width: 1023px) {
       margin-top: 2rem;
     }
-  }
-}
-
-/* Sur très grand écran, la 2e photo déborde légèrement de la gouttière droite,
-   comme sur la maquette où elle est coupée par le bord de page. Contenu par
-   l'overflow:hidden de .section_hero, donc jamais de scroll horizontal. */
-@media (min-width: 1536px) {
-  .hero-media {
-    margin-right: -4rem;
   }
 }
 
