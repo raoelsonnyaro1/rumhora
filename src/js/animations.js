@@ -212,22 +212,78 @@ function reportScrollTriggerCorruption(context, error) {
   scrollTriggerCorrupted = true;
 }
 
+/* ==========================================================================
+   Révélation de texte — « blur-in » par signes, en ordre aléatoire
+   ==========================================================================
+   Les signes partent flous, décalés vers le bas et transparents, puis se
+   posent dans un ORDRE ALÉATOIRE plutôt que de gauche à droite : le texte
+   semble se condenser à l'écran au lieu de s'écrire. C'est le parti pris
+   demandé pour le site.
+*/
+
+// Au-delà de ce nombre de signes, on découpe par MOTS et non par caractères.
+// Un paragraphe de 400 signes donnerait 400 éléments portant chacun un
+// `filter: blur()` animé, soit autant de couches de composition : c'est le
+// genre de chose qui fait tomber un mobile à 15 fps. Les mots donnent le même
+// effet avec 10 fois moins de nœuds, et sur un texte long la nuance
+// signe/mot ne se perçoit de toute façon pas.
+const SPLIT_BY_CHARS_MAX = 120;
+
+// willChange posé ici et retiré par le clearProps de revealSplitTargets : un
+// will-change permanent sur des centaines de fragments garderait autant de
+// couches de composition en mémoire pour toute la vie de la page, ce que le
+// réglage est justement censé éviter.
+const REVEAL_FROM = { opacity: 0, y: 10, filter: 'blur(10px)', willChange: 'filter, transform, opacity' };
+
 /**
- * Enveloppe chaque ligne d'un split SplitText (type:'lines') dans un wrapper
- * masquant (.lineParent, overflow:hidden — voir style.scss) pour permettre le
- * glissement vertical (yPercent) sans déborder de sa ligne, SANS passer par un
- * second `new SplitText()` sur le même élément : ce second split re-découpe le
- * texte déjà splitté et peut laisser `split.lines` (les éléments que le code
- * anime ensuite) pointer vers des nœuds détachés du DOM visible — l'animation
- * s'exécute alors sans erreur mais n'a plus aucun effet visible.
+ * Découpe un élément et renvoie les fragments à animer.
+ * @param {HTMLElement} el
+ * @returns {{split: SplitText, targets: HTMLElement[]}}
  */
-function wrapSplitLines(split, wrapperClass = 'lineParent') {
-  split.lines.forEach((line) => {
-    const wrapper = document.createElement('div');
-    wrapper.className = wrapperClass;
-    line.parentNode.insertBefore(wrapper, line);
-    wrapper.appendChild(line);
+function splitForReveal(el) {
+  const byWords = (el.textContent || '').trim().length > SPLIT_BY_CHARS_MAX;
+
+  // aria:'auto' (SplitText ≥ 3.13) repose un aria-label sur l'élément d'origine
+  // et masque les fragments aux lecteurs d'écran : sans ça, un titre découpé en
+  // signes est épelé lettre par lettre.
+  const split = new SplitText(el, {
+    type: byWords ? 'words' : 'words,chars',
+    aria: 'auto',
   });
+
+  return { split, targets: byWords ? split.words : split.chars };
+}
+
+/**
+ * Anime les fragments d'un split vers leur état final.
+ * @param {HTMLElement[]} targets
+ * @param {object} [vars] - surcharges (delay, onStart...)
+ * @returns {gsap.core.Tween}
+ */
+function revealSplitTargets(targets, vars = {}) {
+  return gsap.to(targets, {
+    opacity: 1,
+    y: 0,
+    filter: 'blur(0px)',
+    duration: 0.8,
+    ease: 'power2.out',
+    stagger: { each: 0.03, from: 'random' },
+    // clearProps une fois fini : sans ça chaque fragment conserve un `filter`
+    // et un `will-change` inline, donc sa propre couche de composition, pour
+    // toute la durée de vie de la page. Sur une page à plusieurs titres, ça
+    // s'accumule jusqu'à peser sur le scroll.
+    onComplete: () => gsap.set(targets, { clearProps: 'filter,transform,opacity,willChange' }),
+    ...vars,
+  });
+}
+
+/**
+ * true si le visiteur a demandé à réduire les animations. Un fondu de signes
+ * en ordre aléatoire est exactement ce que ce réglage vise : on affiche alors
+ * le texte directement.
+ */
+function prefersReducedMotion() {
+  return window.matchMedia && window.matchMedia('(prefers-reduced-motion: reduce)').matches;
 }
 
 // initHeroIntro n'est PAS dans cette liste : elle est jouée séparément, en
@@ -535,7 +591,8 @@ function initLineReveal() {
 }
 
 /**
- * Révélation de texte avec SplitText, ligne par ligne (.text-reveal, h1, h2, h3).
+ * Révélation de texte (.text-reveal, h1, h2, h3) : « blur-in » par signes en
+ * ordre aléatoire — voir splitForReveal() et revealSplitTargets() plus haut.
  *
  * Déclenchement au scroll via IntersectionObserver plutôt que ScrollTrigger :
  * ces éléments sont de loin le plus gros contributeur de triggers sur une page
@@ -558,6 +615,15 @@ function initTextRevealAnimations() {
     .filter((el) => !el.closest('.section_hero'));
 
   if (!textRevealElements.length) return;
+
+  // Mouvement réduit demandé : on affiche le texte tel quel. Pas de split non
+  // plus — inutile de découper le DOM en centaines de fragments pour une
+  // animation qu'on ne jouera pas.
+  if (prefersReducedMotion()) {
+    gsap.set(textRevealElements, { autoAlpha: 1 });
+    document.dispatchEvent(new CustomEvent('textRevealStarted'));
+    return;
+  }
 
   // document.fonts.ready peut indiquer "loaded" alors que la police
   // spécifiquement utilisée par du contenu tout juste inséré par Barba n'a pas
@@ -606,15 +672,14 @@ function initTextRevealAnimations() {
             // Force un reflow pour garantir que les polices sont appliquées
             el.offsetHeight; // eslint-disable-line no-unused-expressions
 
-            const split = new SplitText(el, { type: 'lines', linesClass: 'lineChild' });
-            wrapSplitLines(split);
+            const { split, targets } = splitForReveal(el);
             el._splitText = split;
 
             // L'élément lui-même a été caché en amont (createAnimations) le
             // temps d'attendre la fin de l'intro du hero ; on le rend à
-            // nouveau visible ici, ses LIGNES restant cachées jusqu'au reveal.
+            // nouveau visible ici, ses FRAGMENTS restant cachés jusqu'au reveal.
             gsap.set(el, { autoAlpha: 1 });
-            gsap.set(split.lines, { yPercent: 100, opacity: 0 });
+            gsap.set(targets, REVEAL_FROM);
 
             // Titre en overlay SUR une photo .reveal (voir rs_contact_cta) :
             // pas de déclenchement propre, il se joue une fois le reveal de la
@@ -624,15 +689,7 @@ function initTextRevealAnimations() {
             const titleOverlay = el.closest('.cta-title-overlay');
             if (titleOverlay) {
               const photoImg = titleOverlay.parentElement.querySelector('.reveal img');
-              const anim = gsap.to(split.lines, {
-                yPercent: 0,
-                opacity: 1,
-                duration: 0.75,
-                stagger: 0.2,
-                ease: 'power3.out',
-                paused: true,
-                onStart: notifyProgress,
-              });
+              const anim = revealSplitTargets(targets, { paused: true, onStart: notifyProgress });
               if (photoImg) {
                 photoImg.addEventListener('revealcomplete', () => anim.play(), { once: true });
               } else {
@@ -649,15 +706,7 @@ function initTextRevealAnimations() {
 
             const reveal = () => {
               observer.disconnect();
-              gsap.to(split.lines, {
-                yPercent: 0,
-                opacity: 1,
-                duration: 0.75,
-                stagger: 0.2,
-                delay,
-                ease: 'power3.out',
-                onStart: notifyProgress,
-              });
+              revealSplitTargets(targets, { delay, onStart: notifyProgress });
             };
 
             const observer = new IntersectionObserver((entries) => {
@@ -1647,20 +1696,32 @@ function initHeroIntro(onDone, curtainPromise) {
     // être appelé — sinon le reste des animations de la page reste bloqué
     // indéfiniment en attendant une fin qui ne viendra jamais.
     try {
-      // Le split n'a lieu qu'ici, une fois les vraies polices chargées (voir
-      // waitForFonts), pour mesurer les sauts de ligne correctement.
-      const titleSplit = title ? new SplitText(title, { type: 'lines', linesClass: 'lineChild' }) : null;
-      if (title) {
-        wrapSplitLines(titleSplit);
-        gsap.set(title, { autoAlpha: 1 });
-        gsap.set(titleSplit.lines, { yPercent: 100, opacity: 0 });
+      // Mouvement réduit demandé : on affiche le hero tel quel, sans split ni
+      // timeline, et on rend la main au reste de la page immédiatement.
+      if (prefersReducedMotion()) {
+        if (header) gsap.set(header, { y: 0, opacity: 1 });
+        if (title) gsap.set(title, { autoAlpha: 1 });
+        if (description) gsap.set(description, { autoAlpha: 1 });
+        if (bottomRow) gsap.set(bottomRow, { y: 0, opacity: 1 });
+        if (bottomRowLine) gsap.set(bottomRowLine, { scaleX: 1 });
+        if (mediaItems.length) gsap.set(mediaItems, { y: 0, opacity: 1 });
+        done();
+        return;
       }
 
-      const descSplit = description ? new SplitText(description, { type: 'lines', linesClass: 'lineChild' }) : null;
+      // Le split n'a lieu qu'ici, une fois les vraies polices chargées (voir
+      // waitForFonts) : découper du texte dont la police n'est pas encore
+      // active fige des positions qui changeront au swap.
+      const titleTargets = title ? splitForReveal(title).targets : null;
+      if (title) {
+        gsap.set(title, { autoAlpha: 1 });
+        gsap.set(titleTargets, REVEAL_FROM);
+      }
+
+      const descTargets = description ? splitForReveal(description).targets : null;
       if (description) {
-        wrapSplitLines(descSplit);
         gsap.set(description, { autoAlpha: 1 });
-        gsap.set(descSplit.lines, { yPercent: 100, opacity: 0 });
+        gsap.set(descTargets, REVEAL_FROM);
       }
 
       // delay 0.8s (pas 0.4s) : le rideau met 1.1s à se retirer et démarre à
@@ -1675,24 +1736,17 @@ function initHeroIntro(onDone, curtainPromise) {
         tl.to(header, { y: 0, opacity: 1, duration: 0.8, ease: 'power3.out' }, 0);
       }
 
-      if (titleSplit) {
-        tl.to(titleSplit.lines, {
-          yPercent: 0,
-          opacity: 1,
-          duration: 0.9,
-          stagger: 0.15,
-          ease: 'power3.out',
-        }, 0);
+      // Même « blur-in » aléatoire que le reste du site (voir
+      // revealSplitTargets), ajouté à la timeline plutôt que joué seul pour
+      // rester synchronisé avec le header, le filet et les photos.
+      if (titleTargets) {
+        tl.add(revealSplitTargets(titleTargets), 0);
       }
 
-      if (descSplit) {
-        tl.to(descSplit.lines, {
-          yPercent: 0,
-          opacity: 1,
-          duration: 0.8,
-          stagger: 0.1,
-          ease: 'power3.out',
-        }, title ? '<+=0.2' : 0);
+      if (descTargets) {
+        // L'accroche démarre pendant que le titre finit de se poser : un
+        // enchaînement strictement séquentiel rendrait l'intro trop longue.
+        tl.add(revealSplitTargets(descTargets), title ? 0.35 : 0);
       }
 
       if (bottomRowLine) {

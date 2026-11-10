@@ -1159,13 +1159,33 @@
     console.error(`Error in ${context}:`, error);
     scrollTriggerCorrupted = true;
   }
-  function wrapSplitLines(split, wrapperClass = "lineParent") {
-    split.lines.forEach((line) => {
-      const wrapper = document.createElement("div");
-      wrapper.className = wrapperClass;
-      line.parentNode.insertBefore(wrapper, line);
-      wrapper.appendChild(line);
+  var SPLIT_BY_CHARS_MAX = 120;
+  var REVEAL_FROM = { opacity: 0, y: 10, filter: "blur(10px)", willChange: "filter, transform, opacity" };
+  function splitForReveal(el) {
+    const byWords = (el.textContent || "").trim().length > SPLIT_BY_CHARS_MAX;
+    const split = new SplitText(el, {
+      type: byWords ? "words" : "words,chars",
+      aria: "auto"
     });
+    return { split, targets: byWords ? split.words : split.chars };
+  }
+  function revealSplitTargets(targets, vars = {}) {
+    return gsap.to(targets, __spreadValues({
+      opacity: 1,
+      y: 0,
+      filter: "blur(0px)",
+      duration: 0.8,
+      ease: "power2.out",
+      stagger: { each: 0.03, from: "random" },
+      // clearProps une fois fini : sans ça chaque fragment conserve un `filter`
+      // et un `will-change` inline, donc sa propre couche de composition, pour
+      // toute la durée de vie de la page. Sur une page à plusieurs titres, ça
+      // s'accumule jusqu'à peser sur le scroll.
+      onComplete: () => gsap.set(targets, { clearProps: "filter,transform,opacity,willChange" })
+    }, vars));
+  }
+  function prefersReducedMotion() {
+    return window.matchMedia && window.matchMedia("(prefers-reduced-motion: reduce)").matches;
   }
   var ANIMATION_INITS = [
     initGalerieReveal,
@@ -1339,6 +1359,11 @@
     gsap.registerPlugin(SplitText);
     const textRevealElements = Array.from(document.querySelectorAll(".text-reveal, h1, h2, h3")).filter((el) => !el.closest(".section_hero"));
     if (!textRevealElements.length) return;
+    if (prefersReducedMotion()) {
+      gsap.set(textRevealElements, { autoAlpha: 1 });
+      document.dispatchEvent(new CustomEvent("textRevealStarted"));
+      return;
+    }
     const fontLoads = textRevealElements.map((el) => {
       const cs = getComputedStyle(el);
       return document.fonts.load(`${cs.fontStyle} ${cs.fontWeight} ${cs.fontSize} ${cs.fontFamily}`).catch(() => {
@@ -1361,23 +1386,14 @@
                 el._splitText.revert();
               }
               el.offsetHeight;
-              const split = new SplitText(el, { type: "lines", linesClass: "lineChild" });
-              wrapSplitLines(split);
+              const { split, targets } = splitForReveal(el);
               el._splitText = split;
               gsap.set(el, { autoAlpha: 1 });
-              gsap.set(split.lines, { yPercent: 100, opacity: 0 });
+              gsap.set(targets, REVEAL_FROM);
               const titleOverlay = el.closest(".cta-title-overlay");
               if (titleOverlay) {
                 const photoImg = titleOverlay.parentElement.querySelector(".reveal img");
-                const anim = gsap.to(split.lines, {
-                  yPercent: 0,
-                  opacity: 1,
-                  duration: 0.75,
-                  stagger: 0.2,
-                  ease: "power3.out",
-                  paused: true,
-                  onStart: notifyProgress
-                });
+                const anim = revealSplitTargets(targets, { paused: true, onStart: notifyProgress });
                 if (photoImg) {
                   photoImg.addEventListener("revealcomplete", () => anim.play(), { once: true });
                 } else {
@@ -1390,15 +1406,7 @@
               let checkCount = 0;
               const reveal = () => {
                 observer2.disconnect();
-                gsap.to(split.lines, {
-                  yPercent: 0,
-                  opacity: 1,
-                  duration: 0.75,
-                  stagger: 0.2,
-                  delay,
-                  ease: "power3.out",
-                  onStart: notifyProgress
-                });
+                revealSplitTargets(targets, { delay, onStart: notifyProgress });
               };
               const observer2 = new IntersectionObserver((entries) => {
                 checkCount += 1;
@@ -2017,39 +2025,35 @@
     }
     const run = () => {
       try {
-        const titleSplit = title ? new SplitText(title, { type: "lines", linesClass: "lineChild" }) : null;
-        if (title) {
-          wrapSplitLines(titleSplit);
-          gsap.set(title, { autoAlpha: 1 });
-          gsap.set(titleSplit.lines, { yPercent: 100, opacity: 0 });
+        if (prefersReducedMotion()) {
+          if (header) gsap.set(header, { y: 0, opacity: 1 });
+          if (title) gsap.set(title, { autoAlpha: 1 });
+          if (description) gsap.set(description, { autoAlpha: 1 });
+          if (bottomRow) gsap.set(bottomRow, { y: 0, opacity: 1 });
+          if (bottomRowLine) gsap.set(bottomRowLine, { scaleX: 1 });
+          if (mediaItems.length) gsap.set(mediaItems, { y: 0, opacity: 1 });
+          done();
+          return;
         }
-        const descSplit = description ? new SplitText(description, { type: "lines", linesClass: "lineChild" }) : null;
+        const titleTargets = title ? splitForReveal(title).targets : null;
+        if (title) {
+          gsap.set(title, { autoAlpha: 1 });
+          gsap.set(titleTargets, REVEAL_FROM);
+        }
+        const descTargets = description ? splitForReveal(description).targets : null;
         if (description) {
-          wrapSplitLines(descSplit);
           gsap.set(description, { autoAlpha: 1 });
-          gsap.set(descSplit.lines, { yPercent: 100, opacity: 0 });
+          gsap.set(descTargets, REVEAL_FROM);
         }
         const tl = gsap.timeline({ delay: 0.8, onComplete: done });
         if (header) {
           tl.to(header, { y: 0, opacity: 1, duration: 0.8, ease: "power3.out" }, 0);
         }
-        if (titleSplit) {
-          tl.to(titleSplit.lines, {
-            yPercent: 0,
-            opacity: 1,
-            duration: 0.9,
-            stagger: 0.15,
-            ease: "power3.out"
-          }, 0);
+        if (titleTargets) {
+          tl.add(revealSplitTargets(titleTargets), 0);
         }
-        if (descSplit) {
-          tl.to(descSplit.lines, {
-            yPercent: 0,
-            opacity: 1,
-            duration: 0.8,
-            stagger: 0.1,
-            ease: "power3.out"
-          }, title ? "<+=0.2" : 0);
+        if (descTargets) {
+          tl.add(revealSplitTargets(descTargets), title ? 0.35 : 0);
         }
         if (bottomRowLine) {
           tl.to(bottomRowLine, { scaleX: 1, duration: 0.5, ease: "power2.out" }, "-=0.3");

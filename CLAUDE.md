@@ -132,7 +132,7 @@ animer quelque chose, on pose une classe dans le markup :
 
 | Hook | Effet |
 |---|---|
-| `.text-reveal`, `h1`, `h2`, `h3` | révélation ligne par ligne (SplitText) |
+| `.text-reveal`, `h1`, `h2`, `h3` | « blur-in » : les signes se posent floutés, en ordre aléatoire |
 | `.reveal` | image qui glisse du bas + fondu |
 | `.line-reveal` | ligne qui se dessine de gauche à droite |
 | `.slide-up` | montée de 100px au scroll |
@@ -146,6 +146,29 @@ animer quelque chose, on pose une classe dans le markup :
 Attributs d'ajustement, reconnus sur la plupart de ces hooks :
 `data-reveal-start` (seuil en % du viewport), `data-reveal-delay` (secondes),
 `data-reveal-mask="right"`, `data-reveal-companion="#sel"`.
+
+### Révélation de texte
+
+SplitText découpe le texte, puis les fragments passent de
+`opacity:0 / y:10 / blur(10px)` à leur état final avec un
+`stagger: { each: 0.03, from: 'random' }` : le texte se condense à l'écran au
+lieu de s'écrire de gauche à droite.
+
+Deux garde-fous, à ne pas retirer sans mesurer :
+
+- **Au-delà de 120 signes, le découpage se fait par MOTS et non par
+  caractères** (`SPLIT_BY_CHARS_MAX`). Un paragraphe de 240 signes passe ainsi
+  de ~240 à ~32 éléments animés, chacun portant un `filter: blur()` — donc sa
+  propre couche de composition. Mesuré : 19 signes → 20 nœuds, 241 → 32.
+- **`prefers-reduced-motion: reduce` court-circuite tout** : ni split ni
+  animation, le texte s'affiche directement.
+
+Le `will-change` est posé au départ et retiré par le `clearProps` de fin de
+tween — un will-change permanent sur des centaines de fragments garderait
+autant de couches en mémoire pour toute la vie de la page.
+
+`aria: 'auto'` repose un `aria-label` sur l'élément d'origine et masque les
+fragments : sans lui, un titre découpé est épelé lettre par lettre.
 
 **Ajouter une animation** = ajouter une fonction `init*` et l'inscrire dans le
 tableau `ANIMATION_INITS`. Chaque init est isolée dans un `try/catch` : en cas

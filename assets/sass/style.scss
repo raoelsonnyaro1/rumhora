@@ -337,14 +337,11 @@ img[data-src] {
    Hooks d'animation (voir src/js/animations.js)
    ========================================================================== */
 
-/* SplitText (type:'lines') : wrapper masquant par ligne, pour permettre le
-   glissement vertical sans déborder. */
-.lineParent,
-.line-parent {
-  overflow: hidden;
-  padding: 0.15em 0;
-  margin: -0.15em 0;
-}
+/* Plus de wrapper masquant par ligne (.lineParent) ici : la révélation de
+   texte ne fait plus glisser les lignes derrière un cache, elle défloute les
+   signes sur place — voir splitForReveal() dans src/js/animations.js. Le
+   will-change nécessaire au fondu est posé ET retiré par le JS, le temps du
+   tween seulement. */
 
 /* Reveal d'image : état caché posé en CSS (pas en JS) pour éviter un flash de
    l'image à pleine opacité avant l'exécution du JS. */
