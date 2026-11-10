@@ -1074,6 +1074,26 @@
  * en deçà de la largeur du bloc.
  */
 
+.text-media {
+  padding-block: 4rem;
+}
+
+@media (min-width: 768px) {
+  .text-media {
+    padding-block: 7rem;
+  }
+}
+
+@media (min-width: 1024px) {
+  .text-media {
+    padding-block: 166.67px;
+    min-height: 100vh;
+    min-height: 100svh;
+    display: flex;
+    align-items: center;
+  }
+}
+
 .text-media--surface {
   background-color: #2A0F12;
 }
@@ -1090,6 +1110,7 @@
 .text-media__grid {
   display: flex;
   flex-direction: column;
+  width: 100%;
 }
 
 @media (min-width: 1024px) {
@@ -1155,6 +1176,12 @@
   aspect-ratio: 515/415;
   border-radius: 10px;
   overflow: hidden;
+}
+
+@media (min-width: 1024px) {
+  .text-media__frame {
+    max-height: calc(100svh - 333.34px);
+  }
 }
 
 .text-media__frame img {

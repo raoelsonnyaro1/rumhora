@@ -9,7 +9,33 @@
  */
 @use '../variables' as *;
 
+// Marge haute et basse de la maquette : 125pt, et XD compte en POINTS —
+// 125 × 4/3 = 166.67px (voir la note sur l'échelle typographique dans
+// style.scss). Sortie en variable parce que la hauteur disponible pour la
+// photo s'en déduit, et que les deux ne doivent pas pouvoir diverger.
+$pad-desktop: 166.67px;
+
 .text-media {
+  // Rythme vertical déclaré ICI et non via `py-16 md:py-28` dans le markup :
+  // Tailwind émet ses utilitaires APRÈS le SCSS compilé et, à spécificité
+  // égale, écraserait le padding desktop.
+  padding-block: 4rem;
+
+  @media (min-width: 768px) {
+    padding-block: 7rem;
+  }
+
+  @media (min-width: 1024px) {
+    padding-block: $pad-desktop;
+    // Une section = un écran. min-height et non height : si le contenu devait
+    // malgré tout dépasser (traduction plus longue, zoom navigateur), la
+    // section s'étire au lieu de tronquer.
+    min-height: 100vh; // repli pour les navigateurs sans unités « small »
+    min-height: 100svh;
+    display: flex;
+    align-items: center;
+  }
+
   &--surface {
     background-color: $depth-1;
   }
@@ -27,6 +53,9 @@
 .text-media__grid {
   display: flex;
   flex-direction: column;
+  // La section est elle-même un conteneur flex à partir de lg : sans largeur
+  // explicite, la grille se contenterait de sa largeur de contenu.
+  width: 100%;
 }
 
 @media (min-width: 1024px) {
@@ -111,6 +140,16 @@
   aspect-ratio: 515 / 415; // ratio de la photo sur la maquette
   border-radius: 10px;
   overflow: hidden;
+
+  // Sans cette borne, la section ne tiendrait pas dans un écran : à 1440 la
+  // photo mesure 864px de large, donc 696px de haut à son ratio, et dépasse la
+  // place laissée par les 125pt. Le min-height:100svh resterait alors sans
+  // effet visible. La photo est donc rognée en hauteur (object-fit:cover) au
+  // lieu d'imposer sa taille à la section — le cadre devient plus panoramique
+  // que sur la maquette sur les écrans bas.
+  @media (min-width: 1024px) {
+    max-height: calc(100svh - #{$pad-desktop * 2});
+  }
 
   img {
     width: 100%;
