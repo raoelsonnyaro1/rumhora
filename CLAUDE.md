@@ -90,23 +90,46 @@ couleur `base` produirait un second `.text-base` qui ajouterait `color:#140506`
 
 | Usage | Police | Taille |
 |---|---|---|
-| Titres `h1` / `h2` | Playfair Display Regular | `clamp(40px, 5vw, 96px)` |
+| Titres `h1` / `h2` | Playfair Display Regular | `clamp(40px, 5vw, 128px)` |
 | Sous-titres `h3` | Playfair Display Regular | `clamp(22px, 2.6vw, 38px)` |
-| Texte courant `p` | Montserrat **Light (300)** | `clamp(15px, 1.15vw, 22px)` |
+| Texte courant `p` | Montserrat **Light (300)** | `clamp(15px, 1.15vw, 29.33px)` |
 | Navigation, boutons | Playfair Display Regular | 15–17px |
 | Surtitres (`.eyebrow`) | Montserrat 500 | 12px, `letter-spacing: 0.2em` |
 | Métadonnées de carte | Montserrat 500/600 | 12–18px |
 
-**Les valeurs de la maquette (96px, 22px) sont données sur un plan de travail
-de 1920px de large** — d'où les `5vw` et `1.15vw` au milieu des clamps. Mesuré
-sur le rendu, sans débordement horizontal à aucune largeur :
+### ⚠ La maquette Adobe XD est en POINTS, pas en pixels
+
+Le panneau de texte d'XD affiche les corps en **pt**. Conversion : `px = pt × 4/3`.
+
+| Lu dans XD | À écrire en CSS |
+|---|---|
+| Titres 96 pt | **128 px** |
+| Descriptions 22 pt | **29.33 px** |
+
+Ne jamais reporter tel quel un nombre lu dans XD — c'est l'erreur qui a figé
+l'échelle un tiers trop bas pendant plusieurs sections.
+
+**Le plan de travail de la maquette fait ~2560px de large**, d'où les `5vw`
+(128 / 2560) et `1.15vw` (29.33 / 2560) au milieu des clamps. Largeur déduite
+en mesurant la maquette : « A Timeless Culinary » vaut 9.004 em en Playfair
+Display Regular et occupe ~507px sur l'export 1193px, soit une police de
+56.3px, soit 4.7vw — cohérent avec 5vw, et les deux clamps tombent sur la même
+largeur de plan de travail indépendamment l'un de l'autre.
+
+Mesuré sur le rendu, sans débordement horizontal à aucune largeur :
 
 | Largeur | Titres | Texte |
 |---|---|---|
 | 768px | 40px | 15px |
 | 1024px | 51px | 15px |
-| 1440px | 72px | 17px |
-| 1920px | **96px** | **22px** |
+| 1440px | 72px | 16.5px |
+| 1920px | 96px | 22px |
+| 2560px | **128px** | **29.33px** |
+
+Conséquence à connaître : les plafonds ne sont atteints qu'à 2560px, la largeur
+du plan de travail. En dessous, le corps rendu est le même qu'avant la
+conversion — ce n'est pas une régression, c'est le propre d'une échelle fluide
+calée sur les *proportions* de la maquette plutôt que sur ses valeurs absolues.
 
 Les deux échelles sont déclarées **une seule fois**, sur `h1, h2` et sur `p`
 dans `style.scss`. Les titres et descriptions de section (`.hero-title`,

@@ -140,14 +140,24 @@ h1, h2, h3, h4, h5, h6 {
 }
 
 /* Échelle des titres — SOURCE UNIQUE.
-   96px sur le plan de travail de la maquette (1920px de large), soit 5vw ;
-   le clamp borne à 40px pour que ça reste lisible sur mobile, et plafonne à
-   96px pour qu'un très grand écran n'étire pas le titre indéfiniment.
+   ⚠ Adobe XD affiche les corps en POINTS, pas en pixels : 96pt dans le panneau
+   XD = 96 × 4/3 = 128px à l'écran. C'est cette valeur en px qui est le plafond
+   ci-dessous — ne pas y reporter le 96 lu sur la maquette.
+
+   Proportion : le plan de travail de la maquette fait ~2560px de large, donc
+   128 / 2560 = 5vw. (Vérifié en mesurant « A Timeless Culinary » = 9.004 em en
+   Playfair Display Regular : la ligne fait ~507px sur l'export 1193px de la
+   maquette, soit une police de 56.3px, soit 4.7vw.)
+
+   Le clamp borne à 40px pour rester lisible sur mobile, et plafonne à 128px
+   pour qu'un écran plus large que le plan de travail n'étire pas le titre
+   indéfiniment. Corps atteint : 72px à 1440, 96px à 1920, 128px à 2560.
+
    Les composants de section (.hero-title, .text-media__title, etc.) sont tous
    des h1/h2 et héritent d'ici : ne PAS y redéfinir font-size, sinon l'échelle
    se remet à diverger d'une section à l'autre. */
 h1, h2 {
-  font-size: clamp(40px, 5vw, 96px);
+  font-size: clamp(40px, 5vw, 128px); // 96pt XD
   line-height: 1.08;
   letter-spacing: -0.015em;
 }
@@ -163,9 +173,14 @@ h4 {
 }
 
 /* Échelle du texte courant — SOURCE UNIQUE.
-   22px en Montserrat Light sur le plan de travail de la maquette (1920px de
-   large), soit 1.15vw ; plancher à 15px pour rester lisible sur mobile, où le
-   Light descend déjà à la limite de ce qui tient sur fond sombre.
+   ⚠ Comme pour les titres, la maquette est en POINTS : 22pt dans XD =
+   22 × 4/3 = 29.33px à l'écran.
+
+   Proportion : 29.33 / 2560 (largeur du plan de travail) = 1.15vw — la même
+   valeur que celle déduite indépendamment des proportions de la maquette, ce
+   qui confirme le plan de travail à 2560. Plancher à 15px pour rester lisible
+   sur mobile, où le Light descend déjà à la limite de ce qui tient sur fond
+   sombre. Corps atteint : 16.5px à 1440, 22px à 1920, 29.33px à 2560.
 
    Interlignage 1.55 : mesuré à ~1.48 sur la maquette, légèrement ouvert ici
    parce qu'un texte clair sur fond sombre « bave » optiquement et demande un
@@ -176,7 +191,7 @@ h4 {
    libellés courts (.eyebrow, .event-card__date…) gardent, eux, leur taille et
    leur graisse propres, posées explicitement. */
 p {
-  font-size: clamp(15px, 1.15vw, 22px);
+  font-size: clamp(15px, 1.15vw, 29.33px); // 22pt XD
   font-weight: 300; // Montserrat Light
   line-height: 1.55;
 }
