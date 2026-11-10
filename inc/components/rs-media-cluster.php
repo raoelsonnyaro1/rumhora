@@ -90,8 +90,11 @@ function rs_media_cluster( $args = array() ) {
 
 			<!-- Bloc éditorial -->
 			<div class="media-cluster__content <?php echo $invert ? 'lg:order-1' : ''; ?>">
+				<?php // --gold et non le rouge sourd des autres sections : c'est ce que
+				      // montre la maquette ici, et le rouge sourd sur ce fond ne donne
+				      // que 2.16:1 de contraste là où WCAG AA en demande 4.5. ?>
 				<?php if ( $surtitre ) : ?>
-					<p class="eyebrow fade-in"><?php echo esc_html( $surtitre ); ?></p>
+					<p class="eyebrow eyebrow--gold fade-in"><?php echo esc_html( $surtitre ); ?></p>
 				<?php endif; ?>
 
 				<?php if ( $titre ) : ?>
