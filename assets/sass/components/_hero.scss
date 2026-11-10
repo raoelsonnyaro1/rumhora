@@ -53,16 +53,10 @@
 
 .hero-lead {
   font-family: 'Montserrat', system-ui, sans-serif;
-  font-size: 15px;
-  font-weight: 400;
-  line-height: 1.75;
+  // Taille, graisse et interlignage hérités de la règle `p` (voir style.scss).
   color: $body-text;
   max-width: 34ch;
   transform: none;
-
-  @media (max-width: 767px) {
-    font-size: 14px;
-  }
 }
 
 /* Filet horizontal optionnel, animé par initHeroIntro (scaleX 0 → 1).

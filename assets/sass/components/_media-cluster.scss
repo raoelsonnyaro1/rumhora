@@ -122,14 +122,9 @@
 
 .media-cluster__text {
   font-family: 'Montserrat', system-ui, sans-serif;
-  font-size: 15px;
-  line-height: 1.75;
+  // Taille, graisse et interlignage hérités de la règle `p` (voir style.scss).
   color: $body-text;
   // Mesure plus large que sur les autres sections : ici le texte accompagne la
   // composition au lieu de lui faire contrepoint.
   max-width: 54ch;
-
-  @media (max-width: 767px) {
-    font-size: 14px;
-  }
 }

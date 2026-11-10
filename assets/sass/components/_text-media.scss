@@ -24,17 +24,12 @@
 
 .text-media__text {
   font-family: 'Montserrat', system-ui, sans-serif;
-  font-size: 15px;
-  line-height: 1.8;
+  // Taille, graisse et interlignage hérités de la règle `p` (voir style.scss).
   color: $body-text;
   // ~36 caractères : colonne de texte nettement plus courte que le titre,
   // comme sur la maquette. En ch plutôt qu'en px pour que la mesure suive la
   // taille de police plutôt que de s'en détacher.
   max-width: 36ch;
-
-  @media (max-width: 767px) {
-    font-size: 14px;
-  }
 }
 
 /* ==========================================================================

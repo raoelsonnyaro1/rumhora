@@ -92,20 +92,33 @@ couleur `base` produirait un second `.text-base` qui ajouterait `color:#140506`
 |---|---|---|
 | Titres `h1` / `h2` | Playfair Display Regular | `clamp(40px, 5vw, 96px)` |
 | Sous-titres `h3` | Playfair Display Regular | `clamp(22px, 2.6vw, 38px)` |
+| Texte courant `p` | Montserrat **Light (300)** | `clamp(15px, 1.15vw, 22px)` |
 | Navigation, boutons | Playfair Display Regular | 15–17px |
-| Texte courant | Montserrat | 14–15px |
 | Surtitres (`.eyebrow`) | Montserrat 500 | 12px, `letter-spacing: 0.2em` |
+| Métadonnées de carte | Montserrat 500/600 | 12–18px |
 
-**96px est la valeur du plan de travail de la maquette, large de 1920px** —
-d'où le `5vw` du milieu de clamp. Mesuré sur le rendu : 40px à 768, 51px à
-1024, 72px à 1440, 96px à 1920, sans débordement horizontal.
+**Les valeurs de la maquette (96px, 22px) sont données sur un plan de travail
+de 1920px de large** — d'où les `5vw` et `1.15vw` au milieu des clamps. Mesuré
+sur le rendu, sans débordement horizontal à aucune largeur :
 
-L'échelle des titres est déclarée **une seule fois**, sur `h1, h2` dans
-`style.scss`. Les titres de section (`.hero-title`, `.text-media__title`,
-`.portrait-quote__title`, `.media-cluster__title`, `.event-carousel__title`)
-sont tous des `h1`/`h2` et en héritent : **ne pas y redéfinir `font-size`**,
-sinon l'échelle se remet à diverger d'une section à l'autre — c'était le cas
-avant, avec cinq valeurs différentes.
+| Largeur | Titres | Texte |
+|---|---|---|
+| 768px | 40px | 15px |
+| 1024px | 51px | 15px |
+| 1440px | 72px | 17px |
+| 1920px | **96px** | **22px** |
+
+Les deux échelles sont déclarées **une seule fois**, sur `h1, h2` et sur `p`
+dans `style.scss`. Les titres et descriptions de section (`.hero-title`,
+`.hero-lead`, `.text-media__text`…) sont des `h1`/`h2`/`p` et en héritent :
+**ne pas y redéfinir `font-size`, `font-weight` ni `line-height`**, et ne pas
+y ajouter de surcharge mobile — le plancher du clamp s'en charge. Avant cette
+centralisation, les cinq sections avaient chacune leurs valeurs, qui
+divergeaient sans raison.
+
+Les libellés courts (`.eyebrow`, `.event-card__date`, `.footer-tagline`…)
+gardent, eux, taille et graisse posées explicitement : ils ne suivent pas
+l'échelle du texte courant.
 
 ## Structure
 

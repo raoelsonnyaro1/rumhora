@@ -57,16 +57,11 @@
 
 .portrait-quote__body {
   font-family: 'Montserrat', system-ui, sans-serif;
-  font-size: 14px;
-  line-height: 1.75;
+  // Taille, graisse et interlignage hérités de la règle `p` (voir style.scss).
   color: $body-text;
   // Colonne étroite, nettement plus courte que le titre : c'est ce décalage
   // de mesure qui structure la composition de la maquette.
   max-width: 33ch;
-
-  @media (max-width: 767px) {
-    font-size: 13px;
-  }
 }
 
 /* ==========================================================================

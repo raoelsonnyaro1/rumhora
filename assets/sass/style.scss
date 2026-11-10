@@ -162,12 +162,27 @@ h4 {
   line-height: 1.35;
 }
 
+/* Échelle du texte courant — SOURCE UNIQUE.
+   22px en Montserrat Light sur le plan de travail de la maquette (1920px de
+   large), soit 1.15vw ; plancher à 15px pour rester lisible sur mobile, où le
+   Light descend déjà à la limite de ce qui tient sur fond sombre.
+
+   Interlignage 1.55 : mesuré à ~1.48 sur la maquette, légèrement ouvert ici
+   parce qu'un texte clair sur fond sombre « bave » optiquement et demande un
+   peu plus d'air qu'un texte sombre sur fond clair.
+
+   Les descriptions de section (.hero-lead, .text-media__text, etc.) sont des
+   <p> et héritent d'ici : ne PAS y redéfinir font-size/font-weight. Les
+   libellés courts (.eyebrow, .event-card__date…) gardent, eux, leur taille et
+   leur graisse propres, posées explicitement. */
 p {
-  line-height: 1.75;
+  font-size: clamp(15px, 1.15vw, 22px);
+  font-weight: 300; // Montserrat Light
+  line-height: 1.55;
 }
 
 @media (max-width: 768px) {
-  h4, h5, h6, p { font-size: 14px; }
+  h4, h5, h6 { font-size: 14px; }
 }
 
 /* Surtitre de section : petites capitales très espacées, en rouge sourd
