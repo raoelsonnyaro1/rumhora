@@ -73,15 +73,16 @@ $extra-black: #000;
    ==========================================================================
    Arrondi des cadres photo et des cartouches de la maquette — SOURCE UNIQUE.
 
-   ⚠ 25pt dans Adobe XD, et XD compte en POINTS : 25 × 4/3 = 33.33px (même
-   conversion que l'échelle typographique, voir style.scss).
+   Valeur arrêtée à l'écran, en PIXELS : 25px. Contrairement aux cotes relevées
+   dans XD (titres, descriptions, marges), celle-ci n'est pas à convertir
+   depuis des points — ne pas la « corriger » en 33.33px.
 
    Ne concerne QUE les blocs média et les cartes. Les boutons gardent leur
    `999px` (pilules et cercles), et les champs de formulaire leurs 3-4px : ce
    sont d'autres familles de formes, pas des cadres photo.
 */
 
-$radius-media: 33.33px;
+$radius-media: 25px;
 
 /* ==========================================================================
    Versions URL-encodées

@@ -54,8 +54,9 @@
    ==========================================================================
    Arrondi des cadres photo et des cartouches de la maquette — SOURCE UNIQUE.
 
-   ⚠ 25pt dans Adobe XD, et XD compte en POINTS : 25 × 4/3 = 33.33px (même
-   conversion que l'échelle typographique, voir style.scss).
+   Valeur arrêtée à l'écran, en PIXELS : 25px. Contrairement aux cotes relevées
+   dans XD (titres, descriptions, marges), celle-ci n'est pas à convertir
+   depuis des points — ne pas la « corriger » en 33.33px.
 
    Ne concerne QUE les blocs média et les cartes. Les boutons gardent leur
    `999px` (pilules et cercles), et les champs de formulaire leurs 3-4px : ce
@@ -817,7 +818,7 @@
 .hero-media-item {
   position: relative;
   overflow: hidden;
-  border-radius: 33.33px;
+  border-radius: 25px;
   box-shadow: 0 30px 80px rgba(0, 0, 0, 0.55);
   aspect-ratio: 268/324;
 }
@@ -1187,7 +1188,7 @@
 
 .text-media__frame {
   aspect-ratio: 515/415;
-  border-radius: 33.33px;
+  border-radius: 25px;
   overflow: hidden;
 }
 
@@ -1310,7 +1311,7 @@
     width: 100%;
     max-width: 190px;
     aspect-ratio: 1/1;
-    border-radius: 33.33px;
+    border-radius: 25px;
     background-color: #3A1F1A;
   }
 }
@@ -1338,7 +1339,7 @@
 
 .portrait-quote__frame {
   aspect-ratio: 365/512;
-  border-radius: 33.33px;
+  border-radius: 25px;
   overflow: hidden;
 }
 
@@ -1444,7 +1445,7 @@
 
 .media-cluster__stage .media-cluster__photo {
   position: absolute;
-  border-radius: 33.33px;
+  border-radius: 25px;
   overflow: hidden;
 }
 
@@ -1477,7 +1478,7 @@
   top: 66.4%;
   width: 39.8%;
   height: 33.6%;
-  border-radius: 33.33px;
+  border-radius: 25px;
   background-color: #3A1F1A;
 }
 
@@ -1601,7 +1602,7 @@
 .event-card__media {
   position: relative;
   aspect-ratio: 393/389;
-  border-radius: 33.33px;
+  border-radius: 25px;
   overflow: hidden;
 }
 
@@ -4252,7 +4253,7 @@ img[data-src].lazyloaded {
 
 .card {
   background-color: #2A0F12;
-  border-radius: 33.33px;
+  border-radius: 25px;
   padding: 1.5rem;
   transition: transform 0.3s ease, box-shadow 0.3s ease;
 }
