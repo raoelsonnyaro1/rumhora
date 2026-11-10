@@ -109,8 +109,7 @@
 }
 
 .media-cluster__title {
-  font-size: clamp(34px, 4.1vw, 58px);
-  line-height: 1.14;
+  // Taille et interlignage hérités de h1/h2 (voir style.scss).
   color: $heading;
 
   // Partie mise en avant du titre. Sur cette section la maquette dore le titre

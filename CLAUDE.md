@@ -86,6 +86,27 @@ et non `base`. Tailwind génère `text-*` depuis `fontSize` ET `textColor` ; une
 couleur `base` produirait un second `.text-base` qui ajouterait `color:#140506`
 à tous les usages de `text-base` comme **taille** de police.
 
+## Typographie
+
+| Usage | Police | Taille |
+|---|---|---|
+| Titres `h1` / `h2` | Playfair Display Regular | `clamp(40px, 5vw, 96px)` |
+| Sous-titres `h3` | Playfair Display Regular | `clamp(22px, 2.6vw, 38px)` |
+| Navigation, boutons | Playfair Display Regular | 15–17px |
+| Texte courant | Montserrat | 14–15px |
+| Surtitres (`.eyebrow`) | Montserrat 500 | 12px, `letter-spacing: 0.2em` |
+
+**96px est la valeur du plan de travail de la maquette, large de 1920px** —
+d'où le `5vw` du milieu de clamp. Mesuré sur le rendu : 40px à 768, 51px à
+1024, 72px à 1440, 96px à 1920, sans débordement horizontal.
+
+L'échelle des titres est déclarée **une seule fois**, sur `h1, h2` dans
+`style.scss`. Les titres de section (`.hero-title`, `.text-media__title`,
+`.portrait-quote__title`, `.media-cluster__title`, `.event-carousel__title`)
+sont tous des `h1`/`h2` et en héritent : **ne pas y redéfinir `font-size`**,
+sinon l'échelle se remet à diverger d'une section à l'autre — c'était le cas
+avant, avec cinq valeurs différentes.
+
 ## Structure
 
 ### Fichiers WordPress

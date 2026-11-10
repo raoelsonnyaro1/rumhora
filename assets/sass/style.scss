@@ -139,10 +139,17 @@ h1, h2, h3, h4, h5, h6 {
   color: $heading;
 }
 
+/* Échelle des titres — SOURCE UNIQUE.
+   96px sur le plan de travail de la maquette (1920px de large), soit 5vw ;
+   le clamp borne à 40px pour que ça reste lisible sur mobile, et plafonne à
+   96px pour qu'un très grand écran n'étire pas le titre indéfiniment.
+   Les composants de section (.hero-title, .text-media__title, etc.) sont tous
+   des h1/h2 et héritent d'ici : ne PAS y redéfinir font-size, sinon l'échelle
+   se remet à diverger d'une section à l'autre. */
 h1, h2 {
-  font-size: clamp(38px, 4.6vw, 68px);
-  line-height: 1.12;
-  letter-spacing: -0.01em;
+  font-size: clamp(40px, 5vw, 96px);
+  line-height: 1.08;
+  letter-spacing: -0.015em;
 }
 
 h3 {
