@@ -60,7 +60,7 @@ function rs_text_media( $args = array() ) {
 	<?php // Pas de `md:py-28 py-16` ici : le rythme vertical est déclaré en SCSS,
 	      // où le desktop reçoit les 125pt de la maquette. Tailwind émet ses
 	      // utilitaires APRÈS le SCSS compilé et écraserait ce padding. ?>
-	<section class="text-media <?php echo esc_attr( $fond ); ?> <?php echo $invert ? 'text-media--invert' : ''; ?> xl:px-14 md:px-8 px-5"
+	<section class="text-media <?php echo esc_attr( $fond ); ?> <?php echo $invert ? 'text-media--invert' : ''; ?> gutter-x"
 		<?php echo $id ? ' id="' . esc_attr( $id ) . '"' : ''; ?>>
 
 		<!-- Pas de classes `grid lg:grid-cols-2 items-center` ici : à partir de

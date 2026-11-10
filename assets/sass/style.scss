@@ -83,6 +83,49 @@
 }
 
 /* ==========================================================================
+   Gouttières latérales — SOURCE UNIQUE
+   ==========================================================================
+   Relevée sur la maquette : la marge latérale des sections vaut 10.8% de la
+   largeur. Le thème utilisait 56px (3.9% à 1440), hérité du starter — d'où un
+   décalage constant entre le rendu et la maquette, visible sur le hero, sur
+   About us et sur Chef's universe (le cluster photo y était collé 6.9% trop à
+   gauche, soit exactement l'écart de gouttière).
+
+   Exposée en variable CSS et pas seulement en classe : plusieurs composants
+   doivent la CALCULER, pas seulement l'appliquer — les photos du hero sortent
+   d'un cran au-delà de la gouttière, le carrousel d'événements file jusqu'au
+   bord droit. Avec var(--gutter) ils suivent tout seuls.
+
+   Sous lg, la composition s'empile et la proportion de la maquette (10.8% de
+   390px = 42px) mangerait l'écran d'un téléphone : les valeurs mobiles
+   d'origine sont conservées. Le saut à 1024 coïncide avec le passage de la
+   pile à la grille superposée, donc avec une rupture déjà visible.
+
+   N'est PAS appliquée au header ni au footer : sur la maquette, le logo est
+   calé bien plus près du bord que le texte des sections — ils ne s'alignent
+   pas, et c'est voulu.
+*/
+
+:root {
+  --gutter: 1.25rem; // 20px
+
+  @media (min-width: 768px) {
+    --gutter: 2rem; // 32px
+  }
+
+  @media (min-width: 1024px) {
+    --gutter: 10.8vw; // proportion de la maquette
+  }
+}
+
+/* Classe à poser sur les sections. En SCSS et non via les utilitaires
+   `xl:px-14 md:px-8 px-5` qu'elle remplace : une seule valeur à changer, et
+   plus de risque qu'un utilitaire Tailwind émis après le SCSS la contredise. */
+.gutter-x {
+  padding-inline: var(--gutter);
+}
+
+/* ==========================================================================
    Reset et base
    ========================================================================== */
 

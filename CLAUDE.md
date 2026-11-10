@@ -112,6 +112,38 @@ Exception : `$radius-media` (arrondi des cadres photo) vaut **25px**, valeur
 arrêtée directement à l'écran et non relevée dans XD — elle n'est pas à
 convertir.
 
+## Gouttières latérales
+
+Relevées sur la maquette : **10.8 % de la largeur**. Déclarées une seule fois,
+en variable CSS `--gutter` (style.scss), et appliquées via la classe
+`.gutter-x` :
+
+| Largeur | `--gutter` |
+|---|---|
+| < 768px | `1.25rem` (20px) |
+| 768–1023px | `2rem` (32px) |
+| ≥ 1024px | `10.8vw` |
+
+Sous `lg` la composition s'empile et 10.8 % d'un téléphone (42px à 390) mangerait
+l'écran : les valeurs mobiles d'origine sont conservées. Le saut à 1024 coïncide
+avec le passage de la pile à la grille superposée.
+
+**Ne pas remettre `xl:px-14 md:px-8 px-5` dans le markup d'une section** — c'est
+ce que `.gutter-x` remplace, et un utilitaire Tailwind émis après le SCSS la
+contredirait.
+
+Les composants qui doivent **calculer** à partir de la gouttière lisent
+`var(--gutter)` : débord des photos du hero (`calc((var(--gutter) + 2rem) * -1)`)
+et marge gauche du carrousel d'événements, qui file jusqu'au bord droit.
+
+Header et footer gardent volontairement une gouttière plus serrée : sur la
+maquette, le logo est calé bien plus près du bord que le texte des sections.
+
+Les gabarits hérités du starter (`index.php`, `page.php`, `single.php`,
+`archive.php`, `search.php`, `404.php`, `rs_carousel`, `rs_faq`, `rs_galerie`,
+`rs_hero`) utilisent encore `md:px-5 px-[10px]` : ils ne font pas partie des
+sections validées sur maquette.
+
 Ne jamais reporter tel quel un nombre lu dans XD — c'est l'erreur qui a figé
 l'échelle un tiers trop bas pendant plusieurs sections.
 

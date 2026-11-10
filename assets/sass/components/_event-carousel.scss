@@ -9,12 +9,10 @@
  */
 @use '../variables' as *;
 
-// Gouttières du site, reprises ici en variables : la section ne peut pas
-// utiliser les utilitaires de padding habituels, puisqu'elle n'en applique
-// qu'à GAUCHE (voir plus haut).
-$gutter-sm: 1.25rem; // px-5
-$gutter-md: 2rem;    // md:px-8
-$gutter-xl: 3.5rem;  // xl:px-14
+// La section ne peut pas porter .gutter-x : elle n'applique de marge qu'à
+// GAUCHE, le slider filant jusqu'au bord droit (voir plus haut). Elle lit donc
+// directement var(--gutter), la source unique déclarée dans style.scss, au
+// lieu d'en recopier les valeurs — qui divergeaient dès qu'on y touchait.
 
 .event-carousel {
   background-color: $depth-1;
@@ -24,27 +22,26 @@ $gutter-xl: 3.5rem;  // xl:px-14
   display: flex;
   flex-direction: column;
   gap: 2.5rem;
-  padding-left: $gutter-sm;
+  padding-left: var(--gutter);
   // Pas de padding-right : c'est le slider qui file jusqu'au bord.
   padding-right: 0;
-
-  @media (min-width: 768px) {
-    padding-left: $gutter-md;
-  }
 
   @media (min-width: 1024px) {
     display: grid;
     // Colonne de titre volontairement étroite : à la taille du titre, elle
     // force le passage sur deux lignes de la maquette sans <br> codé en dur,
     // donc sans le figer pour la traduction.
-    grid-template-columns: minmax(200px, 17rem) 1fr;
+    //
+    // min-content comme plancher, et non une valeur fixe : c'est la largeur du
+    // MOT le plus long du titre, qui suit donc la taille de police. Avec le
+    // 17rem d'avant, « Upcoming » (environ 330px à 1440) ne tenait pas dans ses
+    // 272px et le navigateur coupait en plein mot — « Upcomi / ng / Evening /
+    // s ». Le plafond est en % de la grille pour la même raison : il doit
+    // suivre la largeur disponible, qui a changé avec les gouttières.
+    grid-template-columns: minmax(min-content, 32%) 1fr;
     column-gap: 2.5rem;
     gap: 0;
     align-items: center;
-  }
-
-  @media (min-width: 1280px) {
-    padding-left: $gutter-xl;
   }
 }
 
@@ -162,15 +159,7 @@ $gutter-xl: 3.5rem;  // xl:px-14
   justify-content: flex-end;
   gap: 1.25rem;
   margin-top: 2rem;
-  padding-inline: $gutter-sm;
-
-  @media (min-width: 768px) {
-    padding-inline: $gutter-md;
-  }
-
-  @media (min-width: 1280px) {
-    padding-inline: $gutter-xl;
-  }
+  padding-inline: var(--gutter);
 }
 
 .event-carousel__arrow {

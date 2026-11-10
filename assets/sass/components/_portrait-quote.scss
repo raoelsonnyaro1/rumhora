@@ -63,18 +63,11 @@
     font-style: normal;
   }
 
-  // Borne la césure pour que les DEUX lignes mordent franchement sur la photo.
-  // Sur toute la largeur du bloc (100%), le titre se coupe en « The Chef behind
-  // the / experience » : la 1re ligne dépasse de 321px mais passe au-dessus du
-  // bord haut de la photo, et la 2e n'en traverse que 22px — le chevauchement
-  // ne se voit pas. À 82%, la coupe devient « The Chef behind / the
-  // experience », soit 200px et 142px de traversée.
-  //
-  // En % du bloc et non en px : le bord gauche de la photo est lui-même une
-  // fraction de la grille, les deux restent donc alignés à toutes les largeurs.
-  @media (min-width: 1024px) {
-    max-width: 82%;
-  }
+  // Pas de borne de césure ici : depuis que les gouttières suivent la maquette
+  // (10.8%), le bloc éditorial est assez étroit pour couper tout seul au bon
+  // endroit — « The Chef behind / the experience ». La borne à 82% qui servait
+  // à forcer cette coupe le découpait désormais en TROIS lignes, et le
+  // chevauchement retombait de 130 à 62px.
 }
 
 .portrait-quote__body {
@@ -94,7 +87,7 @@
   // corps qui passe sur l'image, et la section n'a volontairement aucun voile.
   // Le tiers gauche de la photo doit donc rester sombre et peu détaillé.
   @media (min-width: 1024px) {
-    max-width: 82%;
+    max-width: 100%;
   }
 }
 

@@ -55,7 +55,7 @@ function rs_media_cluster( $args = array() ) {
 		return;
 	}
 	?>
-	<section class="media-cluster xl:px-14 md:px-8 px-5 md:py-28 py-16"
+	<section class="media-cluster gutter-x md:py-28 py-16"
 		<?php echo $id ? ' id="' . esc_attr( $id ) . '"' : ''; ?>>
 
 		<div class="media-cluster__grid">

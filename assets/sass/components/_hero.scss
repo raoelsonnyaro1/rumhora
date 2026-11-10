@@ -157,13 +157,15 @@
   // négative n'élargit que la boîte de MARGE, pas l'élément — il reste calé sur
   // la largeur de sa piste et ne déborde pas d'un pixel. Rendu à `auto`, il
   // s'étire sur « piste + marge négative » et file bien jusqu'au-delà du bord.
+  // Calculé depuis la gouttière (voir --gutter dans style.scss) et non codé en
+  // dur : la grappe doit TOUJOURS dépasser d'un cran au-delà de la marge, quelle
+  // que soit sa valeur. Les anciennes valeurs (-4rem, -6rem) avaient été
+  // choisies pour des gouttières de 2 et 3.5rem ; avec la gouttière de la
+  // maquette (10.8vw) elles ne sortaient plus du cadre et la 2e photo cessait
+  // d'être coupée par le bord de l'écran.
   @media (min-width: 1024px) {
     width: auto;
-    margin-right: -4rem; // gouttière md = 2rem
-  }
-
-  @media (min-width: 1280px) {
-    margin-right: -6rem; // gouttière xl = 3.5rem
+    margin-right: calc((var(--gutter) + 2rem) * -1);
   }
 }
 

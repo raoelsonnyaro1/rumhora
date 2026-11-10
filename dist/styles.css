@@ -868,13 +868,7 @@
 @media (min-width: 1024px) {
   .hero-media {
     width: auto;
-    margin-right: -4rem;
-  }
-}
-
-@media (min-width: 1280px) {
-  .hero-media {
-    margin-right: -6rem;
+    margin-right: calc((var(--gutter) + 2rem) * -1);
   }
 }
 
@@ -1193,14 +1187,14 @@
 @media (min-width: 1024px) {
   .text-media__grid {
     display: grid;
-    grid-template-columns: 1fr 2.25fr;
+    grid-template-columns: 1fr 1.62fr;
     align-items: center;
   }
 
   .text-media__content {
     grid-column: 1/-1;
     grid-row: 1;
-    max-width: 52%;
+    max-width: 60%;
     z-index: 2;
   }
 
@@ -1215,7 +1209,7 @@
      retombe à l'intérieur de la photo, et le titre la chevauche par la droite. */
 
   .text-media--invert .text-media__grid {
-    grid-template-columns: 2.25fr 1fr;
+    grid-template-columns: 1.62fr 1fr;
   }
 
   .text-media--invert .text-media__content {
@@ -1356,12 +1350,6 @@
   font-style: normal;
 }
 
-@media (min-width: 1024px) {
-  .portrait-quote__title {
-    max-width: 82%;
-  }
-}
-
 .portrait-quote__body {
   font-family: "Montserrat", system-ui, sans-serif;
   color: #D8CFC4;
@@ -1370,7 +1358,7 @@
 
 @media (min-width: 1024px) {
   .portrait-quote__body {
-    max-width: 82%;
+    max-width: 100%;
   }
 }
 
@@ -1625,30 +1613,18 @@
   display: flex;
   flex-direction: column;
   gap: 2.5rem;
-  padding-left: 1.25rem;
+  padding-left: var(--gutter);
   padding-right: 0;
-}
-
-@media (min-width: 768px) {
-  .event-carousel__grid {
-    padding-left: 2rem;
-  }
 }
 
 @media (min-width: 1024px) {
   .event-carousel__grid {
     display: grid;
-    grid-template-columns: minmax(200px, 17rem) 1fr;
+    grid-template-columns: minmax(min-content, 32%) 1fr;
     -moz-column-gap: 2.5rem;
          column-gap: 2.5rem;
     gap: 0;
     align-items: center;
-  }
-}
-
-@media (min-width: 1280px) {
-  .event-carousel__grid {
-    padding-left: 3.5rem;
   }
 }
 
@@ -1759,19 +1735,7 @@
   justify-content: flex-end;
   gap: 1.25rem;
   margin-top: 2rem;
-  padding-inline: 1.25rem;
-}
-
-@media (min-width: 768px) {
-  .event-carousel__nav {
-    padding-inline: 2rem;
-  }
-}
-
-@media (min-width: 1280px) {
-  .event-carousel__nav {
-    padding-inline: 3.5rem;
-  }
+  padding-inline: var(--gutter);
 }
 
 .event-carousel__arrow {
@@ -3881,6 +3845,54 @@ video {
   font-style: normal;
 
   font-display: swap;
+}
+
+/* ==========================================================================
+   Gouttières latérales — SOURCE UNIQUE
+   ==========================================================================
+   Relevée sur la maquette : la marge latérale des sections vaut 10.8% de la
+   largeur. Le thème utilisait 56px (3.9% à 1440), hérité du starter — d'où un
+   décalage constant entre le rendu et la maquette, visible sur le hero, sur
+   About us et sur Chef's universe (le cluster photo y était collé 6.9% trop à
+   gauche, soit exactement l'écart de gouttière).
+
+   Exposée en variable CSS et pas seulement en classe : plusieurs composants
+   doivent la CALCULER, pas seulement l'appliquer — les photos du hero sortent
+   d'un cran au-delà de la gouttière, le carrousel d'événements file jusqu'au
+   bord droit. Avec var(--gutter) ils suivent tout seuls.
+
+   Sous lg, la composition s'empile et la proportion de la maquette (10.8% de
+   390px = 42px) mangerait l'écran d'un téléphone : les valeurs mobiles
+   d'origine sont conservées. Le saut à 1024 coïncide avec le passage de la
+   pile à la grille superposée, donc avec une rupture déjà visible.
+
+   N'est PAS appliquée au header ni au footer : sur la maquette, le logo est
+   calé bien plus près du bord que le texte des sections — ils ne s'alignent
+   pas, et c'est voulu.
+*/
+
+:root {
+  --gutter: 1.25rem;
+}
+
+@media (min-width: 768px) {
+  :root {
+    --gutter: 2rem;
+  }
+}
+
+@media (min-width: 1024px) {
+  :root {
+    --gutter: 10.8vw;
+  }
+}
+
+/* Classe à poser sur les sections. En SCSS et non via les utilitaires
+   `xl:px-14 md:px-8 px-5` qu'elle remplace : une seule valeur à changer, et
+   plus de risque qu'un utilitaire Tailwind émis après le SCSS la contredise. */
+
+.gutter-x {
+  padding-inline: var(--gutter);
 }
 
 /* ==========================================================================

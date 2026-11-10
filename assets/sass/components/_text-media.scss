@@ -61,11 +61,15 @@ $pad-desktop: 166.67px;
 @media (min-width: 1024px) {
   .text-media__grid {
     display: grid;
-    // Ratio relevé sur la maquette, pas choisi à l'œil : le titre y traverse la
-    // photo sur 8.3% de la largeur de section (ligne 1) et 6.6% (ligne 2). Les
-    // deux contraintes placent le bord gauche de la photo au MÊME endroit,
-    // 36.1% de la largeur — ce qui, gouttière et gap déduits, donne 1 : 2.25.
-    grid-template-columns: 1fr 2.25fr;
+    // Ratio relevé sur la maquette : le bord gauche de la photo y tombe à 44.2%
+    // de la largeur de section. Gouttière (10.8%) et gap déduits, ça donne
+    // 1 : 1.62.
+    //
+    // Le ratio valait 1 : 2.25 tant que les gouttières du thème étaient trop
+    // serrées : il fallait alors tirer la photo bien plus à gauche que sur la
+    // maquette pour obtenir un chevauchement. Les gouttières corrigées, la
+    // géométrie de la maquette s'applique telle quelle.
+    grid-template-columns: 1fr 1.62fr;
     align-items: center;
   }
 
@@ -74,12 +78,14 @@ $pad-desktop: 166.67px;
     // la photo sans jamais filer jusqu'au bord droit de la section.
     grid-column: 1 / -1;
     grid-row: 1;
-    // 52% : au-dessus de la largeur de la ligne la plus longue du titre, et en
-    // dessous de celle qu'il faudrait pour y faire rentrer un mot de plus. La
-    // césure de la maquette (« An architecture of / flavor and sound. ») tient
-    // donc toute seule, sans <br> codé en dur qui casserait à la traduction.
-    // Vérifié de 1024 à 2560.
-    max-width: 52%;
+    // 60% : au-dessus de la largeur de la ligne la plus longue du titre (51.7%)
+    // et en dessous de celle qu'il faudrait pour y faire rentrer un mot de plus
+    // (69.8%). La césure de la maquette (« An architecture of / flavor and
+    // sound. ») tient donc toute seule, sans <br> codé en dur qui casserait à
+    // la traduction. Valeur prise au MILIEU de la plage et non à son bord :
+    // à 52% il ne restait que 3px de marge, de quoi faire basculer la césure au
+    // moindre écart de rendu de police. Vérifié de 1024 à 2560.
+    max-width: 60%;
     // Au-dessus de la photo, qu'il chevauche.
     z-index: 2;
   }
@@ -94,7 +100,7 @@ $pad-desktop: 166.67px;
      est calé à droite — son texte restant aligné à gauche, son bord gauche
      retombe à l'intérieur de la photo, et le titre la chevauche par la droite. */
   .text-media--invert .text-media__grid {
-    grid-template-columns: 2.25fr 1fr;
+    grid-template-columns: 1.62fr 1fr;
   }
 
   .text-media--invert .text-media__content {

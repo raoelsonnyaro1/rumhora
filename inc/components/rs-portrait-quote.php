@@ -46,7 +46,7 @@ function rs_portrait_quote( $args = array() ) {
 		return;
 	}
 	?>
-	<section class="portrait-quote xl:px-14 md:px-8 px-5 md:py-28 py-16"
+	<section class="portrait-quote gutter-x md:py-28 py-16"
 		<?php echo $id ? ' id="' . esc_attr( $id ) . '"' : ''; ?>>
 
 		<div class="portrait-quote__grid">
