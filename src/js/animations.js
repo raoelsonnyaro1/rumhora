@@ -235,6 +235,18 @@ const SPLIT_BY_CHARS_MAX = 120;
 // réglage est justement censé éviter.
 const REVEAL_FROM = { opacity: 0, y: 10, filter: 'blur(10px)', willChange: 'filter, transform, opacity' };
 
+// Rythme du reveal de texte — SOURCE UNIQUE. Tous les appelants
+// (initTextRevealAnimations, initHeroIntro) passent par revealSplitTargets et
+// ne surchargent que le délai : ces deux valeurs pilotent donc la vitesse de
+// TOUS les textes du site.
+//
+// C'est le stagger qui fait le gros de la durée ressentie, pas la durée d'un
+// fragment : sur un paragraphe découpé en 45 mots, les fragments s'échelonnent
+// sur 44 × REVEAL_STAGGER avant que le dernier ne commence seulement à
+// s'animer. Baisser l'un sans l'autre ne se verrait quasiment pas.
+const REVEAL_DURATION = 0.6; // par fragment
+const REVEAL_STAGGER = 0.02; // écart entre deux fragments
+
 /**
  * Découpe un élément et renvoie les fragments à animer.
  * @param {HTMLElement} el
@@ -265,9 +277,9 @@ function revealSplitTargets(targets, vars = {}) {
     opacity: 1,
     y: 0,
     filter: 'blur(0px)',
-    duration: 0.8,
+    duration: REVEAL_DURATION,
     ease: 'power2.out',
-    stagger: { each: 0.03, from: 'random' },
+    stagger: { each: REVEAL_STAGGER, from: 'random' },
     // clearProps une fois fini : sans ça chaque fragment conserve un `filter`
     // et un `will-change` inline, donc sa propre couche de composition, pour
     // toute la durée de vie de la page. Sur une page à plusieurs titres, ça

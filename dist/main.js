@@ -1161,6 +1161,8 @@
   }
   var SPLIT_BY_CHARS_MAX = 120;
   var REVEAL_FROM = { opacity: 0, y: 10, filter: "blur(10px)", willChange: "filter, transform, opacity" };
+  var REVEAL_DURATION = 0.6;
+  var REVEAL_STAGGER = 0.02;
   function splitForReveal(el) {
     const byWords = (el.textContent || "").trim().length > SPLIT_BY_CHARS_MAX;
     const split = new SplitText(el, {
@@ -1174,9 +1176,9 @@
       opacity: 1,
       y: 0,
       filter: "blur(0px)",
-      duration: 0.8,
+      duration: REVEAL_DURATION,
       ease: "power2.out",
-      stagger: { each: 0.03, from: "random" },
+      stagger: { each: REVEAL_STAGGER, from: "random" },
       // clearProps une fois fini : sans ça chaque fragment conserve un `filter`
       // et un `will-change` inline, donc sa propre couche de composition, pour
       // toute la durée de vie de la page. Sur une page à plusieurs titres, ça
