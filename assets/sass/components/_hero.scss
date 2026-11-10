@@ -170,7 +170,7 @@
 .hero-media-item {
   position: relative;
   overflow: hidden;
-  border-radius: 14px;
+  border-radius: $radius-media;
   box-shadow: 0 30px 80px rgba(0, 0, 0, 0.55);
   aspect-ratio: 268 / 324; // ratio des photos de la maquette
 

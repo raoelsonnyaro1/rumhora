@@ -89,7 +89,7 @@ $gutter-xl: 3.5rem;  // xl:px-14
   &__media {
     position: relative;
     aspect-ratio: 393 / 389; // ratio des cartes sur la maquette
-    border-radius: 14px;
+    border-radius: $radius-media;
     overflow: hidden;
 
     img {

@@ -99,15 +99,22 @@ couleur `base` produirait un second `.text-base` qui ajouterait `color:#140506`
 
 ### ⚠ La maquette Adobe XD est en POINTS, pas en pixels
 
-Le panneau de texte d'XD affiche les corps en **pt**. Conversion : `px = pt × 4/3`.
+XD affiche ses valeurs en **pt**. Conversion : `px = pt × 4/3`. Ça ne concerne
+pas que la typographie — toutes les cotes relevées sur la maquette y passent.
 
-| Lu dans XD | À écrire en CSS |
-|---|---|
-| Titres 96 pt | **128 px** |
-| Descriptions 22 pt | **29.33 px** |
+| Lu dans XD | À écrire en CSS | Où |
+|---|---|---|
+| Titres 96 pt | **128 px** | `h1, h2` (style.scss) |
+| Descriptions 22 pt | **29.33 px** | `p` (style.scss) |
+| Arrondi des cadres 35 pt | **46.67 px** | `$radius-media` (_variables.scss) |
+| Marges de section 125 pt | **166.67 px** | `$pad-desktop` (_text-media.scss) |
 
 Ne jamais reporter tel quel un nombre lu dans XD — c'est l'erreur qui a figé
 l'échelle un tiers trop bas pendant plusieurs sections.
+
+`$radius-media` ne vaut que pour les **cadres photo et les cartes**. Les boutons
+gardent leur `999px` (pilules et cercles), les champs de formulaire leurs 3-4px,
+et l'indicateur de scroll ses 12px : ce sont d'autres familles de formes.
 
 **Le plan de travail de la maquette fait ~2560px de large**, d'où les `5vw`
 (128 / 2560) et `1.15vw` (29.33 / 2560) au milieu des clamps. Largeur déduite

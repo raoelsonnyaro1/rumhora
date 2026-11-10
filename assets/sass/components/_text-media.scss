@@ -138,7 +138,7 @@ $pad-desktop: 166.67px;
 
 .text-media__frame {
   aspect-ratio: 515 / 415; // ratio de la photo sur la maquette
-  border-radius: 10px;
+  border-radius: $radius-media;
   overflow: hidden;
 
   // Sans cette borne, la section ne tiendrait pas dans un écran : à 1440 la

@@ -69,6 +69,21 @@ $black:       #1e1e1e;
 $extra-black: #000;
 
 /* ==========================================================================
+   Formes
+   ==========================================================================
+   Arrondi des cadres photo et des cartouches de la maquette — SOURCE UNIQUE.
+
+   ⚠ 35pt dans Adobe XD, et XD compte en POINTS : 35 × 4/3 = 46.67px (même
+   conversion que l'échelle typographique, voir style.scss).
+
+   Ne concerne QUE les blocs média et les cartes. Les boutons gardent leur
+   `999px` (pilules et cercles), et les champs de formulaire leurs 3-4px : ce
+   sont d'autres familles de formes, pas des cadres photo.
+*/
+
+$radius-media: 46.67px;
+
+/* ==========================================================================
    Versions URL-encodées
    ==========================================================================
    Pour les chevrons SVG inline des <select> (voir _form.scss) : un

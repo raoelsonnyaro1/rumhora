@@ -58,7 +58,7 @@
 
   .media-cluster__photo {
     position: absolute;
-    border-radius: 14px;
+    border-radius: $radius-media;
     overflow: hidden;
 
     img {
@@ -93,7 +93,7 @@
     top: 66.4%;
     width: 39.8%;
     height: 33.6%;
-    border-radius: 18px;
+    border-radius: $radius-media;
     background-color: $depth-2;
   }
 }

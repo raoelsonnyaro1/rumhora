@@ -524,7 +524,7 @@ img[data-src] {
 
 .card {
   background-color: $depth-1;
-  border-radius: 14px;
+  border-radius: $radius-media;
   padding: 1.5rem;
   transition: transform 0.3s ease, box-shadow 0.3s ease;
 

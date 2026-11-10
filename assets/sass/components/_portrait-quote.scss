@@ -88,7 +88,7 @@
     width: 100%;
     max-width: 190px;
     aspect-ratio: 1 / 1;
-    border-radius: 20px;
+    border-radius: $radius-media;
     background-color: $depth-2;
   }
 }
@@ -115,7 +115,7 @@
 
 .portrait-quote__frame {
   aspect-ratio: 365 / 512; // ratio du portrait sur la maquette
-  border-radius: 14px;
+  border-radius: $radius-media;
   overflow: hidden;
 
   img {
