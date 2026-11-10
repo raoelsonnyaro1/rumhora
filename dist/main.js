@@ -1646,9 +1646,19 @@
             ease: "power2.out",
             paused: !!waitForEvent,
             scrollTrigger: waitForEvent ? void 0 : {
+              // once, et SURTOUT pas `toggleActions: 'play none none reverse'` :
+              // le `reverse` final rejouait l'animation à l'envers dès qu'on
+              // remontait au-dessus du point de déclenchement. Les surtitres,
+              // boutons et cartouches s'effaçaient donc en cours de scroll, puis
+              // réapparaissaient — on lisait ça comme un bug d'affichage, pas
+              // comme une intention.
+              //
+              // `once` détruit aussi le trigger après coup, ce qui allège le
+              // registre ScrollTrigger (voir la note sur sa corruption au-delà
+              // d'une vingtaine de triggers, plus haut dans ce fichier).
               trigger: element,
               start: "top 85%",
-              toggleActions: "play none none reverse"
+              once: true
             }
           }
         );
