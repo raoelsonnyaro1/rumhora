@@ -1236,6 +1236,11 @@
   max-width: 100%;
 }
 
+.text-media__title em {
+  color: #C6A75E;
+  font-style: normal;
+}
+
 .text-media__text {
   font-family: "Montserrat", system-ui, sans-serif;
   color: #D8CFC4;

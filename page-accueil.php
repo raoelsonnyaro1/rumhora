@@ -62,7 +62,9 @@ rs_text_media(
 	array(
 		'id'           => 'about',
 		'surtitre'     => get_field( 'about_surtitre' ) ?: __( 'About us', 'rumhora' ),
-		'titre'        => get_field( 'about_titre' ) ?: __( 'An architecture of flavor and sound.', 'rumhora' ),
+		// <em> : titre entièrement doré (voir .text-media__title em). Côté
+		// éditeur, c'est le bouton « italique » — rien à expliquer au client.
+		'titre'        => get_field( 'about_titre' ) ?: __( '<em>An architecture of flavor and sound.</em>', 'rumhora' ),
 		'texte'        => get_field( 'about_texte' ) ?: __( 'RUMHORA is born from the intersection of haute cuisine and curated sonic environments. We believe in the power of precision—where every ingredient, every note, and every shadow is placed with intent.', 'rumhora' ),
 		'bouton_texte' => get_field( 'about_cta_texte' ) ?: __( 'Discover Our Story', 'rumhora' ),
 		'bouton_lien'  => get_field( 'about_cta_lien' ) ?: home_url( '/story' ),

@@ -113,6 +113,16 @@ $pad-desktop: 166.67px;
 .text-media__title {
   // Taille et interlignage hérités de h1/h2 (voir style.scss).
   color: $heading;
+
+  // Partie dorée du titre. <em> plutôt qu'une classe : c'est le bouton
+  // « italique » de l'éditeur, donc utilisable par le client sans lui apprendre
+  // de syntaxe — même convention que .hero-title, .portrait-quote__title et
+  // .event-carousel__title. font-style remis à normal : on veut la couleur,
+  // pas l'italique.
+  em {
+    color: $gold;
+    font-style: normal;
+  }
   // Le titre occupe TOUTE la colonne, contrairement au paragraphe volontairement
   // étroit juste en dessous : ce contraste de mesure fait partie de la
   // composition de la maquette.
