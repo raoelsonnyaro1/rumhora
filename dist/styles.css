@@ -1066,10 +1066,74 @@
 
 /**
  * Section « texte + média » (voir inc/components/rs-text-media.php).
+ *
+ * Composition superposée à partir de lg, comme le hero : le bloc éditorial et
+ * la photo occupent la MÊME ligne de grille, et le titre déborde sur la photo.
+ * Le paragraphe et le bouton restent dans la colonne de gauche sans avoir à
+ * être bornés : leur mesure (36ch, et la largeur propre du bouton) est très
+ * en deçà de la largeur du bloc.
  */
+
+.text-media {
+  --tm-scrim: rgba(20, 5, 6, 0.9);
+  --tm-scrim-0: rgba(20, 5, 6, 0);
+}
 
 .text-media--surface {
   background-color: #2A0F12;
+  --tm-scrim: rgba(42, 15, 18, 0.92);
+  --tm-scrim-0: rgba(42, 15, 18, 0);
+}
+
+/* ==========================================================================
+   Grille
+   ==========================================================================
+   Déclarée ICI et non via des utilitaires Tailwind (`grid`, `lg:grid-cols-2`,
+   `items-center`) : Tailwind émet ses utilitaires APRÈS le SCSS compilé et, à
+   spécificité égale, écraserait `grid-template-columns` — la 2e piste tombe
+   alors à 0 et la photo disparaît (c'est le bug déjà rencontré sur le hero).
+*/
+
+.text-media__grid {
+  display: flex;
+  flex-direction: column;
+}
+
+@media (min-width: 1024px) {
+  .text-media__grid {
+    display: grid;
+    grid-template-columns: 1fr 2.25fr;
+    align-items: center;
+  }
+
+  .text-media__content {
+    grid-column: 1/-1;
+    grid-row: 1;
+    max-width: 52%;
+    z-index: 2;
+  }
+
+  .text-media__media {
+    grid-column: 2/3;
+    grid-row: 1;
+  }
+
+  /* Variante « photo à gauche ». L'ordre DOM ne change pas (le texte reste lu
+     en premier) : seuls les numéros de colonne s'inversent. Le bloc éditorial
+     est calé à droite — son texte restant aligné à gauche, son bord gauche
+     retombe à l'intérieur de la photo, et le titre la chevauche par la droite. */
+
+  .text-media--invert .text-media__grid {
+    grid-template-columns: 2.25fr 1fr;
+  }
+
+  .text-media--invert .text-media__content {
+    justify-self: end;
+  }
+
+  .text-media--invert .text-media__media {
+    grid-column: 1/2;
+  }
 }
 
 /* ==========================================================================
@@ -1095,6 +1159,7 @@
 */
 
 .text-media__frame {
+  position: relative;
   aspect-ratio: 515/415;
   border-radius: 10px;
   overflow: hidden;
@@ -1111,6 +1176,32 @@
 @media (max-width: 1023px) {
   .text-media__frame {
     aspect-ratio: 4/3;
+  }
+}
+
+/* Voile sur le bord de la photo que le titre chevauche.
+   Nécessaire, pas décoratif : le titre est en crème, et sans lui sa lisibilité
+   dépendrait entièrement de la photo chargée par le client — une image claire
+   à cet endroit et le titre devient illisible. Même rôle que .hero-veil.
+
+   Masqué sous lg, où la composition se déplie en pile et où plus rien ne se
+   chevauche. */
+
+.text-media__scrim {
+  display: none;
+}
+
+@media (min-width: 1024px) {
+  .text-media__scrim {
+    display: block;
+    position: absolute;
+    inset: 0;
+    pointer-events: none;
+    background: linear-gradient(to right, var(--tm-scrim) 0%, var(--tm-scrim-0) 55%);
+  }
+
+  .text-media--invert .text-media__scrim {
+    background: linear-gradient(to left, var(--tm-scrim) 0%, var(--tm-scrim-0) 55%);
   }
 }
 

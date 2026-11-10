@@ -1,11 +1,88 @@
 /**
  * Section « texte + média » (voir inc/components/rs-text-media.php).
+ *
+ * Composition superposée à partir de lg, comme le hero : le bloc éditorial et
+ * la photo occupent la MÊME ligne de grille, et le titre déborde sur la photo.
+ * Le paragraphe et le bouton restent dans la colonne de gauche sans avoir à
+ * être bornés : leur mesure (36ch, et la largeur propre du bouton) est très
+ * en deçà de la largeur du bloc.
  */
 @use '../variables' as *;
 
 .text-media {
+  // Teinte du voile posé sur le bord de la photo, là où le titre la chevauche.
+  // Déclarée en variable CSS pour qu'elle suive le fond de la section : le
+  // voile doit se fondre dans le fond, sinon on voit une arête franche à
+  // l'endroit où il est le plus opaque.
+  --tm-scrim: #{rgba($base, 0.9)};
+  --tm-scrim-0: #{rgba($base, 0)};
+
   &--surface {
     background-color: $depth-1;
+    --tm-scrim: #{rgba($depth-1, 0.92)};
+    --tm-scrim-0: #{rgba($depth-1, 0)};
+  }
+}
+
+/* ==========================================================================
+   Grille
+   ==========================================================================
+   Déclarée ICI et non via des utilitaires Tailwind (`grid`, `lg:grid-cols-2`,
+   `items-center`) : Tailwind émet ses utilitaires APRÈS le SCSS compilé et, à
+   spécificité égale, écraserait `grid-template-columns` — la 2e piste tombe
+   alors à 0 et la photo disparaît (c'est le bug déjà rencontré sur le hero).
+*/
+
+.text-media__grid {
+  display: flex;
+  flex-direction: column;
+}
+
+@media (min-width: 1024px) {
+  .text-media__grid {
+    display: grid;
+    // Ratio relevé sur la maquette, pas choisi à l'œil : le titre y traverse la
+    // photo sur 8.3% de la largeur de section (ligne 1) et 6.6% (ligne 2). Les
+    // deux contraintes placent le bord gauche de la photo au MÊME endroit,
+    // 36.1% de la largeur — ce qui, gouttière et gap déduits, donne 1 : 2.25.
+    grid-template-columns: 1fr 2.25fr;
+    align-items: center;
+  }
+
+  .text-media__content {
+    // Posé sur TOUTE la largeur mais borné : le titre peut courir par-dessus
+    // la photo sans jamais filer jusqu'au bord droit de la section.
+    grid-column: 1 / -1;
+    grid-row: 1;
+    // 52% : au-dessus de la largeur de la ligne la plus longue du titre, et en
+    // dessous de celle qu'il faudrait pour y faire rentrer un mot de plus. La
+    // césure de la maquette (« An architecture of / flavor and sound. ») tient
+    // donc toute seule, sans <br> codé en dur qui casserait à la traduction.
+    // Vérifié de 1024 à 2560.
+    max-width: 52%;
+    // Au-dessus de la photo, qu'il chevauche.
+    z-index: 2;
+  }
+
+  .text-media__media {
+    grid-column: 2 / 3;
+    grid-row: 1;
+  }
+
+  /* Variante « photo à gauche ». L'ordre DOM ne change pas (le texte reste lu
+     en premier) : seuls les numéros de colonne s'inversent. Le bloc éditorial
+     est calé à droite — son texte restant aligné à gauche, son bord gauche
+     retombe à l'intérieur de la photo, et le titre la chevauche par la droite. */
+  .text-media--invert .text-media__grid {
+    grid-template-columns: 2.25fr 1fr;
+  }
+
+  .text-media--invert .text-media__content {
+    justify-self: end;
+  }
+
+  .text-media--invert .text-media__media {
+    grid-column: 1 / 2;
   }
 }
 
@@ -40,6 +117,7 @@
 */
 
 .text-media__frame {
+  position: relative; // référence du voile
   aspect-ratio: 515 / 415; // ratio de la photo sur la maquette
   border-radius: 10px;
   overflow: hidden;
@@ -55,5 +133,40 @@
     // En pile, une photo au ratio desktop devient très basse par rapport à sa
     // largeur : un format un peu plus carré tient mieux la colonne.
     aspect-ratio: 4 / 3;
+  }
+}
+
+/* Voile sur le bord de la photo que le titre chevauche.
+   Nécessaire, pas décoratif : le titre est en crème, et sans lui sa lisibilité
+   dépendrait entièrement de la photo chargée par le client — une image claire
+   à cet endroit et le titre devient illisible. Même rôle que .hero-veil.
+
+   Masqué sous lg, où la composition se déplie en pile et où plus rien ne se
+   chevauche. */
+.text-media__scrim {
+  display: none;
+
+  @media (min-width: 1024px) {
+    display: block;
+    position: absolute;
+    inset: 0;
+    pointer-events: none;
+    // S'éteint à 55% : le voile ne couvre que la zone réellement traversée par
+    // le titre, la photo reste pleinement lisible sur le reste.
+    background: linear-gradient(
+      to right,
+      var(--tm-scrim) 0%,
+      var(--tm-scrim-0) 55%
+    );
+  }
+}
+
+.text-media--invert .text-media__scrim {
+  @media (min-width: 1024px) {
+    background: linear-gradient(
+      to left,
+      var(--tm-scrim) 0%,
+      var(--tm-scrim-0) 55%
+    );
   }
 }

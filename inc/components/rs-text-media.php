@@ -3,6 +3,11 @@
  * Section à deux colonnes : bloc éditorial (surtitre, titre, texte, bouton)
  * d'un côté, photo de l'autre.
  *
+ * À partir de lg, les deux blocs se CHEVAUCHENT : le titre déborde sur la
+ * photo, comme dans le hero. Le paragraphe et le bouton, eux, restent dans la
+ * colonne de gauche — c'est leur mesure courte (36ch) qui les en empêche, pas
+ * une largeur codée en dur (voir _text-media.scss).
+ *
  * Composant générique — c'est la composition de la section « About us » de
  * l'accueil, mais rien n'y est propre à cette page : elle resservira pour
  * Story, Privatisations, etc. L'argument 'invert' place la photo à gauche,
@@ -52,16 +57,22 @@ function rs_text_media( $args = array() ) {
 		return;
 	}
 	?>
-	<section class="text-media <?php echo esc_attr( $fond ); ?> xl:px-14 md:px-8 px-5 md:py-28 py-16"
+	<section class="text-media <?php echo esc_attr( $fond ); ?> <?php echo $invert ? 'text-media--invert' : ''; ?> xl:px-14 md:px-8 px-5 md:py-28 py-16"
 		<?php echo $id ? ' id="' . esc_attr( $id ) . '"' : ''; ?>>
 
-		<div class="text-media__grid grid lg:grid-cols-2 grid-cols-1 items-center xl:gap-20 lg:gap-12 gap-10">
+		<!-- Pas de classes `grid lg:grid-cols-2 items-center` ici : à partir de
+		     lg, le bloc éditorial et la photo partagent la MÊME ligne de grille
+		     et se chevauchent (voir _text-media.scss). Ces utilitaires Tailwind
+		     sont émis APRÈS le SCSS compilé et écraseraient la grille — c'est
+		     exactement ce qui avait fait disparaître les photos du hero. Seules
+		     les gouttières restent en utilitaires, elles ne sont pas en conflit. -->
+		<div class="text-media__grid xl:gap-20 lg:gap-12 gap-10">
 
 			<!-- Colonne éditoriale. L'ordre DOM garde le texte en premier (c'est
-			     lui qui porte le sens) ; seul l'ordre visuel s'inverse, via
-			     `order` — un lecteur d'écran lit donc toujours le texte avant la
-			     photo, quelle que soit la variante. -->
-			<div class="text-media__content <?php echo $invert ? 'lg:order-2' : ''; ?>">
+			     lui qui porte le sens) ; seul l'ordre visuel s'inverse, par les
+			     numéros de colonne posés en SCSS — un lecteur d'écran lit donc
+			     toujours le texte avant la photo, quelle que soit la variante. -->
+			<div class="text-media__content">
 				<?php if ( $surtitre ) : ?>
 					<p class="eyebrow fade-in"><?php echo esc_html( $surtitre ); ?></p>
 				<?php endif; ?>
@@ -89,13 +100,16 @@ function rs_text_media( $args = array() ) {
 				<?php endif; ?>
 			</div>
 
-			<!-- Colonne photo -->
+			<!-- Colonne photo. Le voile (.text-media__scrim) garantit le contraste
+			     du titre là où il chevauche la photo : sans lui, la lisibilité
+			     dépendrait de l'image choisie par le client. -->
 			<?php if ( $image ) : ?>
-				<div class="text-media__media <?php echo $invert ? 'lg:order-1' : ''; ?>">
+				<div class="text-media__media">
 					<div class="reveal text-media__frame">
 						<img data-src="<?php echo esc_url( $image['url'] ); ?>"
 							alt="<?php echo esc_attr( $image['alt'] ?? '' ); ?>"
 							class="lazyload">
+						<span class="text-media__scrim" aria-hidden="true"></span>
 					</div>
 				</div>
 			<?php endif; ?>
