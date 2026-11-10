@@ -1443,7 +1443,7 @@
 
 .portrait-quote__quote {
   font-family: "Playfair Display", Georgia, serif;
-  font-size: clamp(20px, 1.9vw, 28px);
+  font-size: clamp(20px, 2.81vw, 72px);
   font-weight: 400;
   line-height: 1.45;
   color: #C6A75E;

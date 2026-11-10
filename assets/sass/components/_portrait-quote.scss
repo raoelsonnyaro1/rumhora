@@ -163,7 +163,12 @@
 
 .portrait-quote__quote {
   font-family: 'Playfair Display', Georgia, serif;
-  font-size: clamp(20px, 1.9vw, 28px);
+  // ⚠ 54pt dans XD, et XD compte en POINTS : 54 × 4/3 = 72px. La pente suit la
+  // même règle que le reste du site — 72 / 2560 (largeur du plan de travail)
+  // = 2.81vw. Plancher conservé à 20px : la citation doit rester nettement
+  // au-dessus du texte courant sur mobile, sans pour autant y occuper l'écran.
+  // Corps atteint : 28.8px à 1024, 40.5px à 1440, 54px à 1920, 72px à 2560.
+  font-size: clamp(20px, 2.81vw, 72px); // 54pt XD
   font-weight: 400;
   line-height: 1.45;
   color: $gold;
