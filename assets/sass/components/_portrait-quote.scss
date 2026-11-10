@@ -81,17 +81,20 @@
   font-family: 'Montserrat', system-ui, sans-serif;
   // Taille, graisse et interlignage hérités de la règle `p` (voir style.scss).
   color: $body-text;
-  // Colonne étroite, nettement plus courte que le titre : c'est ce décalage
-  // de mesure qui structure la composition de la maquette.
+  // En pile, la mesure est bornée en ch : c'est la largeur de l'écran qui
+  // commande, et 33ch reste le confort de lecture habituel.
   max-width: 33ch;
 
-  // Contrairement au titre, le paragraphe ne doit PAS mordre sur la photo :
-  // du texte courant par-dessus une image se lit mal, et c'est ce débordement
-  // (27px) que la photo rognait jusqu'ici. Le portrait démarre à la colonne 4
-  // sur 12, soit exactement la moitié de ce bloc (colonnes 1 à 6) : 48% le
-  // laisse s'arrêter juste avant, avec la gouttière pour marge.
+  // En composition superposée, le paragraphe se pose sur la photo comme le
+  // titre, et partage sa borne (82%) : les deux blocs s'alignent donc sur le
+  // même bord droit. À 1440 ça fait ~59 caractères par ligne, soit encore dans
+  // la plage de lecture confortable (45-75).
+  //
+  // ⚠ Lisibilité : contrairement au titre, c'est du texte courant en petit
+  // corps qui passe sur l'image, et la section n'a volontairement aucun voile.
+  // Le tiers gauche de la photo doit donc rester sombre et peu détaillé.
   @media (min-width: 1024px) {
-    max-width: min(33ch, 48%);
+    max-width: 82%;
   }
 }
 
