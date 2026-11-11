@@ -1701,6 +1701,33 @@
   overflow: hidden;
 }
 
+/* Slide en tête : sa légende reste affichée sans survol. */
+
+.swiper-slide-active .event-card__body {
+  opacity: 1;
+  transform: none;
+}
+
+/* Swiper non initialisé (son script n'a pas pu se charger) : les slides
+   retombent en simple rangée et plus aucune n'est « active ». On n'escamote
+   alors rien — mieux vaut toutes les légendes que pas une seule. Swiper pose
+   .swiper-initialized sur le conteneur une fois en place. */
+
+.event-carousel__swiper:not(.swiper-initialized) .event-card__body {
+  opacity: 1;
+  transform: none;
+}
+
+/* Le glissement est un ornement ; l'apparition, elle, porte l'information et
+   reste active. */
+
+@media (prefers-reduced-motion: reduce) {
+  .event-card__body {
+    transform: none;
+    transition: opacity 0.4s ease;
+  }
+}
+
 /* ==========================================================================
    Carte événement
    ========================================================================== */
@@ -1729,6 +1756,14 @@
   align-items: flex-end;
   justify-content: space-between;
   gap: 1.5rem;
+  opacity: 0;
+  transform: translateY(8px);
+  transition: opacity 0.4s ease, transform 0.4s ease;
+}
+
+.event-card:hover .event-card__body, .event-card:focus-within .event-card__body {
+  opacity: 1;
+  transform: none;
 }
 
 .event-card__date {

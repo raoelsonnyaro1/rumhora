@@ -102,6 +102,30 @@ $gap: 2.5rem;
   overflow: hidden;
 }
 
+/* Slide en tête : sa légende reste affichée sans survol. */
+.swiper-slide-active .event-card__body {
+  opacity: 1;
+  transform: none;
+}
+
+/* Swiper non initialisé (son script n'a pas pu se charger) : les slides
+   retombent en simple rangée et plus aucune n'est « active ». On n'escamote
+   alors rien — mieux vaut toutes les légendes que pas une seule. Swiper pose
+   .swiper-initialized sur le conteneur une fois en place. */
+.event-carousel__swiper:not(.swiper-initialized) .event-card__body {
+  opacity: 1;
+  transform: none;
+}
+
+/* Le glissement est un ornement ; l'apparition, elle, porte l'information et
+   reste active. */
+@media (prefers-reduced-motion: reduce) {
+  .event-card__body {
+    transform: none;
+    transition: opacity 0.4s ease;
+  }
+}
+
 /* ==========================================================================
    Carte événement
    ========================================================================== */
@@ -123,11 +147,31 @@ $gap: 2.5rem;
     }
   }
 
+  // Légende (date, titre, intervenant, CTA). Escamotée par défaut : seule la
+  // slide ACTIVE porte la sienne en permanence, les autres la révèlent au
+  // survol. C'est la composition de la maquette, où une seule carte est
+  // légendée.
+  //
+  // .swiper-slide-active plutôt que :first-child : la classe suit la slide
+  // réellement en tête après navigation, là où :first-child resterait collé à
+  // la première carte du DOM même une fois le carrousel avancé.
   &__body {
     display: flex;
     align-items: flex-end;
     justify-content: space-between;
     gap: 1.5rem;
+    opacity: 0;
+    transform: translateY(8px);
+    transition: opacity 0.4s ease, transform 0.4s ease;
+  }
+
+  // :focus-within INDISPENSABLE : à opacity 0 le lien « Reserve Lounge » reste
+  // focusable et dans l'arbre d'accessibilité. Sans ça, un visiteur au clavier
+  // tabule sur un lien invisible, sans aucun moyen de savoir où il se trouve.
+  &:hover &__body,
+  &:focus-within &__body {
+    opacity: 1;
+    transform: none;
   }
 
   &__date {
