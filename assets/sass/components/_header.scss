@@ -21,16 +21,15 @@
   opacity: 0;
   transform: translateY(-40px);
 
-  background-color: transparent;
-  transition: background-color 0.4s ease, backdrop-filter 0.4s ease;
-
-  // Une fois le header sorti du hero, un fond translucide flouté le détache du
-  // contenu qui défile dessous (classe posée par src/js/header.js).
-  &.header-scrolled {
-    background-color: rgba($base, 0.85);
-    backdrop-filter: blur(12px);
-    -webkit-backdrop-filter: blur(12px);
-  }
+  // Fond plein, couleur de base du site, à tout moment — y compris par-dessus
+  // le hero, où le header était transparent jusqu'ici.
+  //
+  // .header-scrolled (posée par src/js/header.js) n'a donc plus de fond à
+  // elle : un voile translucide flouté n'avait de sens que sur un header
+  // transparent au repos. La classe reste posée, elle ne sert simplement plus
+  // à distinguer le fond — et le backdrop-filter qu'elle portait disparaît
+  // avec, ainsi que la couche de composition permanente qu'il imposait.
+  background-color: $base;
 
   .site-logo img {
     // Hauteur de référence prise sur la maquette (~70px de haut sur desktop).

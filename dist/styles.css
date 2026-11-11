@@ -413,14 +413,7 @@
 #masthead {
   opacity: 0;
   transform: translateY(-40px);
-  background-color: transparent;
-  transition: background-color 0.4s ease, backdrop-filter 0.4s ease;
-}
-
-#masthead.header-scrolled {
-  background-color: rgba(20, 5, 6, 0.85);
-  backdrop-filter: blur(12px);
-  -webkit-backdrop-filter: blur(12px);
+  background-color: #140506;
 }
 
 #masthead .site-logo img {
