@@ -117,7 +117,10 @@
   // Le filet court sur toute la largeur du contenu, pas sur celle de la page :
   // il est porté par ce bloc (déjà dans la gouttière) plutôt que par un
   // élément pleine largeur à rogner.
-  border-top: 1px solid rgba($neutral, 0.25);
+  // Doré, comme les filets du reste du site. Opacité conservée : à pleine
+  // intensité le trait prend le pas sur la mention légale qu'il sépare, alors
+  // qu'il n'est là que pour la détacher.
+  border-top: 1px solid rgba($gold, 0.35);
   font-family: 'Montserrat', system-ui, sans-serif;
   font-size: 13px;
 }
