@@ -63,6 +63,24 @@
   transform: none;
 }
 
+/* Bande des boutons.
+   Sous lg, la composition est empilée et le bloc suit simplement l'accroche :
+   une marge fixe suffit. À partir de lg, margin-top:auto le pousse au BAS de
+   la colonne de texte, elle-même étirée sur la hauteur de la grappe de photos
+   (voir .section_hero_content) — les boutons s'alignent donc sur le bas de la
+   photo, et suivent automatiquement sa hauteur à chaque largeur d'écran. */
+.hero-bottom-row {
+  margin-top: 2.5rem;
+
+  @media (min-width: 768px) {
+    margin-top: 4rem;
+  }
+
+  @media (min-width: 1024px) {
+    margin-top: auto;
+  }
+}
+
 /* Filet horizontal optionnel, animé par initHeroIntro (scaleX 0 → 1).
    Non utilisé par le hero de l'accueil — la maquette n'en a pas — mais conservé
    pour rs_hero(), dont la bande basse s'appuie dessus. */
@@ -123,6 +141,18 @@
     // Borne la ligne la plus longue du titre : au-delà, elle courrait
     // jusqu'au bord droit au lieu de s'arrêter sur la première photo.
     max-width: 56%;
+
+    // Étiré sur toute la hauteur de la ligne — hauteur donnée par la grappe de
+    // photos, l'élément le plus haut. C'est ce qui permet au margin-top:auto
+    // des boutons de les pousser jusqu'au bas de la photo.
+    //
+    // align-self et non align-items : la grille porte `items-center` côté
+    // markup, et c'est l'alignement de CET enfant qu'on change, pas celui de
+    // tous. Les deux propriétés étant distinctes, l'ordre d'émission du CSS
+    // n'entre pas en jeu.
+    align-self: stretch;
+    display: flex;
+    flex-direction: column;
   }
 
   .hero-media {

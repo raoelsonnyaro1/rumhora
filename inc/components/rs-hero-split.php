@@ -128,7 +128,10 @@ function rs_hero_split( $args = array() ) {
 				<?php endif; ?>
 
 				<?php if ( $boutons ) : ?>
-					<div class="hero-bottom-row flex flex-wrap items-center md:gap-14 gap-8 md:mt-16 mt-10">
+					<?php // Pas de `md:mt-16 mt-10` : à partir de lg le bloc est poussé en bas
+						      // de la colonne par un margin-top:auto (voir _hero.scss), et un
+						      // utilitaire Tailwind — émis après le SCSS — l'écraserait. ?>
+						<div class="hero-bottom-row flex flex-wrap items-center md:gap-14 gap-8">
 						<?php foreach ( $boutons as $bouton ) : ?>
 							<?php
 							// data-barba omis pour une ancre (#...) : Barba ne doit pas
