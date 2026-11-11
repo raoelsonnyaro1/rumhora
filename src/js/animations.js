@@ -1092,6 +1092,11 @@ function initButtonReveal() {
  *   data-fade-delay="0.6"           délai explicite (s), au-delà du stagger
  *                                   par défaut de i*0.1
  *   data-fade-duration="0.75"       durée (s), 1s par défaut
+ *   data-fade-start="100"           seuil de déclenchement, en % de la hauteur
+ *                                   du viewport (85 par défaut). 100 = dès que
+ *                                   l'élément touche le bas de l'écran, donc
+ *                                   le plus tôt possible. Même unité que le
+ *                                   data-reveal-start des .text-reveal.
  */
 function initFadeInAnimations() {
   gsap.utils.toArray('.fade-in').forEach((element, i) => {
@@ -1103,6 +1108,9 @@ function initFadeInAnimations() {
 
       const customDuration = parseFloat(element.dataset.fadeDuration);
       const duration = Number.isNaN(customDuration) ? 1 : customDuration;
+
+      const customStart = parseFloat(element.dataset.fadeStart);
+      const startPercent = Number.isNaN(customStart) ? 85 : customStart;
 
       const anim = gsap.fromTo(element,
         { opacity: 0, y: 50 },
@@ -1125,7 +1133,7 @@ function initFadeInAnimations() {
             // registre ScrollTrigger (voir la note sur sa corruption au-delà
             // d'une vingtaine de triggers, plus haut dans ce fichier).
             trigger: element,
-            start: 'top 85%',
+            start: `top ${startPercent}%`,
             once: true,
           },
         });

@@ -1645,6 +1645,8 @@
         const delay = Number.isNaN(customDelay) ? i * 0.1 : customDelay;
         const customDuration = parseFloat(element.dataset.fadeDuration);
         const duration = Number.isNaN(customDuration) ? 1 : customDuration;
+        const customStart = parseFloat(element.dataset.fadeStart);
+        const startPercent = Number.isNaN(customStart) ? 85 : customStart;
         const anim = gsap.fromTo(
           element,
           { opacity: 0, y: 50 },
@@ -1667,7 +1669,7 @@
               // registre ScrollTrigger (voir la note sur sa corruption au-delà
               // d'une vingtaine de triggers, plus haut dans ce fichier).
               trigger: element,
-              start: "top 85%",
+              start: `top ${startPercent}%`,
               once: true
             }
           }

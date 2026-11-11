@@ -99,7 +99,12 @@ function rs_event_carousel( $args = array() ) {
 										<?php endif; ?>
 
 										<?php if ( ! empty( $event['titre'] ) ) : ?>
-											<h3 class="event-card__title"><?php echo esc_html( $event['titre'] ); ?></h3>
+											<?php // data-reveal-start="100" : la légende est tout en bas de la
+									      // carte, donc son seuil par défaut (80% de la hauteur
+									      // d'écran) n'était atteint que bien après l'arrivée du
+									      // carrousel. À 100, le titre se révèle dès qu'il touche le
+									      // bas de l'écran. ?>
+									<h3 class="event-card__title" data-reveal-start="100"><?php echo esc_html( $event['titre'] ); ?></h3>
 										<?php endif; ?>
 
 										<?php if ( ! empty( $event['intervenant'] ) ) : ?>
@@ -126,7 +131,11 @@ function rs_event_carousel( $args = array() ) {
 		     slider, lui, va jusqu'au bord. Masquée s'il n'y a qu'un événement —
 		     il n'y a alors rien à faire défiler. -->
 		<?php if ( count( $events ) > 1 ) : ?>
-			<div class="event-carousel__nav fade-in" data-fade-delay="0.3">
+			<?php // Même raison que pour les titres de carte : la navigation est le
+			      // dernier élément de la section. Seuil remonté à 100 et délai ramené
+			      // de 0.3s à 0.1s — il la décalait d'un cran supplémentaire après un
+			      // déclenchement déjà tardif. ?>
+			<div class="event-carousel__nav fade-in" data-fade-start="100" data-fade-delay="0.1">
 				<button type="button" class="event-carousel__arrow" id="<?php echo esc_attr( $uid ); ?>-prev" aria-label="<?php esc_attr_e( 'Événement précédent', 'rumhora' ); ?>">
 					<?php rs_arrow_icon( 'left' ); ?>
 				</button>
