@@ -1709,6 +1709,23 @@
   transform: none;
 }
 
+/* ...sauf si une AUTRE carte est survolée : une seule légende à la fois. Le
+   :not() est indispensable — sans lui, la règle s'appliquerait aussi quand
+   c'est la slide active elle-même qui est survolée, et sa légende
+   disparaîtrait sous le curseur (cette règle est plus spécifique que le
+   .event-card:hover qui l'affiche).
+
+   :has() n'est pas supporté avant Chrome 105 / Safari 15.4 / Firefox 121. Un
+   sélecteur invalide fait tomber la règle entière, et le comportement
+   précédent reprend : la légende de la slide active reste visible en plus de
+   celle survolée. Dégradation acceptable, rien ne casse. */
+
+.event-carousel__swiper:has(.event-card:hover) .swiper-slide-active:not(:hover) .event-card__body,
+.event-carousel__swiper:has(.event-card:focus-within) .swiper-slide-active:not(:focus-within) .event-card__body {
+  opacity: 0;
+  transform: translateY(8px);
+}
+
 /* Swiper non initialisé (son script n'a pas pu se charger) : les slides
    retombent en simple rangée et plus aucune n'est « active ». On n'escamote
    alors rien — mieux vaut toutes les légendes que pas une seule. Swiper pose
