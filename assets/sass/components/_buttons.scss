@@ -64,6 +64,16 @@ $slide-line-height: 1.35;
    au libellé de .btn-slide qui demande un aria-hidden explicite.
 */
 
+// Course du glissement, en % de la largeur de la boîte.
+//
+// 100% serait la valeur « évidente » — la copie attendrait pile au bord du
+// cadre. Mais l'icône REMPLIT sa boîte : à 100%, la queue de la flèche qui
+// sort touche la pointe de celle qui entre, et les deux se lisent comme une
+// seule flèche continue qui traverse. Au-delà de 100%, l'écart (ici 60% de la
+// boîte, soit ~28px pour une flèche de 46px) les sépare nettement, sans
+// jamais vider complètement le cadre comme le ferait 200%.
+$icon-slide-travel: 160%;
+
 .icon-slide {
   position: relative;
   display: block;
@@ -81,11 +91,11 @@ $slide-line-height: 1.35;
   }
 
   &--right &__in--dup {
-    transform: translateX(-100%);
+    transform: translateX(-$icon-slide-travel);
   }
 
   &--left &__in--dup {
-    transform: translateX(100%);
+    transform: translateX($icon-slide-travel);
   }
 }
 
@@ -109,7 +119,7 @@ $slide-line-height: 1.35;
   // (.icon-slide__in ET --dup), donc un sélecteur plus court se fait écraser et
   // elle sortait du cadre au lieu d'y entrer.
   .icon-slide--right .icon-slide__in {
-    transform: translateX(100%);
+    transform: translateX($icon-slide-travel);
   }
 
   .icon-slide--right .icon-slide__in--dup {
@@ -117,7 +127,7 @@ $slide-line-height: 1.35;
   }
 
   .icon-slide--left .icon-slide__in {
-    transform: translateX(-100%);
+    transform: translateX(-$icon-slide-travel);
   }
 
   .icon-slide--left .icon-slide__in--dup {
@@ -147,11 +157,11 @@ $slide-line-height: 1.35;
     }
 
     .icon-slide--right .icon-slide__in--dup {
-      transform: translateX(-100%);
+      transform: translateX(-$icon-slide-travel);
     }
 
     .icon-slide--left .icon-slide__in--dup {
-      transform: translateX(100%);
+      transform: translateX($icon-slide-travel);
     }
   }
 }

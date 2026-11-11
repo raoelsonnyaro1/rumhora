@@ -157,11 +157,11 @@
 }
 
 .icon-slide--right .icon-slide__in--dup {
-  transform: translateX(-100%);
+  transform: translateX(-160%);
 }
 
 .icon-slide--left .icon-slide__in--dup {
-  transform: translateX(100%);
+  transform: translateX(160%);
 }
 
 /* État survolé, porté par le bouton et non par la boîte : c'est tout le bouton
@@ -186,7 +186,7 @@
 .btn-circle:hover .icon-slide--right .icon-slide__in, .btn-circle:focus-visible .icon-slide--right .icon-slide__in,
 .btn:hover .icon-slide--right .icon-slide__in, .btn:focus-visible .icon-slide--right .icon-slide__in,
 .event-carousel__arrow:hover .icon-slide--right .icon-slide__in, .event-carousel__arrow:focus-visible .icon-slide--right .icon-slide__in {
-  transform: translateX(100%);
+  transform: translateX(160%);
 }
 
 .btn-pill:hover .icon-slide--right .icon-slide__in--dup, .btn-pill:focus-visible .icon-slide--right .icon-slide__in--dup,
@@ -200,7 +200,7 @@
 .btn-circle:hover .icon-slide--left .icon-slide__in, .btn-circle:focus-visible .icon-slide--left .icon-slide__in,
 .btn:hover .icon-slide--left .icon-slide__in, .btn:focus-visible .icon-slide--left .icon-slide__in,
 .event-carousel__arrow:hover .icon-slide--left .icon-slide__in, .event-carousel__arrow:focus-visible .icon-slide--left .icon-slide__in {
-  transform: translateX(-100%);
+  transform: translateX(-160%);
 }
 
 .btn-pill:hover .icon-slide--left .icon-slide__in--dup, .btn-pill:focus-visible .icon-slide--left .icon-slide__in--dup,
@@ -241,14 +241,14 @@
   .btn-circle:hover .icon-slide--right .icon-slide__in--dup, .btn-circle:focus-visible .icon-slide--right .icon-slide__in--dup,
   .btn:hover .icon-slide--right .icon-slide__in--dup, .btn:focus-visible .icon-slide--right .icon-slide__in--dup,
   .event-carousel__arrow:hover .icon-slide--right .icon-slide__in--dup, .event-carousel__arrow:focus-visible .icon-slide--right .icon-slide__in--dup {
-    transform: translateX(-100%);
+    transform: translateX(-160%);
   }
 
   .btn-pill:hover .icon-slide--left .icon-slide__in--dup, .btn-pill:focus-visible .icon-slide--left .icon-slide__in--dup,
   .btn-circle:hover .icon-slide--left .icon-slide__in--dup, .btn-circle:focus-visible .icon-slide--left .icon-slide__in--dup,
   .btn:hover .icon-slide--left .icon-slide__in--dup, .btn:focus-visible .icon-slide--left .icon-slide__in--dup,
   .event-carousel__arrow:hover .icon-slide--left .icon-slide__in--dup, .event-carousel__arrow:focus-visible .icon-slide--left .icon-slide__in--dup {
-    transform: translateX(100%);
+    transform: translateX(160%);
   }
 }
 
