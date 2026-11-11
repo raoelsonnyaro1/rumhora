@@ -221,14 +221,6 @@ function reportScrollTriggerCorruption(context, error) {
    demandé pour le site.
 */
 
-// Au-delà de ce nombre de signes, on découpe par MOTS et non par caractères.
-// Un paragraphe de 400 signes donnerait 400 éléments portant chacun un
-// `filter: blur()` animé, soit autant de couches de composition : c'est le
-// genre de chose qui fait tomber un mobile à 15 fps. Les mots donnent le même
-// effet avec 10 fois moins de nœuds, et sur un texte long la nuance
-// signe/mot ne se perçoit de toute façon pas.
-const SPLIT_BY_CHARS_MAX = 120;
-
 // willChange posé ici et retiré par le clearProps de revealSplitTargets : un
 // will-change permanent sur des centaines de fragments garderait autant de
 // couches de composition en mémoire pour toute la vie de la page, ce que le
@@ -245,7 +237,17 @@ const REVEAL_FROM = { opacity: 0, y: 10, filter: 'blur(10px)', willChange: 'filt
 // sur 44 × REVEAL_STAGGER avant que le dernier ne commence seulement à
 // s'animer. Baisser l'un sans l'autre ne se verrait quasiment pas.
 const REVEAL_DURATION = 0.6; // par fragment
-const REVEAL_STAGGER = 0.02; // écart entre deux fragments
+
+// Deux rythmes, parce que les deux découpages ne produisent pas le même nombre
+// de fragments : un titre fait 2 à 8 mots, un paragraphe 4 à 8 lignes. L'écart
+// se règle donc sur ce décompte, pas sur une valeur unique.
+//
+// L'ancienne valeur (0.02) venait du découpage par SIGNES, où un titre donnait
+// une trentaine de fragments. Appliquée à 6 mots, elle les étalerait sur 0.1s —
+// soit un fondu du titre entier, plus aucun « mot à mot » visible. Même piège
+// dans l'autre sens pour les lignes.
+const REVEAL_STAGGER_WORDS = 0.07;
+const REVEAL_STAGGER_LINES = 0.09;
 
 /**
  * Découpe un élément et renvoie les fragments à animer.
@@ -253,17 +255,30 @@ const REVEAL_STAGGER = 0.02; // écart entre deux fragments
  * @returns {{split: SplitText, targets: HTMLElement[]}}
  */
 function splitForReveal(el) {
-  const byWords = (el.textContent || '').trim().length > SPLIT_BY_CHARS_MAX;
+  // Le découpage suit la NATURE de l'élément, pas sa longueur : les titres se
+  // révèlent mot à mot, les descriptions ligne à ligne. Un découpage piloté par
+  // le nombre de signes faisait basculer un même composant d'un effet à l'autre
+  // selon le texte saisi par le client.
+  const isTitle = /^H[1-6]$/.test(el.tagName);
 
   // aria:'auto' (SplitText ≥ 3.13) repose un aria-label sur l'élément d'origine
-  // et masque les fragments aux lecteurs d'écran : sans ça, un titre découpé en
-  // signes est épelé lettre par lettre.
+  // et masque les fragments aux lecteurs d'écran : sans ça, un texte découpé
+  // est relu fragment par fragment.
   const split = new SplitText(el, {
-    type: byWords ? 'words' : 'words,chars',
+    type: isTitle ? 'words' : 'lines',
     aria: 'auto',
   });
 
-  return { split, targets: byWords ? split.words : split.chars };
+  return {
+    split,
+    targets: isTitle ? split.words : split.lines,
+    // L'ordre aléatoire fait l'effet sur un titre, où les mots sont nombreux et
+    // courts. Sur 5 lignes il donnerait un désordre lisible comme un défaut :
+    // les lignes se posent donc de haut en bas, dans le sens de la lecture.
+    stagger: isTitle
+      ? { each: REVEAL_STAGGER_WORDS, from: 'random' }
+      : { each: REVEAL_STAGGER_LINES, from: 'start' },
+  };
 }
 
 /**
@@ -272,19 +287,34 @@ function splitForReveal(el) {
  * @param {object} [vars] - surcharges (delay, onStart...)
  * @returns {gsap.core.Tween}
  */
-function revealSplitTargets(targets, vars = {}) {
+function revealSplitTargets(targets, vars = {}, split = null) {
   return gsap.to(targets, {
     opacity: 1,
     y: 0,
     filter: 'blur(0px)',
     duration: REVEAL_DURATION,
     ease: 'power2.out',
-    stagger: { each: REVEAL_STAGGER, from: 'random' },
-    // clearProps une fois fini : sans ça chaque fragment conserve un `filter`
-    // et un `will-change` inline, donc sa propre couche de composition, pour
-    // toute la durée de vie de la page. Sur une page à plusieurs titres, ça
-    // s'accumule jusqu'à peser sur le scroll.
-    onComplete: () => gsap.set(targets, { clearProps: 'filter,transform,opacity,willChange' }),
+    // Valeur par défaut ; splitForReveal en renvoie une adaptée au découpage,
+    // que les appelants transmettent via `vars` (étalé après, donc gagnant).
+    stagger: { each: REVEAL_STAGGER_WORDS, from: 'random' },
+    onComplete: () => {
+      // On rend le texte au DOM dès que l'animation est finie, plutôt que de
+      // se contenter d'un clearProps.
+      //
+      // INDISPENSABLE pour le découpage en lignes : SplitText fige la
+      // répartition des mots dans un <div> par ligne, mesurée à la largeur du
+      // moment. Sans revert, un redimensionnement (ou une rotation de
+      // téléphone) laisse ces lignes telles quelles : chacune se re-casse alors
+      // à l'intérieur de son propre div et le paragraphe part en escalier.
+      // Rien ne re-découpe au resize dans ce fichier.
+      //
+      // Utile aussi pour les mots : revert supprime les fragments, donc les
+      // `filter` et `will-change` inline qu'ils portaient — et avec eux autant
+      // de couches de composition qui, sur une page à plusieurs titres,
+      // s'accumulaient jusqu'à peser sur le scroll.
+      if (split) split.revert();
+      else gsap.set(targets, { clearProps: 'filter,transform,opacity,willChange' });
+    },
     ...vars,
   });
 }
@@ -603,8 +633,9 @@ function initLineReveal() {
 }
 
 /**
- * Révélation de texte (.text-reveal, h1, h2, h3) : « blur-in » par signes en
- * ordre aléatoire — voir splitForReveal() et revealSplitTargets() plus haut.
+ * Révélation de texte (.text-reveal, h1, h2, h3) : « blur-in » — les titres
+ * mot à mot en ordre aléatoire, les descriptions ligne à ligne de haut en bas
+ * — voir splitForReveal() et revealSplitTargets() plus haut.
  *
  * Déclenchement au scroll via IntersectionObserver plutôt que ScrollTrigger :
  * ces éléments sont de loin le plus gros contributeur de triggers sur une page
@@ -684,7 +715,7 @@ function initTextRevealAnimations() {
             // Force un reflow pour garantir que les polices sont appliquées
             el.offsetHeight; // eslint-disable-line no-unused-expressions
 
-            const { split, targets } = splitForReveal(el);
+            const { split, targets, stagger } = splitForReveal(el);
             el._splitText = split;
 
             // L'élément lui-même a été caché en amont (createAnimations) le
@@ -701,7 +732,7 @@ function initTextRevealAnimations() {
             const titleOverlay = el.closest('.cta-title-overlay');
             if (titleOverlay) {
               const photoImg = titleOverlay.parentElement.querySelector('.reveal img');
-              const anim = revealSplitTargets(targets, { paused: true, onStart: notifyProgress });
+              const anim = revealSplitTargets(targets, { stagger, paused: true, onStart: notifyProgress }, split);
               if (photoImg) {
                 photoImg.addEventListener('revealcomplete', () => anim.play(), { once: true });
               } else {
@@ -718,7 +749,7 @@ function initTextRevealAnimations() {
 
             const reveal = () => {
               observer.disconnect();
-              revealSplitTargets(targets, { delay, onStart: notifyProgress });
+              revealSplitTargets(targets, { stagger, delay, onStart: notifyProgress }, split);
             };
 
             const observer = new IntersectionObserver((entries) => {
@@ -1734,13 +1765,15 @@ function initHeroIntro(onDone, curtainPromise) {
       // Le split n'a lieu qu'ici, une fois les vraies polices chargées (voir
       // waitForFonts) : découper du texte dont la police n'est pas encore
       // active fige des positions qui changeront au swap.
-      const titleTargets = title ? splitForReveal(title).targets : null;
+      const titleSplit = title ? splitForReveal(title) : null;
+      const titleTargets = titleSplit ? titleSplit.targets : null;
       if (title) {
         gsap.set(title, { autoAlpha: 1 });
         gsap.set(titleTargets, REVEAL_FROM);
       }
 
-      const descTargets = description ? splitForReveal(description).targets : null;
+      const descSplit = description ? splitForReveal(description) : null;
+      const descTargets = descSplit ? descSplit.targets : null;
       if (description) {
         gsap.set(description, { autoAlpha: 1 });
         gsap.set(descTargets, REVEAL_FROM);
@@ -1762,13 +1795,13 @@ function initHeroIntro(onDone, curtainPromise) {
       // revealSplitTargets), ajouté à la timeline plutôt que joué seul pour
       // rester synchronisé avec le header, le filet et les photos.
       if (titleTargets) {
-        tl.add(revealSplitTargets(titleTargets), 0);
+        tl.add(revealSplitTargets(titleTargets, { stagger: titleSplit.stagger }, titleSplit.split), 0);
       }
 
       if (descTargets) {
         // L'accroche démarre pendant que le titre finit de se poser : un
         // enchaînement strictement séquentiel rendrait l'intro trop longue.
-        tl.add(revealSplitTargets(descTargets), title ? 0.35 : 0);
+        tl.add(revealSplitTargets(descTargets, { stagger: descSplit.stagger }, descSplit.split), title ? 0.35 : 0);
       }
 
       if (bottomRowLine) {

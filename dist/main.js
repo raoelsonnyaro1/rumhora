@@ -1159,31 +1159,39 @@
     console.error(`Error in ${context}:`, error);
     scrollTriggerCorrupted = true;
   }
-  var SPLIT_BY_CHARS_MAX = 120;
   var REVEAL_FROM = { opacity: 0, y: 10, filter: "blur(10px)", willChange: "filter, transform, opacity" };
   var REVEAL_DURATION = 0.6;
-  var REVEAL_STAGGER = 0.02;
+  var REVEAL_STAGGER_WORDS = 0.07;
+  var REVEAL_STAGGER_LINES = 0.09;
   function splitForReveal(el) {
-    const byWords = (el.textContent || "").trim().length > SPLIT_BY_CHARS_MAX;
+    const isTitle = /^H[1-6]$/.test(el.tagName);
     const split = new SplitText(el, {
-      type: byWords ? "words" : "words,chars",
+      type: isTitle ? "words" : "lines",
       aria: "auto"
     });
-    return { split, targets: byWords ? split.words : split.chars };
+    return {
+      split,
+      targets: isTitle ? split.words : split.lines,
+      // L'ordre aléatoire fait l'effet sur un titre, où les mots sont nombreux et
+      // courts. Sur 5 lignes il donnerait un désordre lisible comme un défaut :
+      // les lignes se posent donc de haut en bas, dans le sens de la lecture.
+      stagger: isTitle ? { each: REVEAL_STAGGER_WORDS, from: "random" } : { each: REVEAL_STAGGER_LINES, from: "start" }
+    };
   }
-  function revealSplitTargets(targets, vars = {}) {
+  function revealSplitTargets(targets, vars = {}, split = null) {
     return gsap.to(targets, __spreadValues({
       opacity: 1,
       y: 0,
       filter: "blur(0px)",
       duration: REVEAL_DURATION,
       ease: "power2.out",
-      stagger: { each: REVEAL_STAGGER, from: "random" },
-      // clearProps une fois fini : sans ça chaque fragment conserve un `filter`
-      // et un `will-change` inline, donc sa propre couche de composition, pour
-      // toute la durée de vie de la page. Sur une page à plusieurs titres, ça
-      // s'accumule jusqu'à peser sur le scroll.
-      onComplete: () => gsap.set(targets, { clearProps: "filter,transform,opacity,willChange" })
+      // Valeur par défaut ; splitForReveal en renvoie une adaptée au découpage,
+      // que les appelants transmettent via `vars` (étalé après, donc gagnant).
+      stagger: { each: REVEAL_STAGGER_WORDS, from: "random" },
+      onComplete: () => {
+        if (split) split.revert();
+        else gsap.set(targets, { clearProps: "filter,transform,opacity,willChange" });
+      }
     }, vars));
   }
   function prefersReducedMotion() {
@@ -1388,14 +1396,14 @@
                 el._splitText.revert();
               }
               el.offsetHeight;
-              const { split, targets } = splitForReveal(el);
+              const { split, targets, stagger } = splitForReveal(el);
               el._splitText = split;
               gsap.set(el, { autoAlpha: 1 });
               gsap.set(targets, REVEAL_FROM);
               const titleOverlay = el.closest(".cta-title-overlay");
               if (titleOverlay) {
                 const photoImg = titleOverlay.parentElement.querySelector(".reveal img");
-                const anim = revealSplitTargets(targets, { paused: true, onStart: notifyProgress });
+                const anim = revealSplitTargets(targets, { stagger, paused: true, onStart: notifyProgress }, split);
                 if (photoImg) {
                   photoImg.addEventListener("revealcomplete", () => anim.play(), { once: true });
                 } else {
@@ -1408,7 +1416,7 @@
               let checkCount = 0;
               const reveal = () => {
                 observer2.disconnect();
-                revealSplitTargets(targets, { delay, onStart: notifyProgress });
+                revealSplitTargets(targets, { stagger, delay, onStart: notifyProgress }, split);
               };
               const observer2 = new IntersectionObserver((entries) => {
                 checkCount += 1;
@@ -2047,12 +2055,14 @@
           done();
           return;
         }
-        const titleTargets = title ? splitForReveal(title).targets : null;
+        const titleSplit = title ? splitForReveal(title) : null;
+        const titleTargets = titleSplit ? titleSplit.targets : null;
         if (title) {
           gsap.set(title, { autoAlpha: 1 });
           gsap.set(titleTargets, REVEAL_FROM);
         }
-        const descTargets = description ? splitForReveal(description).targets : null;
+        const descSplit = description ? splitForReveal(description) : null;
+        const descTargets = descSplit ? descSplit.targets : null;
         if (description) {
           gsap.set(description, { autoAlpha: 1 });
           gsap.set(descTargets, REVEAL_FROM);
@@ -2062,10 +2072,10 @@
           tl.to(header, { y: 0, opacity: 1, duration: 0.8, ease: "power3.out" }, 0);
         }
         if (titleTargets) {
-          tl.add(revealSplitTargets(titleTargets), 0);
+          tl.add(revealSplitTargets(titleTargets, { stagger: titleSplit.stagger }, titleSplit.split), 0);
         }
         if (descTargets) {
-          tl.add(revealSplitTargets(descTargets), title ? 0.35 : 0);
+          tl.add(revealSplitTargets(descTargets, { stagger: descSplit.stagger }, descSplit.split), title ? 0.35 : 0);
         }
         if (bottomRowLine) {
           tl.to(bottomRowLine, { scaleX: 1, duration: 0.5, ease: "power2.out" }, "-=0.3");
