@@ -239,14 +239,12 @@ const REVEAL_FROM = { opacity: 0, y: 10, filter: 'blur(10px)', willChange: 'filt
 const REVEAL_DURATION = 0.6; // par fragment
 
 // Deux rythmes, parce que les deux découpages ne produisent pas le même nombre
-// de fragments : un titre fait 2 à 8 mots, un paragraphe 4 à 8 lignes. L'écart
-// se règle donc sur ce décompte, pas sur une valeur unique.
-//
-// L'ancienne valeur (0.02) venait du découpage par SIGNES, où un titre donnait
-// une trentaine de fragments. Appliquée à 6 mots, elle les étalerait sur 0.1s —
-// soit un fondu du titre entier, plus aucun « mot à mot » visible. Même piège
-// dans l'autre sens pour les lignes.
-const REVEAL_STAGGER_WORDS = 0.07;
+// de fragments : un titre fait une trentaine de signes, un paragraphe 4 à 8
+// lignes. L'écart se règle donc sur ce décompte, pas sur une valeur unique —
+// 0.09s appliqué à 30 signes étalerait un titre sur près de 3 secondes, et
+// 0.02s appliqué à 5 lignes les ferait arriver ensemble, donc plus aucun
+// « ligne par ligne » visible.
+const REVEAL_STAGGER_CHARS = 0.02;
 const REVEAL_STAGGER_LINES = 0.09;
 
 /**
@@ -256,27 +254,37 @@ const REVEAL_STAGGER_LINES = 0.09;
  */
 function splitForReveal(el) {
   // Le découpage suit la NATURE de l'élément, pas sa longueur : les titres se
-  // révèlent mot à mot, les descriptions ligne à ligne. Un découpage piloté par
-  // le nombre de signes faisait basculer un même composant d'un effet à l'autre
-  // selon le texte saisi par le client.
+  // révèlent signe à signe, les descriptions ligne à ligne. Un découpage piloté
+  // par le nombre de signes faisait basculer un même composant d'un effet à
+  // l'autre selon le texte saisi par le client.
+  //
+  // Le découpage par signes ne vaut QUE pour les titres : c'est un fragment par
+  // caractère, chacun portant un `filter: blur()` animé, donc sa propre couche
+  // de composition. Sur un paragraphe de 400 signes c'est le genre de chose qui
+  // fait tomber un mobile à 15 fps — d'où les lignes pour le texte courant, qui
+  // n'en produisent qu'une poignée.
   const isTitle = /^H[1-6]$/.test(el.tagName);
 
   // aria:'auto' (SplitText ≥ 3.13) repose un aria-label sur l'élément d'origine
-  // et masque les fragments aux lecteurs d'écran : sans ça, un texte découpé
-  // est relu fragment par fragment.
+  // et masque les fragments aux lecteurs d'écran : sans ça, un titre découpé en
+  // signes est épelé lettre par lettre.
+  //
+  // 'words,chars' et pas 'chars' seul : sans la couche de mots intermédiaire,
+  // les signes se répartissent sur les lignes sans tenir compte des limites de
+  // mots, et un titre sur deux lignes se coupe n'importe où.
   const split = new SplitText(el, {
-    type: isTitle ? 'words' : 'lines',
+    type: isTitle ? 'words,chars' : 'lines',
     aria: 'auto',
   });
 
   return {
     split,
-    targets: isTitle ? split.words : split.lines,
-    // L'ordre aléatoire fait l'effet sur un titre, où les mots sont nombreux et
-    // courts. Sur 5 lignes il donnerait un désordre lisible comme un défaut :
-    // les lignes se posent donc de haut en bas, dans le sens de la lecture.
+    targets: isTitle ? split.chars : split.lines,
+    // L'ordre aléatoire fait l'effet sur un titre, où les signes sont nombreux.
+    // Sur 5 lignes il donnerait un désordre lisible comme un défaut : les
+    // lignes se posent donc de haut en bas, dans le sens de la lecture.
     stagger: isTitle
-      ? { each: REVEAL_STAGGER_WORDS, from: 'random' }
+      ? { each: REVEAL_STAGGER_CHARS, from: 'random' }
       : { each: REVEAL_STAGGER_LINES, from: 'start' },
   };
 }
@@ -296,7 +304,7 @@ function revealSplitTargets(targets, vars = {}, split = null) {
     ease: 'power2.out',
     // Valeur par défaut ; splitForReveal en renvoie une adaptée au découpage,
     // que les appelants transmettent via `vars` (étalé après, donc gagnant).
-    stagger: { each: REVEAL_STAGGER_WORDS, from: 'random' },
+    stagger: { each: REVEAL_STAGGER_CHARS, from: 'random' },
     onComplete: () => {
       // On rend le texte au DOM dès que l'animation est finie, plutôt que de
       // se contenter d'un clearProps.
@@ -634,8 +642,8 @@ function initLineReveal() {
 
 /**
  * Révélation de texte (.text-reveal, h1, h2, h3) : « blur-in » — les titres
- * mot à mot en ordre aléatoire, les descriptions ligne à ligne de haut en bas
- * — voir splitForReveal() et revealSplitTargets() plus haut.
+ * signe à signe en ordre aléatoire, les descriptions ligne à ligne de haut en
+ * bas — voir splitForReveal() et revealSplitTargets() plus haut.
  *
  * Déclenchement au scroll via IntersectionObserver plutôt que ScrollTrigger :
  * ces éléments sont de loin le plus gros contributeur de triggers sur une page

@@ -1161,21 +1161,21 @@
   }
   var REVEAL_FROM = { opacity: 0, y: 10, filter: "blur(10px)", willChange: "filter, transform, opacity" };
   var REVEAL_DURATION = 0.6;
-  var REVEAL_STAGGER_WORDS = 0.07;
+  var REVEAL_STAGGER_CHARS = 0.02;
   var REVEAL_STAGGER_LINES = 0.09;
   function splitForReveal(el) {
     const isTitle = /^H[1-6]$/.test(el.tagName);
     const split = new SplitText(el, {
-      type: isTitle ? "words" : "lines",
+      type: isTitle ? "words,chars" : "lines",
       aria: "auto"
     });
     return {
       split,
-      targets: isTitle ? split.words : split.lines,
-      // L'ordre aléatoire fait l'effet sur un titre, où les mots sont nombreux et
-      // courts. Sur 5 lignes il donnerait un désordre lisible comme un défaut :
-      // les lignes se posent donc de haut en bas, dans le sens de la lecture.
-      stagger: isTitle ? { each: REVEAL_STAGGER_WORDS, from: "random" } : { each: REVEAL_STAGGER_LINES, from: "start" }
+      targets: isTitle ? split.chars : split.lines,
+      // L'ordre aléatoire fait l'effet sur un titre, où les signes sont nombreux.
+      // Sur 5 lignes il donnerait un désordre lisible comme un défaut : les
+      // lignes se posent donc de haut en bas, dans le sens de la lecture.
+      stagger: isTitle ? { each: REVEAL_STAGGER_CHARS, from: "random" } : { each: REVEAL_STAGGER_LINES, from: "start" }
     };
   }
   function revealSplitTargets(targets, vars = {}, split = null) {
@@ -1187,7 +1187,7 @@
       ease: "power2.out",
       // Valeur par défaut ; splitForReveal en renvoie une adaptée au découpage,
       // que les appelants transmettent via `vars` (étalé après, donc gagnant).
-      stagger: { each: REVEAL_STAGGER_WORDS, from: "random" },
+      stagger: { each: REVEAL_STAGGER_CHARS, from: "random" },
       onComplete: () => {
         if (split) split.revert();
         else gsap.set(targets, { clearProps: "filter,transform,opacity,willChange" });
