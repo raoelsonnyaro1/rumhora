@@ -193,7 +193,8 @@ $gap: 2.5rem;
   border: none;
   padding: 0;
   cursor: pointer;
-  color: $neutral;
+  // Dorées au repos, comme tous les boutons du site.
+  color: $gold;
   transition: color 0.3s ease, transform 0.3s ease;
 
   svg {
@@ -202,8 +203,10 @@ $gap: 2.5rem;
     display: block;
   }
 
+  // L'or étant déjà la couleur de repos, le survol passe à l'ivoire des titres
+  // plutôt que de ne rien faire.
   &:hover {
-    color: $gold;
+    color: $heading;
   }
 
   // Swiper pose cette classe en début/fin de liste : la flèche inactive reste

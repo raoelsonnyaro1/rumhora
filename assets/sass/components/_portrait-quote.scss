@@ -79,16 +79,16 @@
   max-width: 33ch;
 
   // En composition superposée, le paragraphe reste plus court que le titre —
-  // c'est ce décalage de mesure qui structure la composition. 75% du bloc, soit
-  // ~38 caractères par ligne à 1440 : nettement moins que les ~51 de la pleine
-  // largeur, tout en continuant de mordre sur la photo (le portrait démarre à
-  // 52% du bloc, donc 75% le traverse encore franchement).
+  // c'est ce décalage de mesure qui structure la composition. 58% du bloc : le
+  // portrait démarre à 52%, le paragraphe ne mord donc plus sur la photo que
+  // d'un cheveu, juste assez pour que la superposition reste lisible comme une
+  // intention.
   //
   // ⚠ Lisibilité : contrairement au titre, c'est du texte courant en petit
   // corps qui passe sur l'image, et la section n'a volontairement aucun voile.
   // Le tiers gauche de la photo doit donc rester sombre et peu détaillé.
   @media (min-width: 1024px) {
-    max-width: 75%;
+    max-width: 58%;
   }
 }
 

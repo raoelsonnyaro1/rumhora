@@ -1384,7 +1384,7 @@
 
 @media (min-width: 1024px) {
   .portrait-quote__body {
-    max-width: 75%;
+    max-width: 58%;
   }
 }
 
@@ -1791,7 +1791,7 @@
   border: none;
   padding: 0;
   cursor: pointer;
-  color: #8A7F7A;
+  color: #C6A75E;
   transition: color 0.3s ease, transform 0.3s ease;
 }
 
@@ -1802,7 +1802,7 @@
 }
 
 .event-carousel__arrow:hover {
-  color: #C6A75E;
+  color: #F4EDE4;
 }
 
 .event-carousel__arrow.swiper-button-disabled {
