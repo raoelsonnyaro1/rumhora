@@ -38,6 +38,17 @@
 
 .hero-title {
   font-family: 'Playfair Display', Georgia, serif;
+
+  // Deuxième marge automatique de la colonne, l'autre étant sur
+  // .hero-bottom-row : l'espace libre se répartit donc à parts égales
+  // au-dessus du titre et sous l'accroche. Le groupe titre + accroche se
+  // retrouve au milieu, pendant que les boutons restent collés en bas, sur le
+  // bas de la photo. Une seule des deux marges ne donnerait que l'un ou
+  // l'autre.
+  @media (min-width: 1024px) {
+    margin-top: auto;
+  }
+
   // Taille, interlignage et approche viennent de h1/h2 (voir style.scss) :
   // échelle unique pour tous les titres du site.
   color: $heading;
@@ -124,6 +135,13 @@
 // disparaissaient.
 .hero-grid {
   grid-template-columns: 1fr;
+
+  // Écart maquette entre le bas du header et le haut de la photo : 16pt, et XD
+  // compte en POINTS — 16 × 4/3 = 21.33px. Le header étant `fixed`, il ne
+  // pousse rien : sa hauteur doit donc être ajoutée explicitement (voir
+  // --header-h dans style.scss). Remplace `md:pt-32 pt-28`, qui ne tenait
+  // compte ni de l'un ni de l'autre.
+  padding-top: calc(var(--header-h) + 21.33px); // 16pt
 }
 
 @media (min-width: 1024px) {
@@ -158,6 +176,10 @@
   .hero-media {
     grid-column: 2 / 3;
     grid-row: 1;
+    // Calée en HAUT de la ligne : c'est ce qui rend l'écart au header
+    // déterministe. Sans ça la grappe suit le `items-center` de la grille et
+    // redescend dès que la colonne de texte devient plus haute qu'elle.
+    align-self: start;
   }
 }
 

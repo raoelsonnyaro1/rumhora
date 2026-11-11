@@ -88,7 +88,10 @@ function rs_hero_split( $args = array() ) {
 	}
 	$boutons = array_slice( $boutons, 0, 2 );
 	?>
-	<section class="section_hero relative w-full min-h-[100svh] flex items-center overflow-hidden">
+	<?php // items-start et non items-center : la photo doit être à une distance
+	      // FIXE du header (16pt), ce qu'un centrage vertical rend impossible —
+	      // la composition flotterait selon la hauteur de la fenêtre. ?>
+	<section class="section_hero relative w-full min-h-[100svh] flex items-start overflow-hidden">
 
 		<!-- Fond. <picture> volontairement (plutôt qu'un background-image CSS) :
 		     initHeroIntro() attend `picture img` avant de lancer la séquence
@@ -113,7 +116,7 @@ function rs_hero_split( $args = array() ) {
 		     au-delà du bord droit de l'écran. Toute la géométrie est dans
 		     _hero.scss ; les classes Tailwind ne portent ici que les gouttières
 		     et le rythme vertical. -->
-		<div class="hero-grid relative z-10 w-full grid items-center xl:gap-12 gap-8 gutter-x md:pt-32 pt-28 md:pb-16 pb-12">
+		<div class="hero-grid relative z-10 w-full grid items-center xl:gap-12 gap-8 gutter-x md:pb-16 pb-12">
 
 			<!-- Colonne texte. Pas de max-width ici : le titre doit pouvoir occuper
 			     toute la colonne pour tenir sur 2 lignes comme dans la maquette

@@ -779,6 +779,12 @@
   transform: none;
 }
 
+@media (min-width: 1024px) {
+  .hero-title {
+    margin-top: auto;
+  }
+}
+
 .hero-title em {
   color: #C6A75E;
   font-style: normal;
@@ -853,6 +859,7 @@
 
 .hero-grid {
   grid-template-columns: 1fr;
+  padding-top: calc(var(--header-h) + 21.33px);
 }
 
 @media (min-width: 1024px) {
@@ -873,6 +880,7 @@
   .hero-media {
     grid-column: 2/3;
     grid-row: 1;
+    align-self: start;
   }
 }
 
@@ -3785,10 +3793,6 @@ video {
   padding-top: 3.5rem;
 }
 
-.pt-28{
-  padding-top: 7rem;
-}
-
 .pt-4{
   padding-top: 1rem;
 }
@@ -3976,6 +3980,31 @@ video {
 
 .gutter-x {
   padding-inline: var(--gutter);
+}
+
+/* ==========================================================================
+   Hauteur du header
+   ==========================================================================
+   Le header est `fixed` : il ne pousse rien, donc tout contenu qui doit se
+   positionner PAR RAPPORT À LUI doit connaître sa hauteur (aujourd'hui le
+   hero, dont la photo est calée à 16pt sous le header).
+
+   Somme des valeurs déclarées ailleurs : hauteur du logo (_header.scss) plus
+   le padding vertical du .header-container (header.php).
+     ≥768px : 70 + 2 × 20 = 110px
+     <768px : 52 + 2 × 12 =  76px
+   ⚠ À RECALCULER si l'une de ces deux valeurs bouge — rien ne le fait
+   automatiquement, et le décalage ne se verrait que sur le hero.
+*/
+
+:root {
+  --header-h: 76px;
+}
+
+@media (min-width: 768px) {
+  :root {
+    --header-h: 110px;
+  }
 }
 
 /* ==========================================================================
@@ -4744,10 +4773,6 @@ body.page-loading * {
 
   .md\:pt-20{
     padding-top: 5rem;
-  }
-
-  .md\:pt-32{
-    padding-top: 8rem;
   }
 
   .md\:pt-5{

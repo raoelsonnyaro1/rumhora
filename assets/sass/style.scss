@@ -126,6 +126,29 @@
 }
 
 /* ==========================================================================
+   Hauteur du header
+   ==========================================================================
+   Le header est `fixed` : il ne pousse rien, donc tout contenu qui doit se
+   positionner PAR RAPPORT À LUI doit connaître sa hauteur (aujourd'hui le
+   hero, dont la photo est calée à 16pt sous le header).
+
+   Somme des valeurs déclarées ailleurs : hauteur du logo (_header.scss) plus
+   le padding vertical du .header-container (header.php).
+     ≥768px : 70 + 2 × 20 = 110px
+     <768px : 52 + 2 × 12 =  76px
+   ⚠ À RECALCULER si l'une de ces deux valeurs bouge — rien ne le fait
+   automatiquement, et le décalage ne se verrait que sur le hero.
+*/
+
+:root {
+  --header-h: 76px;
+
+  @media (min-width: 768px) {
+    --header-h: 110px;
+  }
+}
+
+/* ==========================================================================
    Reset et base
    ========================================================================== */
 
