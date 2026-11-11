@@ -14,22 +14,17 @@
 
 // L'accroche a un repli : c'est de la copie marketing, elle peut sans risque
 // afficher le texte de la maquette tant que le champ est vide.
-//
-// Adresse, téléphone et email n'en ont PAS, volontairement : un numéro ou une
-// adresse de repli inventés s'afficheraient comme de vraies coordonnées et
-// finiraient par partir en production. Les blocs correspondants ne sont tout
-// simplement pas rendus tant que le client ne les a pas renseignés.
 $rumhora_tagline = get_field( 'footer_tagline', 'option' )
 	?: __( 'A premium, timeless, elegant fine dining and musical lounge experience in the heart of Montreal.', 'rumhora' );
 
-$rumhora_address = get_field( 'footer_address', 'option' );
-$rumhora_phone   = get_field( 'footer_phone', 'option' );
-
-// Repli en cascade : adresse dédiée au footer, sinon celle qui reçoit les
-// formulaires, sinon l'adresse d'administration — il y a toujours un email
-// affichable, jamais un "mailto:" vide.
-$rumhora_email = get_field( 'footer_email', 'option' )
-	?: ( get_field( 'formulaires_email', 'option' ) ?: get_option( 'admin_email' ) );
+// Coordonnées : repli sur les valeurs de la maquette, centralisé dans
+// rumhora_contact() (inc/template-tags.php) parce que rs_social_icons() lit
+// le même téléphone pour en déduire l'URL WhatsApp.
+// ⚠ Contenu de maquette, à remplacer avant mise en ligne — voir la note de
+// l'accesseur.
+$rumhora_address = rumhora_contact( 'address' );
+$rumhora_phone   = rumhora_contact( 'phone' );
+$rumhora_email   = rumhora_contact( 'email' );
 
 $rumhora_copyright = get_field( 'footer_copyright', 'option' )
 	?: sprintf(

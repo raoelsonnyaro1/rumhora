@@ -163,3 +163,57 @@ if ( ! function_exists( 'wp_body_open' ) ) :
 		do_action( 'wp_body_open' );
 	}
 endif;
+
+/**
+ * Coordonnées du pied de page, avec repli sur les valeurs de la maquette.
+ *
+ * Pourquoi un accesseur plutôt que get_field() en direct : ces valeurs sont
+ * lues à DEUX endroits — footer.php pour l'adresse affichée, et
+ * rs_social_icons() qui déduit l'URL WhatsApp du téléphone. Sans point unique,
+ * le repli devait être dupliqué, et le lien WhatsApp se retrouvait vide alors
+ * que le téléphone, lui, s'affichait.
+ *
+ * ⚠ CONTENU DE MAQUETTE, À REMPLACER AVANT MISE EN LIGNE. Le téléphone
+ * (« 514 000 000 ») est déjà un numéro fictif sur la maquette elle-même, et
+ * les deux URLs de réseaux pointent vers l'accueil des plateformes faute de
+ * compte connu : elles n'envoient donc sur AUCUN compte tiers, mais elles ne
+ * mènent nulle part d'utile non plus.
+ *
+ * Ces replis n'existent que parce qu'ACF n'est pas installé : get_field()
+ * passe par le shim de inc/acf-fallback.php et renvoie toujours null, donc
+ * rien ne peut être saisi en back-office. Dès qu'ACF sera là, les champs
+ * renseignés reprendront la main sans rien changer ici.
+ *
+ * @param string $cle address|phone|email|facebook|instagram
+ * @return string Chaîne vide si la clé est inconnue.
+ */
+function rumhora_contact( $cle ) {
+	$maquette = array(
+		'address'   => '381 Avenue Laurier Ouest, Montreal QC',
+		'phone'     => '+1 514 000 000',
+		'email'     => 'reservations@rumhora.com',
+		'facebook'  => 'https://www.facebook.com/',
+		'instagram' => 'https://www.instagram.com/',
+	);
+
+	if ( ! isset( $maquette[ $cle ] ) ) {
+		return '';
+	}
+
+	$saisi = get_field( 'footer_' . $cle, 'option' );
+	if ( $saisi ) {
+		return $saisi;
+	}
+
+	// L'email a une source de repli supplémentaire : celle qui reçoit les
+	// formulaires. Elle est prioritaire sur la maquette, étant la seule des
+	// deux qui soit une vraie adresse joignable.
+	if ( 'email' === $cle ) {
+		$formulaires = get_field( 'formulaires_email', 'option' );
+		if ( $formulaires ) {
+			return $formulaires;
+		}
+	}
+
+	return $maquette[ $cle ];
+}

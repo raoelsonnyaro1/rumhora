@@ -41,11 +41,14 @@ function rs_social_icons( $args = array() ) {
 	foreach ( $available as $icon ) {
 		// WhatsApp n'a pas d'URL propre : il se déduit du téléphone du footer
 		// (format wa.me, sans le "+"), comme le lien de contact rapide.
+		// rumhora_contact() et non get_field() en direct : ACF n'étant pas
+		// installé, get_field() renvoie toujours null et aucune icône ne se
+		// rendait — alors que la maquette en montre trois.
 		if ( 'whatsapp' === $icon['key'] ) {
-			$phone = get_field( 'footer_phone', 'option' );
+			$phone = rumhora_contact( 'phone' );
 			$icon['url'] = $phone ? 'https://wa.me/' . preg_replace( '/[^0-9]/', '', $phone ) : '';
 		} else {
-			$icon['url'] = get_field( 'footer_' . $icon['key'], 'option' );
+			$icon['url'] = rumhora_contact( $icon['key'] );
 		}
 
 		if ( $icon['url'] ) {
