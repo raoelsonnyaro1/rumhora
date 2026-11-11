@@ -4791,6 +4791,14 @@ body.page-loading * {
     margin-bottom: 2rem;
   }
 
+  .lg\:ml-0{
+    margin-left: 0px;
+  }
+
+  .lg\:ml-auto{
+    margin-left: auto;
+  }
+
   .lg\:block{
     display: block;
   }

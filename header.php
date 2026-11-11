@@ -98,7 +98,14 @@ $rumhora_book_url = get_field( 'book_url', 'option' ) ?: home_url( '/book-a-tabl
 	     l'autre. Les éléments dont le contenu/l'URL dépendent de la langue sont
 	     resynchronisés par updatePersistentLayoutLinks() (src/js/barba.js). -->
 	<header id="masthead" class="site-header fixed top-0 left-0 right-0 z-50 <?php echo esc_attr( $rumhora_header_class ); ?>">
-		<div class="header-container flex items-center justify-between gap-6 xl:px-14 md:px-8 px-5 md:py-5 py-3">
+		<?php // gutter-x plutôt que `xl:px-14 md:px-8 px-5` : le header partage
+		      // désormais la gouttière de toutes les sections (voir --gutter dans
+		      // style.scss), donc le logo s'aligne sur leur bord de contenu.
+		      //
+		      // Seul le padding HORIZONTAL change : la hauteur du header reste
+		      // donnée par md:py-5 / py-3, dont dépend --header-h et, par là, la
+		      // position de la photo du hero. ?>
+		<div class="header-container flex items-center gap-6 gutter-x md:py-5 py-3">
 
 			<!-- Logo. Pas de lazyload : le header est fixed, donc toujours dans le
 			     viewport dès le chargement — un chargement différé n'aurait jamais
@@ -111,11 +118,21 @@ $rumhora_book_url = get_field( 'book_url', 'option' ) ?: home_url( '/book-a-tabl
 			</a>
 
 			<!-- Navigation desktop -->
-			<nav id="site-navigation" class="site-nav hidden lg:block" aria-label="<?php esc_attr_e( 'Navigation principale', 'rumhora' ); ?>">
+			<?php // ml-auto, et plus de justify-between sur le conteneur : la marge
+			      // automatique absorbe tout l'espace libre à GAUCHE de la nav, qui se
+			      // retrouve donc collée au bloc d'actions, à droite. Avec
+			      // justify-between, l'espace était réparti de part et d'autre et la nav
+			      // restait centrée. ?>
+			<nav id="site-navigation" class="site-nav hidden lg:block lg:ml-auto" aria-label="<?php esc_attr_e( 'Navigation principale', 'rumhora' ); ?>">
 				<?php rumhora_primary_nav( 'xl:gap-9 gap-6' ); ?>
 			</nav>
 
-			<div class="header-actions flex items-center md:gap-5 gap-3 flex-shrink-0">
+			<?php // ml-auto SOUS lg seulement : la nav est alors masquée (`hidden`), donc
+			      // sa propre marge automatique disparaît avec elle et le bloc d'actions
+			      // remonterait contre le logo. À partir de lg c'est la nav qui porte la
+			      // marge, et une seconde ici partagerait l'espace libre entre les deux
+			      // au lieu de les coller. ?>
+			<div class="header-actions flex items-center md:gap-5 gap-3 flex-shrink-0 ml-auto lg:ml-0">
 				<?php if ( $rumhora_lang_label && $rumhora_lang_url ) : ?>
 					<a href="<?php echo esc_url( $rumhora_lang_url ); ?>" id="header-lang-toggle" class="lang-toggle hover-underline hidden md:inline-block"><?php echo esc_html( $rumhora_lang_label ); ?></a>
 				<?php endif; ?>
