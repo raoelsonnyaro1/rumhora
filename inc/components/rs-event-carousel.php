@@ -136,10 +136,10 @@ function rs_event_carousel( $args = array() ) {
 			      // de 0.3s à 0.1s — il la décalait d'un cran supplémentaire après un
 			      // déclenchement déjà tardif. ?>
 			<div class="event-carousel__nav fade-in" data-fade-start="100" data-fade-delay="0.1">
-				<button type="button" class="event-carousel__arrow" id="<?php echo esc_attr( $uid ); ?>-prev" aria-label="<?php esc_attr_e( 'Événement précédent', 'rumhora' ); ?>">
+				<button type="button" class="event-carousel__arrow event-carousel__arrow--prev" id="<?php echo esc_attr( $uid ); ?>-prev" aria-label="<?php esc_attr_e( 'Événement précédent', 'rumhora' ); ?>">
 					<?php rs_arrow_icon( 'left' ); ?>
 				</button>
-				<button type="button" class="event-carousel__arrow" id="<?php echo esc_attr( $uid ); ?>-next" aria-label="<?php esc_attr_e( 'Événement suivant', 'rumhora' ); ?>">
+				<button type="button" class="event-carousel__arrow event-carousel__arrow--next" id="<?php echo esc_attr( $uid ); ?>-next" aria-label="<?php esc_attr_e( 'Événement suivant', 'rumhora' ); ?>">
 					<?php rs_arrow_icon( 'right' ); ?>
 				</button>
 			</div>

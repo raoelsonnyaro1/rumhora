@@ -1737,12 +1737,24 @@
 }
 
 /* Le glissement est un ornement ; l'apparition, elle, porte l'information et
-   reste active. */
+   reste active. Idem pour les flèches : la couleur suffit à signaler le
+   survol, le déplacement est supprimé. */
 
 @media (prefers-reduced-motion: reduce) {
   .event-card__body {
     transform: none;
     transition: opacity 0.4s ease;
+  }
+
+  .event-carousel__arrow svg {
+    transition: none;
+  }
+
+  .event-carousel__arrow--prev:hover svg,
+  .event-carousel__arrow--prev:focus-visible svg,
+  .event-carousel__arrow--next:hover svg,
+  .event-carousel__arrow--next:focus-visible svg {
+    transform: none;
   }
 }
 
@@ -1845,17 +1857,26 @@
   padding: 0;
   cursor: pointer;
   color: #C6A75E;
-  transition: color 0.3s ease, transform 0.3s ease;
+  transition: color 0.3s ease;
 }
 
 .event-carousel__arrow svg {
   width: 46px;
   height: 20px;
   display: block;
+  transition: transform 0.3s ease;
 }
 
 .event-carousel__arrow:hover {
   color: #F4EDE4;
+}
+
+.event-carousel__arrow--prev:hover svg, .event-carousel__arrow--prev:focus-visible svg {
+  transform: translateX(-6px);
+}
+
+.event-carousel__arrow--next:hover svg, .event-carousel__arrow--next:focus-visible svg {
+  transform: translateX(6px);
 }
 
 .event-carousel__arrow.swiper-button-disabled {

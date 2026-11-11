@@ -134,11 +134,23 @@ $gap: 2.5rem;
 }
 
 /* Le glissement est un ornement ; l'apparition, elle, porte l'information et
-   reste active. */
+   reste active. Idem pour les flèches : la couleur suffit à signaler le
+   survol, le déplacement est supprimé. */
 @media (prefers-reduced-motion: reduce) {
   .event-card__body {
     transform: none;
     transition: opacity 0.4s ease;
+  }
+
+  .event-carousel__arrow svg {
+    transition: none;
+  }
+
+  .event-carousel__arrow--prev:hover svg,
+  .event-carousel__arrow--prev:focus-visible svg,
+  .event-carousel__arrow--next:hover svg,
+  .event-carousel__arrow--next:focus-visible svg {
+    transform: none;
   }
 }
 
@@ -266,18 +278,40 @@ $gap: 2.5rem;
   cursor: pointer;
   // Dorées au repos, comme tous les boutons du site.
   color: $gold;
-  transition: color 0.3s ease, transform 0.3s ease;
+  // Pas de `transform` ici : c'est le <svg> qui glisse, pas le bouton (voir
+  // plus bas). Une transition sur une propriété que l'élément n'anime jamais
+  // ne sert qu'à égarer la prochaine lecture.
+  transition: color 0.3s ease;
 
   svg {
     width: 46px;
     height: 20px;
     display: block;
+    transition: transform 0.3s ease;
   }
 
   // L'or étant déjà la couleur de repos, le survol passe à l'ivoire des titres
   // plutôt que de ne rien faire.
   &:hover {
     color: $heading;
+  }
+
+  // Au survol, l'icône glisse DANS le sens où elle emmène — la flèche gauche
+  // vers la gauche, la droite vers la droite. C'est le geste de navigation
+  // joué par avance, et c'est aussi ce qui distingue les deux boutons autrement
+  // qu'à la couleur. Le glissement porte sur le <svg> et non sur le bouton :
+  // la zone cliquable, elle, ne doit pas bouger sous le curseur.
+  //
+  // :focus-visible en plus de :hover pour que le repère existe aussi au
+  // clavier, où la seule couleur est un indice faible.
+  &--prev:hover svg,
+  &--prev:focus-visible svg {
+    transform: translateX(-6px);
+  }
+
+  &--next:hover svg,
+  &--next:focus-visible svg {
+    transform: translateX(6px);
   }
 
   // Swiper pose cette classe en début/fin de liste : la flèche inactive reste
