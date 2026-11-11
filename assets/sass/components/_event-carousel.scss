@@ -255,7 +255,10 @@ $gap: 2.5rem;
   display: flex;
   align-items: center;
   justify-content: flex-end;
-  gap: 1.25rem;
+  // Les deux flèches ont besoin d'air entre elles : leur icône glisse de toute
+  // sa largeur au survol (voir .icon-slide), et serrées elles se lisaient comme
+  // un seul bloc.
+  gap: 2.5rem;
   margin-top: 2rem;
   padding-inline: var(--gutter);
 }
@@ -278,11 +281,9 @@ $gap: 2.5rem;
     display: block;
   }
 
-  // L'or étant déjà la couleur de repos, le survol passe à l'ivoire des titres
-  // plutôt que de ne rien faire.
-  &:hover {
-    color: $heading;
-  }
+  // Pas de changement de couleur au survol : la flèche reste dorée, comme les
+  // autres boutons du site. C'est le glissement de l'icône qui porte la
+  // réponse au survol (voir .icon-slide dans _buttons.scss).
 
   // Le glissement de l'icône au survol est porté par .icon-slide (voir
   // _buttons.scss) : deux copies de la flèche dans une boîte rognée, la
