@@ -51,18 +51,77 @@ $slide-line-height: 1.35;
   }
 }
 
+/* ==========================================================================
+   Icône à glissement horizontal
+   ==========================================================================
+   Même mécanique que .btn-slide, couchée : deux copies de l'icône dans une
+   boîte rognée, la visible sort d'un côté pendant que la copie entre de
+   l'autre. Le sens est porté par un modificateur, l'icône devant sortir du
+   côté vers lequel elle pointe.
+
+   L'icône est décorative (aria-hidden sur le <svg>, libellé porté par le
+   bouton) : la dupliquer n'ajoute rien à l'arbre d'accessibilité, contrairement
+   au libellé de .btn-slide qui demande un aria-hidden explicite.
+*/
+
+.icon-slide {
+  position: relative;
+  display: block;
+  overflow: hidden;
+
+  &__in {
+    display: block;
+    transition: transform 0.4s cubic-bezier(0.33, 1, 0.68, 1);
+  }
+
+  // Copie en attente, hors cadre du côté opposé à la sortie.
+  &__in--dup {
+    position: absolute;
+    inset: 0;
+  }
+
+  &--right &__in--dup {
+    transform: translateX(-100%);
+  }
+
+  &--left &__in--dup {
+    transform: translateX(100%);
+  }
+}
+
 /* État survolé, porté par le bouton et non par la boîte : c'est tout le bouton
-   qui est la cible de survol, pas seulement les lettres. :focus-visible inclus
-   pour que l'effet existe aussi au clavier. */
+   qui est la cible de survol, pas seulement les lettres ou l'icône.
+   :focus-visible inclus pour que l'effet existe aussi au clavier. */
 .btn-pill:hover, .btn-pill:focus-visible,
 .btn-circle:hover, .btn-circle:focus-visible,
-.btn:hover, .btn:focus-visible {
+.btn:hover, .btn:focus-visible,
+.event-carousel__arrow:hover, .event-carousel__arrow:focus-visible {
   .btn-slide__in {
     transform: translateY(-100%);
   }
 
   .btn-slide__in--dup {
     transform: translateY(0);
+  }
+
+  // La règle qui ramène la copie à 0 doit être AUSSI SPÉCIFIQUE que celle qui
+  // fait sortir la visible, et déclarée après : la copie porte les deux classes
+  // (.icon-slide__in ET --dup), donc un sélecteur plus court se fait écraser et
+  // elle sortait du cadre au lieu d'y entrer.
+  .icon-slide--right .icon-slide__in {
+    transform: translateX(100%);
+  }
+
+  .icon-slide--right .icon-slide__in--dup {
+    transform: translateX(0);
+  }
+
+  .icon-slide--left .icon-slide__in {
+    transform: translateX(-100%);
+  }
+
+  .icon-slide--left .icon-slide__in--dup {
+    transform: translateX(0);
   }
 }
 
@@ -73,13 +132,26 @@ $slide-line-height: 1.35;
 @media (prefers-reduced-motion: reduce) {
   .btn-pill:hover, .btn-pill:focus-visible,
   .btn-circle:hover, .btn-circle:focus-visible,
-  .btn:hover, .btn:focus-visible {
+  .btn:hover, .btn:focus-visible,
+  .event-carousel__arrow:hover, .event-carousel__arrow:focus-visible {
     .btn-slide__in {
       transform: none;
     }
 
     .btn-slide__in--dup {
       transform: translateY(100%);
+    }
+
+    .icon-slide__in {
+      transform: none;
+    }
+
+    .icon-slide--right .icon-slide__in--dup {
+      transform: translateX(-100%);
+    }
+
+    .icon-slide--left .icon-slide__in--dup {
+      transform: translateX(100%);
     }
   }
 }

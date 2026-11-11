@@ -127,20 +127,87 @@
   transform: translateY(100%);
 }
 
+/* ==========================================================================
+   Icône à glissement horizontal
+   ==========================================================================
+   Même mécanique que .btn-slide, couchée : deux copies de l'icône dans une
+   boîte rognée, la visible sort d'un côté pendant que la copie entre de
+   l'autre. Le sens est porté par un modificateur, l'icône devant sortir du
+   côté vers lequel elle pointe.
+
+   L'icône est décorative (aria-hidden sur le <svg>, libellé porté par le
+   bouton) : la dupliquer n'ajoute rien à l'arbre d'accessibilité, contrairement
+   au libellé de .btn-slide qui demande un aria-hidden explicite.
+*/
+
+.icon-slide {
+  position: relative;
+  display: block;
+  overflow: hidden;
+}
+
+.icon-slide__in {
+  display: block;
+  transition: transform 0.4s cubic-bezier(0.33, 1, 0.68, 1);
+}
+
+.icon-slide__in--dup {
+  position: absolute;
+  inset: 0;
+}
+
+.icon-slide--right .icon-slide__in--dup {
+  transform: translateX(-100%);
+}
+
+.icon-slide--left .icon-slide__in--dup {
+  transform: translateX(100%);
+}
+
 /* État survolé, porté par le bouton et non par la boîte : c'est tout le bouton
-   qui est la cible de survol, pas seulement les lettres. :focus-visible inclus
-   pour que l'effet existe aussi au clavier. */
+   qui est la cible de survol, pas seulement les lettres ou l'icône.
+   :focus-visible inclus pour que l'effet existe aussi au clavier. */
 
 .btn-pill:hover .btn-slide__in, .btn-pill:focus-visible .btn-slide__in,
 .btn-circle:hover .btn-slide__in, .btn-circle:focus-visible .btn-slide__in,
-.btn:hover .btn-slide__in, .btn:focus-visible .btn-slide__in {
+.btn:hover .btn-slide__in, .btn:focus-visible .btn-slide__in,
+.event-carousel__arrow:hover .btn-slide__in, .event-carousel__arrow:focus-visible .btn-slide__in {
   transform: translateY(-100%);
 }
 
 .btn-pill:hover .btn-slide__in--dup, .btn-pill:focus-visible .btn-slide__in--dup,
 .btn-circle:hover .btn-slide__in--dup, .btn-circle:focus-visible .btn-slide__in--dup,
-.btn:hover .btn-slide__in--dup, .btn:focus-visible .btn-slide__in--dup {
+.btn:hover .btn-slide__in--dup, .btn:focus-visible .btn-slide__in--dup,
+.event-carousel__arrow:hover .btn-slide__in--dup, .event-carousel__arrow:focus-visible .btn-slide__in--dup {
   transform: translateY(0);
+}
+
+.btn-pill:hover .icon-slide--right .icon-slide__in, .btn-pill:focus-visible .icon-slide--right .icon-slide__in,
+.btn-circle:hover .icon-slide--right .icon-slide__in, .btn-circle:focus-visible .icon-slide--right .icon-slide__in,
+.btn:hover .icon-slide--right .icon-slide__in, .btn:focus-visible .icon-slide--right .icon-slide__in,
+.event-carousel__arrow:hover .icon-slide--right .icon-slide__in, .event-carousel__arrow:focus-visible .icon-slide--right .icon-slide__in {
+  transform: translateX(100%);
+}
+
+.btn-pill:hover .icon-slide--right .icon-slide__in--dup, .btn-pill:focus-visible .icon-slide--right .icon-slide__in--dup,
+.btn-circle:hover .icon-slide--right .icon-slide__in--dup, .btn-circle:focus-visible .icon-slide--right .icon-slide__in--dup,
+.btn:hover .icon-slide--right .icon-slide__in--dup, .btn:focus-visible .icon-slide--right .icon-slide__in--dup,
+.event-carousel__arrow:hover .icon-slide--right .icon-slide__in--dup, .event-carousel__arrow:focus-visible .icon-slide--right .icon-slide__in--dup {
+  transform: translateX(0);
+}
+
+.btn-pill:hover .icon-slide--left .icon-slide__in, .btn-pill:focus-visible .icon-slide--left .icon-slide__in,
+.btn-circle:hover .icon-slide--left .icon-slide__in, .btn-circle:focus-visible .icon-slide--left .icon-slide__in,
+.btn:hover .icon-slide--left .icon-slide__in, .btn:focus-visible .icon-slide--left .icon-slide__in,
+.event-carousel__arrow:hover .icon-slide--left .icon-slide__in, .event-carousel__arrow:focus-visible .icon-slide--left .icon-slide__in {
+  transform: translateX(-100%);
+}
+
+.btn-pill:hover .icon-slide--left .icon-slide__in--dup, .btn-pill:focus-visible .icon-slide--left .icon-slide__in--dup,
+.btn-circle:hover .icon-slide--left .icon-slide__in--dup, .btn-circle:focus-visible .icon-slide--left .icon-slide__in--dup,
+.btn:hover .icon-slide--left .icon-slide__in--dup, .btn:focus-visible .icon-slide--left .icon-slide__in--dup,
+.event-carousel__arrow:hover .icon-slide--left .icon-slide__in--dup, .event-carousel__arrow:focus-visible .icon-slide--left .icon-slide__in--dup {
+  transform: translateX(0);
 }
 
 /* Le glissement est un pur ornement : en mouvement réduit, les deux copies
@@ -151,14 +218,37 @@
 @media (prefers-reduced-motion: reduce) {
   .btn-pill:hover .btn-slide__in, .btn-pill:focus-visible .btn-slide__in,
   .btn-circle:hover .btn-slide__in, .btn-circle:focus-visible .btn-slide__in,
-  .btn:hover .btn-slide__in, .btn:focus-visible .btn-slide__in {
+  .btn:hover .btn-slide__in, .btn:focus-visible .btn-slide__in,
+  .event-carousel__arrow:hover .btn-slide__in, .event-carousel__arrow:focus-visible .btn-slide__in {
     transform: none;
   }
 
   .btn-pill:hover .btn-slide__in--dup, .btn-pill:focus-visible .btn-slide__in--dup,
   .btn-circle:hover .btn-slide__in--dup, .btn-circle:focus-visible .btn-slide__in--dup,
-  .btn:hover .btn-slide__in--dup, .btn:focus-visible .btn-slide__in--dup {
+  .btn:hover .btn-slide__in--dup, .btn:focus-visible .btn-slide__in--dup,
+  .event-carousel__arrow:hover .btn-slide__in--dup, .event-carousel__arrow:focus-visible .btn-slide__in--dup {
     transform: translateY(100%);
+  }
+
+  .btn-pill:hover .icon-slide__in, .btn-pill:focus-visible .icon-slide__in,
+  .btn-circle:hover .icon-slide__in, .btn-circle:focus-visible .icon-slide__in,
+  .btn:hover .icon-slide__in, .btn:focus-visible .icon-slide__in,
+  .event-carousel__arrow:hover .icon-slide__in, .event-carousel__arrow:focus-visible .icon-slide__in {
+    transform: none;
+  }
+
+  .btn-pill:hover .icon-slide--right .icon-slide__in--dup, .btn-pill:focus-visible .icon-slide--right .icon-slide__in--dup,
+  .btn-circle:hover .icon-slide--right .icon-slide__in--dup, .btn-circle:focus-visible .icon-slide--right .icon-slide__in--dup,
+  .btn:hover .icon-slide--right .icon-slide__in--dup, .btn:focus-visible .icon-slide--right .icon-slide__in--dup,
+  .event-carousel__arrow:hover .icon-slide--right .icon-slide__in--dup, .event-carousel__arrow:focus-visible .icon-slide--right .icon-slide__in--dup {
+    transform: translateX(-100%);
+  }
+
+  .btn-pill:hover .icon-slide--left .icon-slide__in--dup, .btn-pill:focus-visible .icon-slide--left .icon-slide__in--dup,
+  .btn-circle:hover .icon-slide--left .icon-slide__in--dup, .btn-circle:focus-visible .icon-slide--left .icon-slide__in--dup,
+  .btn:hover .icon-slide--left .icon-slide__in--dup, .btn:focus-visible .icon-slide--left .icon-slide__in--dup,
+  .event-carousel__arrow:hover .icon-slide--left .icon-slide__in--dup, .event-carousel__arrow:focus-visible .icon-slide--left .icon-slide__in--dup {
+    transform: translateX(100%);
   }
 }
 
@@ -1737,24 +1827,13 @@
 }
 
 /* Le glissement est un ornement ; l'apparition, elle, porte l'information et
-   reste active. Idem pour les flèches : la couleur suffit à signaler le
-   survol, le déplacement est supprimé. */
+   reste active. (Le mouvement réduit des flèches est traité avec .icon-slide,
+   dans _buttons.scss.) */
 
 @media (prefers-reduced-motion: reduce) {
   .event-card__body {
     transform: none;
     transition: opacity 0.4s ease;
-  }
-
-  .event-carousel__arrow svg {
-    transition: none;
-  }
-
-  .event-carousel__arrow--prev:hover svg,
-  .event-carousel__arrow--prev:focus-visible svg,
-  .event-carousel__arrow--next:hover svg,
-  .event-carousel__arrow--next:focus-visible svg {
-    transform: none;
   }
 }
 
@@ -1864,19 +1943,10 @@
   width: 46px;
   height: 20px;
   display: block;
-  transition: transform 0.3s ease;
 }
 
 .event-carousel__arrow:hover {
   color: #F4EDE4;
-}
-
-.event-carousel__arrow--prev:hover svg, .event-carousel__arrow--prev:focus-visible svg {
-  transform: translateX(-6px);
-}
-
-.event-carousel__arrow--next:hover svg, .event-carousel__arrow--next:focus-visible svg {
-  transform: translateX(6px);
 }
 
 .event-carousel__arrow.swiper-button-disabled {
