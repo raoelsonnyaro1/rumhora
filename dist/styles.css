@@ -2531,6 +2531,18 @@ span.flatpickr-weekday {
   will-change: transform;
 }
 
+/* Hero : la grappe des deux photos, pas les photos elles-mêmes — elles sont
+   déjà animées en `y` par initHeroIntro (voir le markup de rs_hero_split).
+
+   Les boutons du hero sont alignés sur le bas de la photo basse (margin-top
+   auto). Le parallax étant une TRANSFORMATION, il ne déplace pas la mise en
+   page : l'alignement tient au repos, et ne se décale qu'au fil du scroll —
+   au moment où le hero quitte l'écran. */
+
+.hero-media.scroll-parallax-box {
+  --overflow: 40;
+}
+
 .text-media__frame.scroll-parallax-box {
   --overflow: 45;
 }

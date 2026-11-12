@@ -153,7 +153,12 @@ function rs_hero_split( $args = array() ) {
 			</div>
 
 			<!-- Colonne photos : quinconce, la 2e décalée vers le bas et la droite -->
-			<div class="hero-media relative">
+			<?php // Le parallax est posé sur la GRAPPE et non sur chaque photo :
+			      // initHeroIntro anime déjà `y` sur les .hero-media-item pour les
+			      // faire monter à l'entrée, et le ticker du parallax, qui écrit la
+			      // même propriété à chaque frame, écraserait cette montée dès la
+			      // première. La grappe, elle, n'est animée par personne. ?>
+			<div class="hero-media scroll-parallax-box relative">
 				<?php foreach ( array_slice( $images, 0, 2 ) as $i => $image ) : ?>
 					<!-- Pas de `m-0` ici : cet utilitaire Tailwind est émis APRÈS le
 					     SCSS compilé et écraserait le margin-top qui décale la 2e
