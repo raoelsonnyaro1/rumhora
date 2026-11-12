@@ -138,12 +138,23 @@ $gap: 2.5rem;
 }
 
 /* Le glissement est un ornement ; l'apparition, elle, porte l'information et
-   reste active. (Le mouvement réduit des flèches est traité avec .icon-slide,
-   dans _buttons.scss.) */
+   reste active. */
 @media (prefers-reduced-motion: reduce) {
   .event-card__body {
     transform: none;
     transition: opacity 0.4s ease;
+  }
+
+  // Le glissement des flèches est un ornement : l'icône ne bouge plus.
+  .event-carousel__arrow svg {
+    transition: none;
+  }
+
+  .event-carousel__arrow--prev:hover svg,
+  .event-carousel__arrow--prev:focus-visible svg,
+  .event-carousel__arrow--next:hover svg,
+  .event-carousel__arrow--next:focus-visible svg {
+    transform: none;
   }
 }
 
@@ -241,9 +252,8 @@ $gap: 2.5rem;
   display: flex;
   align-items: center;
   justify-content: flex-end;
-  // Les deux flèches ont besoin d'air entre elles : leur icône glisse de toute
-  // sa largeur au survol (voir .icon-slide), et serrées elles se lisaient comme
-  // un seul bloc.
+  // Les deux flèches ont besoin d'air entre elles : serrées, et leurs icônes
+  // bougeant au survol, elles se lisaient comme un seul bloc.
   gap: 2.5rem;
   margin-top: 2rem;
   padding-inline: var(--gutter);
@@ -261,21 +271,36 @@ $gap: 2.5rem;
   // ne sert qu'à égarer la prochaine lecture.
   transition: color 0.3s ease;
 
+
   svg {
     width: 46px;
     height: 20px;
     display: block;
+    transition: transform 0.3s ease;
   }
 
   // Pas de changement de couleur au survol : la flèche reste dorée, comme les
   // autres boutons du site. C'est le glissement de l'icône qui porte la
-  // réponse au survol (voir .icon-slide dans _buttons.scss).
+  // réponse.
+  //
+  // Un simple déplacement de quelques pixels DANS le sens où la flèche emmène
+  // — la gauche vers la gauche, la droite vers la droite — et non un relais de
+  // deux copies : le geste reste continu et l'icône ne quitte jamais le bouton.
+  //
+  // Le glissement porte sur le <svg> et non sur le bouton : la zone cliquable
+  // ne doit pas se dérober sous le curseur.
+  //
+  // :focus-visible en plus de :hover pour que le repère existe aussi au
+  // clavier, où la couleur ne change pas non plus.
+  &--prev:hover svg,
+  &--prev:focus-visible svg {
+    transform: translateX(-6px);
+  }
 
-  // Le glissement de l'icône au survol est porté par .icon-slide (voir
-  // _buttons.scss) : deux copies de la flèche dans une boîte rognée, la
-  // visible sort du côté vers lequel elle pointe pendant que la copie entre
-  // de l'autre — exactement le mécanisme du libellé des boutons, couché.
-  // Le sens vient du modificateur posé sur le markup, pas d'ici.
+  &--next:hover svg,
+  &--next:focus-visible svg {
+    transform: translateX(6px);
+  }
 
   // Swiper pose cette classe en début/fin de liste : la flèche inactive reste
   // visible mais clairement inopérante, plutôt que de disparaître et de faire
