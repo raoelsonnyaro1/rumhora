@@ -1706,12 +1706,9 @@
   transition-timing-function: cubic-bezier(0.33, 1, 0.68, 1);
 }
 
-/* Aucune légende affichée au repos, pas même celle de la slide en tête : elles
-   n'apparaissent qu'au survol de leur carte (voir .event-card plus bas).
-
-   La slide active avait son exception, et avec elle une règle en « has » qui
-   l'effaçait dès qu'une AUTRE carte était survolée. Les deux disparaissent :
-   sans légende permanente, il n'y a plus rien à effacer. */
+/* La légende de la slide en tête est affichée par défaut ; les autres
+   n'apparaissent qu'au survol. Les règles sont EN FIN DE FICHIER, après
+   .event-card — voir le bloc « Légendes » tout en bas. */
 
 /* Swiper non initialisé (son script n'a pas pu se charger) : les slides
    retombent en simple rangée et plus aucune n'est « active ». On n'escamote
@@ -1876,6 +1873,41 @@
   .event-carousel__arrow--next:focus-visible svg {
     transform: none;
   }
+}
+
+/* ==========================================================================
+   Légendes : slide en tête affichée par défaut
+   ==========================================================================
+   Placé en fin de fichier, après la règle de base qui escamote les légendes.
+   La spécificité suffirait ici (0-2-0 contre 0-1-0), mais l'ordre de source
+   l'assure aussi : c'est exactement le piège qui avait rendu muet un bloc
+   déclaré trop haut dans ce fichier.
+
+   .swiper-slide-active plutôt que :first-child : la classe suit la slide
+   réellement en tête après navigation, là où :first-child resterait collé à
+   la première carte du DOM même une fois le carrousel avancé.
+*/
+
+.swiper-slide-active .event-card__body {
+  opacity: 1;
+  transform: none;
+}
+
+/* ...sauf si une AUTRE carte est survolée : une seule légende à la fois.
+
+   Le :not() est indispensable — sans lui la règle s'appliquerait aussi quand
+   c'est la slide active elle-même qui est survolée, et sa légende
+   disparaîtrait sous le curseur, cette règle étant plus spécifique que le
+   .event-card:hover qui l'affiche.
+
+   :has() demande Chrome 105 / Safari 15.4 / Firefox 121. En dessous le
+   sélecteur est invalide et la règle entière tombe : la légende de la slide
+   en tête reste alors visible en plus de celle survolée. Rien ne casse. */
+
+.event-carousel__swiper:has(.event-card:hover) .swiper-slide-active:not(:hover) .event-card__body,
+.event-carousel__swiper:has(.event-card:focus-within) .swiper-slide-active:not(:focus-within) .event-card__body {
+  opacity: 0;
+  transform: translateY(8px);
 }
 
 /**
