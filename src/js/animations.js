@@ -1097,6 +1097,13 @@ function initButtonReveal() {
  *                                   l'élément touche le bas de l'écran, donc
  *                                   le plus tôt possible. Même unité que le
  *                                   data-reveal-start des .text-reveal.
+ *   data-fade-y="0"                 décalage de départ en px (50 par défaut) :
+ *                                   l'élément part d'autant PLUS BAS que sa
+ *                                   position finale. À mettre à 0 pour un
+ *                                   élément collé au bas de son conteneur —
+ *                                   sinon il est dessiné EN DEHORS pendant
+ *                                   toute l'animation, sur ce qu'il y a
+ *                                   derrière (voir la barre légale du footer).
  */
 function initFadeInAnimations() {
   gsap.utils.toArray('.fade-in').forEach((element, i) => {
@@ -1112,8 +1119,11 @@ function initFadeInAnimations() {
       const customStart = parseFloat(element.dataset.fadeStart);
       const startPercent = Number.isNaN(customStart) ? 85 : customStart;
 
+      const customY = parseFloat(element.dataset.fadeY);
+      const fromY = Number.isNaN(customY) ? 50 : customY;
+
       const anim = gsap.fromTo(element,
-        { opacity: 0, y: 50 },
+        { opacity: 0, y: fromY },
         {
           opacity: 1,
           y: 0,

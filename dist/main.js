@@ -1647,9 +1647,11 @@
         const duration = Number.isNaN(customDuration) ? 1 : customDuration;
         const customStart = parseFloat(element.dataset.fadeStart);
         const startPercent = Number.isNaN(customStart) ? 85 : customStart;
+        const customY = parseFloat(element.dataset.fadeY);
+        const fromY = Number.isNaN(customY) ? 50 : customY;
         const anim = gsap.fromTo(
           element,
-          { opacity: 0, y: 50 },
+          { opacity: 0, y: fromY },
           {
             opacity: 1,
             y: 0,
