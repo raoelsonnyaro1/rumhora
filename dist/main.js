@@ -1854,7 +1854,9 @@
       const prevEl = document.getElementById(`${el.id}-prev`);
       const nextEl = document.getElementById(`${el.id}-next`);
       new Swiper(el, __spreadValues({
-        slidesPerView: 1.08,
+        // Nombres ENTIERS : une valeur fractionnaire laissait la dernière carte
+        // coupée par le bord du slider, donc sans coins arrondis de ce côté.
+        slidesPerView: 1,
         spaceBetween: 12,
         grabCursor: true,
         // 700ms au lieu des 300 par défaut : le défilement se pose au lieu de
@@ -1867,8 +1869,10 @@
         // rend impossible — il n'y a alors jamais de fin.
         watchOverflow: true,
         breakpoints: {
-          640: { slidesPerView: 1.6, spaceBetween: 14 },
-          1024: { slidesPerView: 2.25, spaceBetween: 16 }
+          640: { slidesPerView: 2, spaceBetween: 14 },
+          // 3 et non 2 : à 1440 la carte fait alors ~365px de large, soit la
+          // cote de la maquette (393px). À 2 elle en ferait 550.
+          1024: { slidesPerView: 3, spaceBetween: 16 }
         }
       }, prevEl && nextEl ? { navigation: { prevEl, nextEl } } : {}));
     });

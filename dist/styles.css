@@ -1650,11 +1650,9 @@
 /**
  * Carrousel d'événements (voir inc/components/rs-event-carousel.php).
  *
- * Particularité de mise en page : le slider s'étend jusqu'au BORD DROIT de
- * l'écran, sans gouttière, pour que les cartes suivantes soient rognées par le
- * bord de la fenêtre — c'est ce débordement qui signale qu'il y a autre chose
- * à voir. Le bloc de titre et la navigation, eux, gardent les gouttières
- * standard du site.
+ * Le slider garde les gouttières du site des deux côtés et n'affiche que des
+ * cartes ENTIÈRES : chacune montre donc ses quatre coins arrondis. C'est la
+ * navigation, et elle seule, qui signale qu'il y a d'autres événements à voir.
  */
 
 .event-carousel {
@@ -1666,7 +1664,7 @@
   flex-direction: column;
   gap: 2.5rem;
   padding-left: var(--gutter);
-  padding-right: 0;
+  padding-right: var(--gutter);
 }
 
 @media (min-width: 1024px) {

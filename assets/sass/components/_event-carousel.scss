@@ -1,18 +1,16 @@
 /**
  * Carrousel d'événements (voir inc/components/rs-event-carousel.php).
  *
- * Particularité de mise en page : le slider s'étend jusqu'au BORD DROIT de
- * l'écran, sans gouttière, pour que les cartes suivantes soient rognées par le
- * bord de la fenêtre — c'est ce débordement qui signale qu'il y a autre chose
- * à voir. Le bloc de titre et la navigation, eux, gardent les gouttières
- * standard du site.
+ * Le slider garde les gouttières du site des deux côtés et n'affiche que des
+ * cartes ENTIÈRES : chacune montre donc ses quatre coins arrondis. C'est la
+ * navigation, et elle seule, qui signale qu'il y a d'autres événements à voir.
  */
 @use '../variables' as *;
 
-// La section ne peut pas porter .gutter-x : elle n'applique de marge qu'à
-// GAUCHE, le slider filant jusqu'au bord droit (voir plus haut). Elle lit donc
-// directement var(--gutter), la source unique déclarée dans style.scss, au
-// lieu d'en recopier les valeurs — qui divergeaient dès qu'on y touchait.
+// La grille lit var(--gutter) directement plutôt que de porter .gutter-x : le
+// bloc de titre déborde de sa piste par-dessus le slider (voir
+// .event-carousel__head), ce qui demande de connaître la gouttière pour
+// dimensionner la 1re piste, pas seulement de l'appliquer.
 
 // Gouttière entre le bloc de titre et le slider. En variable parce que la
 // largeur de la 1re piste s'en déduit.
@@ -31,8 +29,11 @@ $gap: 2.5rem;
   flex-direction: column;
   gap: $gap;
   padding-left: var(--gutter);
-  // Pas de padding-right : c'est le slider qui file jusqu'au bord.
-  padding-right: 0;
+  // Gouttière des deux côtés : le slider ne file plus jusqu'au bord de
+  // l'écran. Il le faisait pour laisser deviner les cartes suivantes, mais
+  // celle qui dépassait était coupée net par le bord — donc sans coins
+  // arrondis de ce côté.
+  padding-right: var(--gutter);
 
   @media (min-width: 1024px) {
     display: grid;
