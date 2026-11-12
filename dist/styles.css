@@ -2509,6 +2509,19 @@ span.flatpickr-weekday {
    --overflow est l'amplitude en PIXELS (le cadre va de -overflow à +overflow),
    lue telle quelle par initColumnParallax.
 
+   Ce qui borne l'amplitude, c'est la distance du cadre au BORD de sa section —
+   là où un overflow:hidden rognerait. Mesurée à 1024, la largeur la plus
+   contraignante :
+
+     About us          262px de marge   -> 45px   (17%)
+     portrait du chef  112px            -> 48px   (43%)
+     univers photo 1   112px            -> 25px   (22%)
+     univers photo 2   189px            -> 20px   (11%)
+
+   Le portrait est le cas limite : sa section porte overflow:hidden et le cadre
+   affleure déjà le bas de la zone de contenu, il ne lui reste que le padding.
+   Les 112px sont donc une vraie borne, pas une approximation.
+
    Le cadre porte aussi, pour certains composants, le `yPercent` du reveal
    d'entrée (initRevealImages). Pas de conflit : GSAP compose `y` et
    `yPercent`, ce sont deux propriétés distinctes de la même transformation.
@@ -2519,19 +2532,19 @@ span.flatpickr-weekday {
 }
 
 .text-media__frame.scroll-parallax-box {
-  --overflow: 22;
+  --overflow: 45;
 }
 
 .portrait-quote__frame.scroll-parallax-box {
-  --overflow: 28;
+  --overflow: 48;
 }
 
 .media-cluster__photo--1.scroll-parallax-box {
-  --overflow: 12;
+  --overflow: 25;
 }
 
 .media-cluster__photo--2.scroll-parallax-box {
-  --overflow: 9;
+  --overflow: 20;
 }
 
 /**
