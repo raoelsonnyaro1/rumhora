@@ -33,7 +33,10 @@ $footer-text: clamp(14px, 0.83vw, 21.33px); // 16pt XD
   font-family: 'Montserrat', system-ui, sans-serif;
   font-size: $footer-text;
   font-weight: 400;
-  line-height: 1.6;
+  // Interligne de la maquette : 19pt pour un corps de 16pt, soit 19/16 =
+  // 1.1875. Sans unité et non en px — le corps étant fluide, une valeur
+  // absolue s'en décrocherait à chaque largeur d'écran.
+  line-height: 1.1875; // 19pt / 16pt
   color: $body-text;
   // ~38 caractères : force le retour sur 3 lignes de la maquette sans avoir à
   // écrire les sauts à la main dans le champ ACF, donc sans les figer pour la
