@@ -66,7 +66,7 @@ $rumhora_copyright = get_field( 'footer_copyright', 'option' )
 
 			<!-- Colonne centrale : logo complet (logomark + nom + signature) -->
 			<div class="footer-col flex justify-center">
-				<a href="<?php echo esc_url( home_url( '/' ) ); ?>" rel="home" data-barba class="footer-logo">
+				<a href="<?php echo esc_url( home_url( '/' ) ); ?>" rel="home" data-barba class="footer-logo blur-reveal">
 					<img data-src="<?php echo esc_url( get_template_directory_uri() . '/img/logo-full.png' ); ?>"
 						alt="<?php bloginfo( 'name' ); ?>"
 						width="482" height="542"

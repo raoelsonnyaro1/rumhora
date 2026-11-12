@@ -1205,6 +1205,7 @@
     initCarousels,
     initEventCarousels,
     initFadeInAnimations,
+    initBlurReveal,
     initGsapFadeIn,
     initTextRevealAnimations,
     initListRevealAnimations,
@@ -1682,6 +1683,34 @@
       } catch (error) {
         reportScrollTriggerCorruption("initFadeInAnimations (element)", error);
         gsap.set(element, { opacity: 1, y: 0 });
+      }
+    });
+  }
+  function initBlurReveal() {
+    gsap.utils.toArray(".blur-reveal").forEach((element) => {
+      const customStart = parseFloat(element.dataset.blurStart);
+      const startPercent = Number.isNaN(customStart) ? 90 : customStart;
+      gsap.set(element, REVEAL_FROM);
+      try {
+        gsap.to(element, {
+          opacity: 1,
+          y: 0,
+          filter: "blur(0px)",
+          duration: REVEAL_DURATION,
+          ease: "power2.out",
+          // Même raison que pour les fragments de texte : sans ce nettoyage,
+          // l'élément garde un `filter` et un `will-change` inline, donc sa
+          // propre couche de composition, pour toute la vie de la page.
+          onComplete: () => gsap.set(element, { clearProps: "filter,transform,opacity,willChange" }),
+          scrollTrigger: {
+            trigger: element,
+            start: `top ${startPercent}%`,
+            once: true
+          }
+        });
+      } catch (error) {
+        reportScrollTriggerCorruption("initBlurReveal (element)", error);
+        gsap.set(element, { clearProps: "filter,transform,opacity,willChange" });
       }
     });
   }
