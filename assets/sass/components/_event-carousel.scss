@@ -106,27 +106,12 @@ $gap: 2.5rem;
   overflow: hidden;
 }
 
-/* Slide en tête : sa légende reste affichée sans survol. */
-.swiper-slide-active .event-card__body {
-  opacity: 1;
-  transform: none;
-}
+/* Aucune légende affichée au repos, pas même celle de la slide en tête : elles
+   n'apparaissent qu'au survol de leur carte (voir .event-card plus bas).
 
-/* ...sauf si une AUTRE carte est survolée : une seule légende à la fois. Le
-   :not() est indispensable — sans lui, la règle s'appliquerait aussi quand
-   c'est la slide active elle-même qui est survolée, et sa légende
-   disparaîtrait sous le curseur (cette règle est plus spécifique que le
-   .event-card:hover qui l'affiche).
-
-   :has() n'est pas supporté avant Chrome 105 / Safari 15.4 / Firefox 121. Un
-   sélecteur invalide fait tomber la règle entière, et le comportement
-   précédent reprend : la légende de la slide active reste visible en plus de
-   celle survolée. Dégradation acceptable, rien ne casse. */
-.event-carousel__swiper:has(.event-card:hover) .swiper-slide-active:not(:hover) .event-card__body,
-.event-carousel__swiper:has(.event-card:focus-within) .swiper-slide-active:not(:focus-within) .event-card__body {
-  opacity: 0;
-  transform: translateY(8px);
-}
+   La slide active avait son exception, et avec elle une règle en « has » qui
+   l'effaçait dès qu'une AUTRE carte était survolée. Les deux disparaissent :
+   sans légende permanente, il n'y a plus rien à effacer. */
 
 /* Swiper non initialisé (son script n'a pas pu se charger) : les slides
    retombent en simple rangée et plus aucune n'est « active ». On n'escamote
@@ -177,6 +162,22 @@ $gap: 2.5rem;
       object-fit: cover;
       display: block;
     }
+  }
+
+  // Légende (date, titre, intervenant, CTA). Escamotée au repos sur TOUTES les
+  // cartes : elle n'apparaît qu'au survol de la sienne.
+  //
+  // ⚠ Cette règle avait disparu en retirant la parallaxe — la coupe avait
+  // emporté le bloc entier. Sans elle, plus rien ne cache les légendes et
+  // elles restaient toutes affichées en permanence.
+  &__body {
+    display: flex;
+    align-items: flex-end;
+    justify-content: space-between;
+    gap: 1.5rem;
+    opacity: 0;
+    transform: translateY(8px);
+    transition: opacity 0.4s ease, transform 0.4s ease;
   }
 
   // :focus-within INDISPENSABLE : à opacity 0 le lien « Reserve Lounge » reste
