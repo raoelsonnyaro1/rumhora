@@ -1056,12 +1056,22 @@
    Colonne centrale — logo
    ========================================================================== */
 
-/* Espacement haut et bas du logo. C'est lui qui donne sa hauteur au footer,
-   depuis que celui-ci n'a plus de hauteur imposée. */
+/* Espacement du logo, 36px de part et d'autre. C'est lui qui donne sa hauteur
+   au footer, depuis que celui-ci n'a plus de hauteur imposée.
+
+   Les 36px du BAS sont portés par la rangée (.footer-top) et non par le logo :
+   les trois colonnes étant calées sur le bas de la rangée, une marge basse sur
+   le seul logo l'aurait remonté de 36px par rapport aux textes — il n'aurait
+   plus partagé leur ligne de base. Le résultat visuel est identique, l'espace
+   étant simplement déclaré un cran plus haut. */
+
+.footer-top {
+  padding-bottom: 36px;
+}
 
 .footer-logo {
   display: block;
-  margin-block: 36px;
+  margin-top: 36px;
 }
 
 .footer-logo img {

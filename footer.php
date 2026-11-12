@@ -41,7 +41,11 @@ $rumhora_copyright = get_field( 'footer_copyright', 'option' )
 <footer class="site-footer header-dark-section relative">
 	<div class="footer-inner xl:px-14 md:px-8 px-5 md:pt-20 pt-14 md:pb-6 pb-5">
 
-		<div class="footer-top grid lg:grid-cols-3 grid-cols-1 lg:gap-10 gap-12 items-center">
+		<?php // lg:items-end : les trois colonnes sont calées sur le BAS de la ligne,
+		      // pour que les textes partagent la ligne de base du logo. Pas sous lg,
+		      // où la grille est à une colonne — `items-end` y alignerait les blocs
+		      // à droite au lieu de les laisser occuper la largeur. ?>
+		<div class="footer-top grid lg:grid-cols-3 grid-cols-1 lg:gap-10 gap-12 lg:items-end">
 
 			<!-- Colonne gauche : accroche + liens -->
 			<div class="footer-col">
