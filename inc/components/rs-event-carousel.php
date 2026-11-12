@@ -145,11 +145,16 @@ function rs_event_carousel( $args = array() ) {
 		     slider, lui, va jusqu'au bord. Masquée s'il n'y a qu'un événement —
 		     il n'y a alors rien à faire défiler. -->
 		<?php if ( count( $events ) > 1 ) : ?>
-			<?php // Même raison que pour les titres de carte : la navigation est le
-			      // dernier élément de la section. Seuil remonté à 100 et délai ramené
-			      // de 0.3s à 0.1s — il la décalait d'un cran supplémentaire après un
-			      // déclenchement déjà tardif. ?>
-			<div class="event-carousel__nav fade-in" data-fade-start="100" data-fade-delay="0.1">
+			<?php // La navigation est le dernier élément de la section, donc le plus
+			      // tardif à franchir n'importe quel seuil. Celui-ci est poussé à 120,
+			      // soit 20% de hauteur d'écran SOUS la fenêtre : les flèches partent
+			      // avant même d'y entrer. Délai supprimé, il ajoutait un cran de plus.
+			      //
+			      // Au-delà de 100 sans risque ici : contrairement à la barre légale du
+			      // footer, cette section n'est pas la dernière de la page, le scroll
+			      // nécessaire reste donc largement atteignable (3908 pour un maximum
+			      // de 4740 à 1440x900). ?>
+			<div class="event-carousel__nav fade-in" data-fade-start="120" data-fade-delay="0">
 				<button type="button" class="event-carousel__arrow event-carousel__arrow--prev" id="<?php echo esc_attr( $uid ); ?>-prev" aria-label="<?php esc_attr_e( 'Événement précédent', 'rumhora' ); ?>">
 					<?php rs_arrow_icon( 'left' ); ?>
 				</button>
