@@ -66,23 +66,24 @@ $footer-text: clamp(14px, 0.83vw, 21.33px); // 16pt XD
    Colonne centrale — logo
    ========================================================================== */
 
-/* Espacement haut et bas du logo, relevé sur la maquette : 127pt, et XD compte
-   en POINTS — 127 × 4/3 = 169.33px. C'est lui qui donne sa hauteur au footer
-   depuis qu'il n'a plus de hauteur imposée. */
+/* Espacement haut et bas du logo. C'est lui qui donne sa hauteur au footer,
+   depuis que celui-ci n'a plus de hauteur imposée. */
 .footer-logo {
   display: block;
-  margin-block: 169.33px; // 127pt XD
+  margin-block: 36px;
 }
 
 .footer-logo img {
-  // Hauteur de référence de la maquette (~175px pour le bloc complet
-  // logomark + nom + signature).
-  height: 175px;
-  width: auto;
+  // Dimensionné par la LARGEUR et non la hauteur : c'est la cote de la
+  // maquette, et la hauteur suit le ratio du fichier (482 × 542).
+  width: 230px;
+  height: auto;
   display: block;
 
   @media (max-width: 767px) {
-    height: 140px;
+    // 80% de la cote desktop, le rapport qui existait entre les deux
+    // précédentes hauteurs.
+    width: 184px;
   }
 }
 
