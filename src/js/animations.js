@@ -1508,7 +1508,14 @@ function destroyColumnParallax() {
 }
 
 function initColumnParallax() {
-  document.querySelectorAll('.scroll-parallax-img').forEach((img) => {
+  // Deux cibles possibles :
+  //   .scroll-parallax-img  l'IMAGE coulisse dans son cadre (le cadre ne bouge
+  //                         pas ; l'image est agrandie pour avoir de la réserve)
+  //   .scroll-parallax-box  le CADRE lui-même se déplace dans la mise en page
+  // Le traitement est identique — seule la cible change, et avec elle la
+  // contrainte : réserve d'image dans un cas, place disponible autour dans
+  // l'autre.
+  document.querySelectorAll('.scroll-parallax-img, .scroll-parallax-box').forEach((img) => {
     // .section_galerie avant img.parentElement : dans rs_galerie(), le parent
     // direct est .swiper-slide (positionné/transformé par Swiper, masqué quand
     // ce n'est pas le slide actif) — une référence instable pour mesurer la

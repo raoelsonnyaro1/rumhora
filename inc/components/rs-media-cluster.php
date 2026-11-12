@@ -68,17 +68,17 @@ function rs_media_cluster( $args = array() ) {
 			<div class="media-cluster__media <?php echo $invert ? 'lg:order-2' : ''; ?>">
 				<div class="media-cluster__stage">
 
-					<div class="reveal media-cluster__photo media-cluster__photo--1">
+					<div class="reveal media-cluster__photo media-cluster__photo--1 scroll-parallax-box">
 						<img data-src="<?php echo esc_url( $images[0]['url'] ); ?>"
 							alt="<?php echo esc_attr( $images[0]['alt'] ?? '' ); ?>"
-							class="lazyload scroll-parallax-img">
+							class="lazyload">
 					</div>
 
 					<?php if ( isset( $images[1] ) ) : ?>
-						<div class="reveal media-cluster__photo media-cluster__photo--2">
+						<div class="reveal media-cluster__photo media-cluster__photo--2 scroll-parallax-box">
 							<img data-src="<?php echo esc_url( $images[1]['url'] ); ?>"
 								alt="<?php echo esc_attr( $images[1]['alt'] ?? '' ); ?>"
-								class="lazyload scroll-parallax-img">
+								class="lazyload">
 						</div>
 					<?php endif; ?>
 

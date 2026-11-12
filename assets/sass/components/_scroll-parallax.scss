@@ -13,39 +13,37 @@
 }
 
 /* ==========================================================================
-   Amplitude par cadre
+   Variante « conteneur »
    ==========================================================================
-   --overflow est l'amplitude en PIXELS (l'image va de -overflow à +overflow),
-   lue telle quelle par initColumnParallax. Le scale(1.2) ci-dessus donne 10%
-   de réserve de chaque côté : l'amplitude doit rester sous cette réserve,
-   sinon un bord vide apparaît en haut ou en bas de la course.
+   Ici c'est le CADRE qui se déplace dans la mise en page, pas l'image dans son
+   cadre. Pas de scale donc : l'image garde sa taille, et il n'y a aucune
+   réserve à ménager — la seule contrainte est la place disponible autour du
+   cadre, que ces amplitudes volontairement faibles ne consomment jamais.
 
-   La réserve dépend de la HAUTEUR du cadre, qui varie d'un composant à
-   l'autre — et une valeur unique serait soit invisible sur les grands cadres,
-   soit débordante sur les petits. Réserves mesurées à 1024, la largeur la plus
-   contraignante :
+   --overflow est l'amplitude en PIXELS (le cadre va de -overflow à +overflow),
+   lue telle quelle par initColumnParallax.
 
-     About us          376px de haut -> 38px de réserve
-     portrait du chef  469px          -> 47px
-     univers photo 1   224px          -> 22px
-     univers photo 2   158px          -> 16px
-
-   Les valeurs ci-dessous gardent toutes au moins 40% de marge sous leur
-   réserve. Mouvement « léger » voulu : on reste loin du maximum possible.
+   Le cadre porte aussi, pour certains composants, le `yPercent` du reveal
+   d'entrée (initRevealImages). Pas de conflit : GSAP compose `y` et
+   `yPercent`, ce sont deux propriétés distinctes de la même transformation.
 */
 
-.text-media__frame .scroll-parallax-img {
+.scroll-parallax-box {
+  will-change: transform;
+}
+
+.text-media__frame.scroll-parallax-box {
   --overflow: 22;
 }
 
-.portrait-quote__frame .scroll-parallax-img {
+.portrait-quote__frame.scroll-parallax-box {
   --overflow: 28;
 }
 
-.media-cluster__photo--1 .scroll-parallax-img {
+.media-cluster__photo--1.scroll-parallax-box {
   --overflow: 12;
 }
 
-.media-cluster__photo--2 .scroll-parallax-img {
+.media-cluster__photo--2.scroll-parallax-box {
   --overflow: 9;
 }

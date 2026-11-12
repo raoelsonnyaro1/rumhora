@@ -1912,7 +1912,7 @@
     parallaxItems = [];
   }
   function initColumnParallax() {
-    document.querySelectorAll(".scroll-parallax-img").forEach((img) => {
+    document.querySelectorAll(".scroll-parallax-img, .scroll-parallax-box").forEach((img) => {
       const wrap = img.closest(".photo-trio-item") || img.closest(".section_galerie") || img.parentElement;
       if (!wrap) return;
       const maxValue = parseInt(getComputedStyle(img).getPropertyValue("--overflow"), 10) || 100;

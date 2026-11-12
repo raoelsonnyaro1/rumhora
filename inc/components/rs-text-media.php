@@ -109,10 +109,10 @@ function rs_text_media( $args = array() ) {
 			     titre — prévoir une zone sombre sur son tiers gauche. -->
 			<?php if ( $image ) : ?>
 				<div class="text-media__media">
-					<div class="reveal text-media__frame">
+					<div class="reveal text-media__frame scroll-parallax-box">
 						<img data-src="<?php echo esc_url( $image['url'] ); ?>"
 							alt="<?php echo esc_attr( $image['alt'] ?? '' ); ?>"
-							class="lazyload scroll-parallax-img">
+							class="lazyload">
 					</div>
 				</div>
 			<?php endif; ?>
