@@ -46,7 +46,13 @@ $rumhora_copyright = get_field( 'footer_copyright', 'option' )
 			<!-- Colonne gauche : accroche + liens -->
 			<div class="footer-col">
 				<?php if ( $rumhora_tagline ) : ?>
-					<p class="footer-tagline"><?php echo wp_kses_post( $rumhora_tagline ); ?></p>
+					<?php // .text-reveal : même révélation ligne à ligne que les descriptions
+					      // des sections. À noter — initTextRevealAnimations ne dispatche
+					      // « textRevealStarted » qu'une fois TOUS ses éléments démarrés ;
+					      // en ajouter un dans le footer repousse donc cet évènement au
+					      // moment où le visiteur y arrive. Sans conséquence aujourd'hui,
+					      // rien n'utilise data-fade-wait-for — à savoir si ça change. ?>
+					<p class="footer-tagline text-reveal"><?php echo wp_kses_post( $rumhora_tagline ); ?></p>
 				<?php endif; ?>
 
 				<nav class="footer-nav md:mt-8 mt-6" aria-label="<?php esc_attr_e( 'Liens du pied de page', 'rumhora' ); ?>">
@@ -68,19 +74,24 @@ $rumhora_copyright = get_field( 'footer_copyright', 'option' )
 			<div class="footer-col flex flex-col lg:items-end items-start">
 				<?php rs_social_icons(); ?>
 
-				<address class="footer-contact lg:text-right md:mt-6 mt-5">
+				<?php // Groupe à décalage plutôt que .text-reveal : SplitText devrait ici
+					      // recouper des <span> de bloc contenant des liens, ce qui est
+					      // fragile. Chaque ligne est déjà un élément — autant les animer
+					      // telles quelles. ?>
+					<address class="footer-contact lg:text-right md:mt-6 mt-5"
+						data-stagger-group data-stagger-start="top 95%">
 					<?php if ( $rumhora_address ) : ?>
-						<span class="block"><?php echo esc_html( $rumhora_address ); ?></span>
+						<span class="block" data-stagger-item><?php echo esc_html( $rumhora_address ); ?></span>
 					<?php endif; ?>
 
 					<?php if ( $rumhora_phone ) : ?>
-						<span class="block">
+						<span class="block" data-stagger-item>
 							<?php esc_html_e( 'Phone:', 'rumhora' ); ?>
 							<a href="tel:<?php echo esc_attr( preg_replace( '/[^0-9+]/', '', $rumhora_phone ) ); ?>" class="hover-underline"><?php echo esc_html( $rumhora_phone ); ?></a>
 						</span>
 					<?php endif; ?>
 
-					<span class="block">
+					<span class="block" data-stagger-item>
 						<?php esc_html_e( 'Email:', 'rumhora' ); ?>
 						<a href="mailto:<?php echo esc_attr( $rumhora_email ); ?>" class="hover-underline"><?php echo esc_html( $rumhora_email ); ?></a>
 					</span>
@@ -90,7 +101,8 @@ $rumhora_copyright = get_field( 'footer_copyright', 'option' )
 		</div>
 
 		<!-- Barre légale, séparée par un filet (voir .footer-bottom) -->
-		<div class="footer-bottom flex flex-wrap justify-between items-center gap-3 md:mt-16 mt-12 md:pt-5 pt-4">
+		<div class="footer-bottom fade-in flex flex-wrap justify-between items-center gap-3 md:mt-16 mt-12 md:pt-5 pt-4"
+			data-fade-start="95" data-fade-duration="0.8">
 			<span class="footer-copyright"><?php echo esc_html( $rumhora_copyright ); ?></span>
 
 			<nav class="footer-legal" aria-label="<?php esc_attr_e( 'Mentions légales', 'rumhora' ); ?>">
