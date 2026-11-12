@@ -1016,6 +1016,10 @@
 .site-footer {
   background-color: #2A0F12;
   color: #D8CFC4;
+  min-height: 100vh;
+  min-height: 100svh;
+  display: flex;
+  flex-direction: column;
 }
 
 /* ==========================================================================
@@ -1117,7 +1121,26 @@
    Barre légale
    ========================================================================== */
 
+/* Le bloc intérieur prend toute la hauteur laissée par le footer : c'est lui
+   qui distribue l'espace entre les colonnes et la barre légale. */
+
+.footer-inner {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+}
+
+/* Deuxième marge automatique du bloc, l'autre étant sur .footer-bottom :
+   l'espace libre se répartit à parts égales au-dessus des colonnes et entre
+   elles et la barre légale. Sans elle, les colonnes restaient collées en haut
+   et toute la hauteur gagnée s'accumulait en un seul vide au milieu. */
+
+.footer-top {
+  margin-top: auto;
+}
+
 .footer-bottom {
+  margin-top: auto;
   border-top: 1px solid rgba(198, 167, 94, 0.35);
   font-family: "Montserrat", system-ui, sans-serif;
   font-size: 13px;

@@ -111,9 +111,13 @@ $rumhora_copyright = get_field( 'footer_copyright', 'option' )
 	      // data-fade-y="0" : le fade-in fait normalement MONTER l'élément de 50px.
 	      // Ici la barre finit à 4px du bas du footer — elle était donc dessinée
 	      // 46px EN DESSOUS de lui pendant toute l'animation, c'est-à-dire sur le
-	      // fond de page. On garde le fondu, sans le déplacement. ?>
+	      // fond de page. On garde le fondu, sans le déplacement.
+	      //
+	      // Pas de `md:mt-16 mt-12` non plus : la barre est désormais poussée en
+	      // bas par un margin-top:auto (voir _footer.scss), et ces utilitaires
+	      // Tailwind — émis après le SCSS — l'écraseraient. ?>
 	<!-- Barre légale, séparée par un filet (voir .footer-bottom) -->
-		<div class="footer-bottom fade-in flex flex-wrap justify-between items-center gap-3 md:mt-16 mt-12 md:pt-5 pt-4"
+		<div class="footer-bottom fade-in flex flex-wrap justify-between items-center gap-3 md:pt-5 pt-4"
 			data-fade-start="105" data-fade-duration="0.8" data-fade-y="0">
 			<span class="footer-copyright"><?php echo esc_html( $rumhora_copyright ); ?></span>
 
