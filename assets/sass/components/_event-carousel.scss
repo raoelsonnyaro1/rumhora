@@ -104,6 +104,17 @@ $gap: 2.5rem;
 
 .event-carousel__swiper {
   overflow: hidden;
+
+  // Courbe du défilement. Swiper pose la DURÉE en style inline sur la piste
+  // (option `speed`) mais laisse la courbe au `ease` du navigateur, qui
+  // freine mollement en fin de course. Celle-ci décélère franchement puis
+  // s'arrête net — le même easeOutCubic que les autres mouvements du site.
+  //
+  // Sans effet pendant un glissement au doigt ou à la souris : Swiper y met
+  // la durée à 0ms, la piste suit alors le curseur sans transition.
+  .swiper-wrapper {
+    transition-timing-function: cubic-bezier(0.33, 1, 0.68, 1);
+  }
 }
 
 /* Aucune légende affichée au repos, pas même celle de la slide en tête : elles

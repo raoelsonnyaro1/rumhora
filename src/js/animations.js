@@ -1343,6 +1343,11 @@ function initEventCarousels() {
       slidesPerView: 1.08,
       spaceBetween: 12,
       grabCursor: true,
+      // 700ms au lieu des 300 par défaut : le défilement se pose au lieu de
+      // claquer. La courbe, elle, n'est pas réglable ici — Swiper laisse le
+      // `ease` du navigateur et c'est le CSS qui la reprend (voir
+      // .swiper-wrapper dans _event-carousel.scss).
+      speed: 700,
       // Pas de loop : les flèches doivent pouvoir se désactiver en début et en
       // fin de liste (voir .swiper-button-disabled), ce que le mode boucle
       // rend impossible — il n'y a alors jamais de fin.

@@ -1702,6 +1702,10 @@
   overflow: hidden;
 }
 
+.event-carousel__swiper .swiper-wrapper {
+  transition-timing-function: cubic-bezier(0.33, 1, 0.68, 1);
+}
+
 /* Aucune légende affichée au repos, pas même celle de la slide en tête : elles
    n'apparaissent qu'au survol de leur carte (voir .event-card plus bas).
 
