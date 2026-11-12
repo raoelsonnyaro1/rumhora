@@ -112,7 +112,7 @@ function rs_text_media( $args = array() ) {
 					<div class="reveal text-media__frame">
 						<img data-src="<?php echo esc_url( $image['url'] ); ?>"
 							alt="<?php echo esc_attr( $image['alt'] ?? '' ); ?>"
-							class="lazyload">
+							class="lazyload scroll-parallax-img">
 					</div>
 				</div>
 			<?php endif; ?>

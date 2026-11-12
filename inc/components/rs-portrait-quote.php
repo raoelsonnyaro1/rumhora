@@ -75,7 +75,7 @@ function rs_portrait_quote( $args = array() ) {
 				<div class="reveal portrait-quote__frame">
 					<img data-src="<?php echo esc_url( $image['url'] ); ?>"
 						alt="<?php echo esc_attr( $image['alt'] ?? '' ); ?>"
-						class="lazyload">
+						class="lazyload scroll-parallax-img">
 				</div>
 			</div>
 

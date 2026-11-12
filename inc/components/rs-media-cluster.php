@@ -71,14 +71,14 @@ function rs_media_cluster( $args = array() ) {
 					<div class="reveal media-cluster__photo media-cluster__photo--1">
 						<img data-src="<?php echo esc_url( $images[0]['url'] ); ?>"
 							alt="<?php echo esc_attr( $images[0]['alt'] ?? '' ); ?>"
-							class="lazyload">
+							class="lazyload scroll-parallax-img">
 					</div>
 
 					<?php if ( isset( $images[1] ) ) : ?>
 						<div class="reveal media-cluster__photo media-cluster__photo--2">
 							<img data-src="<?php echo esc_url( $images[1]['url'] ); ?>"
 								alt="<?php echo esc_attr( $images[1]['alt'] ?? '' ); ?>"
-								class="lazyload">
+								class="lazyload scroll-parallax-img">
 						</div>
 					<?php endif; ?>
 

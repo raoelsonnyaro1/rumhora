@@ -2498,6 +2498,44 @@ span.flatpickr-weekday {
   will-change: transform;
 }
 
+/* ==========================================================================
+   Amplitude par cadre
+   ==========================================================================
+   --overflow est l'amplitude en PIXELS (l'image va de -overflow à +overflow),
+   lue telle quelle par initColumnParallax. Le scale(1.2) ci-dessus donne 10%
+   de réserve de chaque côté : l'amplitude doit rester sous cette réserve,
+   sinon un bord vide apparaît en haut ou en bas de la course.
+
+   La réserve dépend de la HAUTEUR du cadre, qui varie d'un composant à
+   l'autre — et une valeur unique serait soit invisible sur les grands cadres,
+   soit débordante sur les petits. Réserves mesurées à 1024, la largeur la plus
+   contraignante :
+
+     About us          376px de haut -> 38px de réserve
+     portrait du chef  469px          -> 47px
+     univers photo 1   224px          -> 22px
+     univers photo 2   158px          -> 16px
+
+   Les valeurs ci-dessous gardent toutes au moins 40% de marge sous leur
+   réserve. Mouvement « léger » voulu : on reste loin du maximum possible.
+*/
+
+.text-media__frame .scroll-parallax-img {
+  --overflow: 22;
+}
+
+.portrait-quote__frame .scroll-parallax-img {
+  --overflow: 28;
+}
+
+.media-cluster__photo--1 .scroll-parallax-img {
+  --overflow: 12;
+}
+
+.media-cluster__photo--2 .scroll-parallax-img {
+  --overflow: 9;
+}
+
 /**
  * Feuille maîtresse — compilée vers dist/styles.css
  *
