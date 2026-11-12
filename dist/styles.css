@@ -1835,6 +1835,10 @@
     transform: none;
     transition: opacity 0.4s ease;
   }
+
+  .event-card__media img {
+    transform: none;
+  }
 }
 
 /* ==========================================================================
@@ -1853,11 +1857,14 @@
 }
 
 .event-card__media img {
-  width: 100%;
+  width: 124%;
+  max-width: none;
+  margin-left: -12%;
   height: 100%;
   -o-object-fit: cover;
      object-fit: cover;
   display: block;
+  transform: translateX(calc(var(--slide-progress, 0) * 9%));
 }
 
 .event-card__body {

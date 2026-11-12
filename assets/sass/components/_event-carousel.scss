@@ -145,6 +145,12 @@ $gap: 2.5rem;
     transform: none;
     transition: opacity 0.4s ease;
   }
+
+  // Le décalage des photos est un pur effet de profondeur : l'image reste
+  // centrée, la navigation fonctionne à l'identique.
+  .event-card__media img {
+    transform: none;
+  }
 }
 
 /* ==========================================================================
@@ -154,6 +160,22 @@ $gap: 2.5rem;
 .event-card {
   height: auto; // les slides Swiper sont étirées par défaut
 
+  // Décalage de la photo pendant le défilement.
+  //
+  // L'image est plus LARGE que son cadre et recentrée par une marge négative :
+  // c'est cette réserve qui lui permet de coulisser sans jamais découvrir un
+  // bord. Les trois valeurs sont liées — réserve de 12% de chaque côté, donc
+  // une largeur de 124% et une marge de -12%.
+  //
+  // Le déplacement maximal est de 9% de la largeur de l'IMAGE (le % d'un
+  // translate porte sur l'élément, pas sur son conteneur), soit 9 × 1.24 =
+  // 11.2% du cadre. Volontairement SOUS les 12% de réserve : à la valeur
+  // exacte (9.68%) l'image affleurait le bord au pixel près, et un arrondi
+  // sous-pixel suffisait à laisser passer un filet de fond. Il reste ainsi
+  // 0.8% de marge de chaque côté.
+  //
+  // --slide-progress est posée par setParallax() (src/js/animations.js), bornée
+  // à [-1, 1]. Repli à 0 : sans JS, l'image reste centrée et rien ne bouge.
   &__media {
     position: relative;
     aspect-ratio: 393 / 389; // ratio des cartes sur la maquette
@@ -161,10 +183,21 @@ $gap: 2.5rem;
     overflow: hidden;
 
     img {
-      width: 100%;
+      width: 124%;
+      // max-width:none INDISPENSABLE : le preflight Tailwind pose
+      // `img { max-width: 100% }`, qui plafonne la largeur ci-dessus à 100% du
+      // cadre. Une règle plus spécifique ne suffit pas — `width` et
+      // `max-width` sont deux propriétés distinctes, la seconde borne la
+      // première quelle que soit sa provenance. L'image restait donc à la
+      // taille du cadre et découvrait le fond dès le premier décalage.
+      max-width: none;
+      margin-left: -12%;
       height: 100%;
       object-fit: cover;
       display: block;
+      // À contre-sens du glissement : la slide part à gauche, l'image retient
+      // vers la droite — c'est ce retard qui se lit comme de la profondeur.
+      transform: translateX(calc(var(--slide-progress, 0) * 9%));
     }
   }
 
