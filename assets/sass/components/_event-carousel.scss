@@ -19,7 +19,11 @@
 $gap: 2.5rem;
 
 .event-carousel {
-  background-color: $depth-1;
+  // Couleur de base et non le ton intermédiaire : la section est posée sur le
+  // fond de page, comme le hero et About us. Déclarée explicitement plutôt que
+  // laissée transparente — le composant doit rester juste s'il est un jour
+  // placé sur une page au fond différent.
+  background-color: $base;
 }
 
 .event-carousel__grid {
