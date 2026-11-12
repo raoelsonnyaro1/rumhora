@@ -73,7 +73,15 @@ function rs_event_carousel( $args = array() ) {
 			     ce qui produit le débordement de la maquette. -->
 			<div class="event-carousel__slider">
 				<div class="swiper event-carousel__swiper" id="<?php echo esc_attr( $uid ); ?>">
-					<div class="swiper-wrapper">
+					<?php // Groupe à décalage plutôt qu'un .reveal par carte : les cartes
+					      // suivantes sont rognées par l'overflow du slider, donc jamais
+					      // « visibles » pour un IntersectionObserver — elles resteraient
+					      // cachées à jamais. Ici le déclencheur est la PREMIÈRE carte, et
+					      // toutes suivent en cascade, y compris hors cadre.
+					      //
+					      // « top 100% » : même seuil que les titres de carte et la
+					      // navigation, le carrousel étant bas dans la section. ?>
+					<div class="swiper-wrapper" data-stagger-group data-stagger-start="top 100%">
 						<?php foreach ( $events as $event ) : ?>
 							<?php
 							$image = $event['image'] ?? null;
@@ -83,7 +91,7 @@ function rs_event_carousel( $args = array() ) {
 							$lien      = $event['bouton_lien'] ?? '';
 							$is_anchor = $lien && 0 === strpos( $lien, '#' );
 							?>
-							<article class="swiper-slide event-card">
+							<article class="swiper-slide event-card" data-stagger-item>
 								<?php if ( $image ) : ?>
 									<div class="event-card__media">
 										<img data-src="<?php echo esc_url( $image['url'] ); ?>"
