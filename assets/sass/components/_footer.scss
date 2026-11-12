@@ -157,7 +157,9 @@ $footer-text: clamp(14px, 0.83vw, 21.33px); // 16pt XD
 }
 
 .footer-copyright {
-  color: $secondary;
+  // Même ton que le reste du texte du footer, et non le gris secondaire : la
+  // mention n'est pas un texte de second plan sur cette maquette.
+  color: $body-text;
 }
 
 .legal-menu {
