@@ -280,6 +280,20 @@ function splitForReveal(el) {
   return {
     split,
     targets: isTitle ? split.chars : split.lines,
+    // Instance à rendre au DOM en fin d'animation — ou null pour la garder.
+    //
+    // Pour les LIGNES c'est indispensable : SplitText y fige la répartition
+    // des mots dans un <div> par ligne, et un redimensionnement laisserait ces
+    // lignes telles quelles, chacune se re-cassant dans son propre div.
+    //
+    // Pour les SIGNES, surtout pas. Un élément par caractère désactive le
+    // crénage entre eux : le titre découpé est ~0.5% plus large que le même
+    // texte intact (mesuré : 3.1px sur 24 signes en Playfair). Rendre le texte
+    // au DOM rétablit le crénage d'un coup, et la ligne se resserre
+    // visiblement à la fin du reveal. Les signes n'ont de toute façon pas le
+    // problème des lignes : les mots restent des boîtes qui se replacent
+    // normalement au redimensionnement.
+    revert: isTitle ? null : split,
     // L'ordre aléatoire fait l'effet sur un titre, où les signes sont nombreux.
     // Sur 5 lignes il donnerait un désordre lisible comme un défaut : les
     // lignes se posent donc de haut en bas, dans le sens de la lecture.
@@ -309,17 +323,16 @@ function revealSplitTargets(targets, vars = {}, split = null) {
       // On rend le texte au DOM dès que l'animation est finie, plutôt que de
       // se contenter d'un clearProps.
       //
-      // INDISPENSABLE pour le découpage en lignes : SplitText fige la
-      // répartition des mots dans un <div> par ligne, mesurée à la largeur du
-      // moment. Sans revert, un redimensionnement (ou une rotation de
-      // téléphone) laisse ces lignes telles quelles : chacune se re-casse alors
-      // à l'intérieur de son propre div et le paragraphe part en escalier.
-      // Rien ne re-découpe au resize dans ce fichier.
+      // `split` n'est fourni QUE pour le découpage en lignes (voir le champ
+      // `revert` de splitForReveal) : SplitText y fige la répartition des mots
+      // dans un <div> par ligne, et sans rendre le texte au DOM, un
+      // redimensionnement laisse ces lignes telles quelles — chacune se
+      // re-cassant dans son propre div, le paragraphe part en escalier. Rien
+      // ne re-découpe au resize dans ce fichier.
       //
-      // Utile aussi pour les mots : revert supprime les fragments, donc les
-      // `filter` et `will-change` inline qu'ils portaient — et avec eux autant
-      // de couches de composition qui, sur une page à plusieurs titres,
-      // s'accumulaient jusqu'à peser sur le scroll.
+      // Pour les titres, découpés en signes, on s'en tient au clearProps :
+      // rendre le texte au DOM y rétablirait le crénage d'un coup et
+      // resserrerait la ligne à la fin du reveal.
       if (split) split.revert();
       else gsap.set(targets, { clearProps: 'filter,transform,opacity,willChange' });
     },
@@ -724,7 +737,7 @@ function initTextRevealAnimations() {
             // Force un reflow pour garantir que les polices sont appliquées
             el.offsetHeight; // eslint-disable-line no-unused-expressions
 
-            const { split, targets, stagger } = splitForReveal(el);
+            const { split, targets, stagger, revert } = splitForReveal(el);
             el._splitText = split;
 
             // L'élément lui-même a été caché en amont (createAnimations) le
@@ -741,7 +754,7 @@ function initTextRevealAnimations() {
             const titleOverlay = el.closest('.cta-title-overlay');
             if (titleOverlay) {
               const photoImg = titleOverlay.parentElement.querySelector('.reveal img');
-              const anim = revealSplitTargets(targets, { stagger, paused: true, onStart: notifyProgress }, split);
+              const anim = revealSplitTargets(targets, { stagger, paused: true, onStart: notifyProgress }, revert);
               if (photoImg) {
                 photoImg.addEventListener('revealcomplete', () => anim.play(), { once: true });
               } else {
@@ -758,7 +771,7 @@ function initTextRevealAnimations() {
 
             const reveal = () => {
               observer.disconnect();
-              revealSplitTargets(targets, { stagger, delay, onStart: notifyProgress }, split);
+              revealSplitTargets(targets, { stagger, delay, onStart: notifyProgress }, revert);
             };
 
             const observer = new IntersectionObserver((entries) => {
@@ -1884,13 +1897,13 @@ function initHeroIntro(onDone, curtainPromise) {
       // revealSplitTargets), ajouté à la timeline plutôt que joué seul pour
       // rester synchronisé avec le header, le filet et les photos.
       if (titleTargets) {
-        tl.add(revealSplitTargets(titleTargets, { stagger: titleSplit.stagger }, titleSplit.split), 0);
+        tl.add(revealSplitTargets(titleTargets, { stagger: titleSplit.stagger }, titleSplit.revert), 0);
       }
 
       if (descTargets) {
         // L'accroche démarre pendant que le titre finit de se poser : un
         // enchaînement strictement séquentiel rendrait l'intro trop longue.
-        tl.add(revealSplitTargets(descTargets, { stagger: descSplit.stagger }, descSplit.split), title ? 0.35 : 0);
+        tl.add(revealSplitTargets(descTargets, { stagger: descSplit.stagger }, descSplit.revert), title ? 0.35 : 0);
       }
 
       if (bottomRowLine) {

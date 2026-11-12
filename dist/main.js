@@ -1172,6 +1172,20 @@
     return {
       split,
       targets: isTitle ? split.chars : split.lines,
+      // Instance à rendre au DOM en fin d'animation — ou null pour la garder.
+      //
+      // Pour les LIGNES c'est indispensable : SplitText y fige la répartition
+      // des mots dans un <div> par ligne, et un redimensionnement laisserait ces
+      // lignes telles quelles, chacune se re-cassant dans son propre div.
+      //
+      // Pour les SIGNES, surtout pas. Un élément par caractère désactive le
+      // crénage entre eux : le titre découpé est ~0.5% plus large que le même
+      // texte intact (mesuré : 3.1px sur 24 signes en Playfair). Rendre le texte
+      // au DOM rétablit le crénage d'un coup, et la ligne se resserre
+      // visiblement à la fin du reveal. Les signes n'ont de toute façon pas le
+      // problème des lignes : les mots restent des boîtes qui se replacent
+      // normalement au redimensionnement.
+      revert: isTitle ? null : split,
       // L'ordre aléatoire fait l'effet sur un titre, où les signes sont nombreux.
       // Sur 5 lignes il donnerait un désordre lisible comme un défaut : les
       // lignes se posent donc de haut en bas, dans le sens de la lecture.
@@ -1397,14 +1411,14 @@
                 el._splitText.revert();
               }
               el.offsetHeight;
-              const { split, targets, stagger } = splitForReveal(el);
+              const { split, targets, stagger, revert } = splitForReveal(el);
               el._splitText = split;
               gsap.set(el, { autoAlpha: 1 });
               gsap.set(targets, REVEAL_FROM);
               const titleOverlay = el.closest(".cta-title-overlay");
               if (titleOverlay) {
                 const photoImg = titleOverlay.parentElement.querySelector(".reveal img");
-                const anim = revealSplitTargets(targets, { stagger, paused: true, onStart: notifyProgress }, split);
+                const anim = revealSplitTargets(targets, { stagger, paused: true, onStart: notifyProgress }, revert);
                 if (photoImg) {
                   photoImg.addEventListener("revealcomplete", () => anim.play(), { once: true });
                 } else {
@@ -1417,7 +1431,7 @@
               let checkCount = 0;
               const reveal = () => {
                 observer2.disconnect();
-                revealSplitTargets(targets, { stagger, delay, onStart: notifyProgress }, split);
+                revealSplitTargets(targets, { stagger, delay, onStart: notifyProgress }, revert);
               };
               const observer2 = new IntersectionObserver((entries) => {
                 checkCount += 1;
@@ -2110,10 +2124,10 @@
           tl.to(header, { y: 0, opacity: 1, duration: 0.8, ease: "power3.out" }, 0);
         }
         if (titleTargets) {
-          tl.add(revealSplitTargets(titleTargets, { stagger: titleSplit.stagger }, titleSplit.split), 0);
+          tl.add(revealSplitTargets(titleTargets, { stagger: titleSplit.stagger }, titleSplit.revert), 0);
         }
         if (descTargets) {
-          tl.add(revealSplitTargets(descTargets, { stagger: descSplit.stagger }, descSplit.split), title ? 0.35 : 0);
+          tl.add(revealSplitTargets(descTargets, { stagger: descSplit.stagger }, descSplit.revert), title ? 0.35 : 0);
         }
         if (bottomRowLine) {
           tl.to(bottomRowLine, { scaleX: 1, duration: 0.5, ease: "power2.out" }, "-=0.3");
