@@ -172,6 +172,7 @@ rs_event_carousel(
 		'surtitre' => get_field( 'events_surtitre' ) ?: __( 'The lounge', 'rumhora' ),
 		'titre'    => get_field( 'events_titre' ) ?: '<em>' . __( 'Upcoming<br>Evenings', 'rumhora' ) . '</em>',
 		'events'   => $rumhora_events,
+		'fond'         => 'page',
 	)
 );
 

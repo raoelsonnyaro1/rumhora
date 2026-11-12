@@ -248,9 +248,17 @@ h4 {
    sur mobile, où le Light descend déjà à la limite de ce qui tient sur fond
    sombre. Corps atteint : 16.5px à 1440, 22px à 1920, 29.33px à 2560.
 
-   Interlignage 1.55 : mesuré à ~1.48 sur la maquette, légèrement ouvert ici
-   parce qu'un texte clair sur fond sombre « bave » optiquement et demande un
-   peu plus d'air qu'un texte sombre sur fond clair.
+   Interlignage : 32pt pour un corps de 22pt sur la maquette, soit 32/22 =
+   1.4545. Sans unité et non en px : le corps étant fluide, une valeur absolue
+   se décrocherait de lui à chaque largeur d'écran.
+
+   (Il valait 1.55 jusqu'ici — une ouverture que j'avais ajoutée au jugé, le
+   texte clair sur fond sombre « bavant » optiquement. La cote de la maquette
+   la remplace.)
+
+   Approche : 0 sur la maquette. Déclarée explicitement plutôt que laissée à
+   `normal` — identique en rendu, mais ça documente l'intention et protège
+   d'un letter-spacing hérité si un conteneur venait à en poser un.
 
    Les descriptions de section (.hero-lead, .text-media__text, etc.) sont des
    <p> et héritent d'ici : ne PAS y redéfinir font-size/font-weight. Les
@@ -259,7 +267,8 @@ h4 {
 p {
   font-size: clamp(15px, 1.15vw, 29.33px); // 22pt XD
   font-weight: 300; // Montserrat Light
-  line-height: 1.55;
+  line-height: 1.4545; // 32pt / 22pt
+  letter-spacing: 0;
 }
 
 @media (max-width: 768px) {
