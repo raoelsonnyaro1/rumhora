@@ -1328,24 +1328,6 @@ function initCarousels() {
  *
  * Doit être rappelé après chaque transition Barba puisque le DOM est remplacé.
  */
-/**
- * Reporte la progression de chaque slide en variable CSS, pour que la photo
- * puisse se décaler dans son cadre.
- *
- * slide.progress vaut 0 pour la slide en place, -1 / +1 pour ses voisines, et
- * continue au-delà pour les suivantes. On le borne à [-1, 1] : sans ça les
- * slides lointaines sortiraient leur image du cadre et découvriraient le fond.
- *
- * @param {object} swiper
- */
-function setParallax(swiper) {
-  swiper.slides.forEach((slide) => {
-    const media = slide.querySelector('.event-card__media');
-    if (!media) return;
-    media.style.setProperty('--slide-progress', Math.max(-1, Math.min(1, slide.progress)));
-  });
-}
-
 function initEventCarousels() {
   if (typeof Swiper === 'undefined') return;
 
@@ -1365,37 +1347,14 @@ function initEventCarousels() {
       // fin de liste (voir .swiper-button-disabled), ce que le mode boucle
       // rend impossible — il n'y a alors jamais de fin.
       watchOverflow: true,
-      // Nécessaire au décalage des photos : sans ça Swiper ne calcule pas
-      // slide.progress, qui vaut 0 pour la slide centrée et ±1 pour ses
-      // voisines.
-      watchSlidesProgress: true,
       breakpoints: {
         640: { slidesPerView: 1.6, spaceBetween: 14 },
         1024: { slidesPerView: 2.25, spaceBetween: 16 },
       },
       ...(prevEl && nextEl ? { navigation: { prevEl, nextEl } } : {}),
-      on: {
-        // Décalage des photos pendant le défilement : chaque image se déplace
-        // DANS son cadre à contre-sens du glissement, ce qui donne l'impression
-        // qu'elle suit avec un temps de retard.
-        //
-        // La valeur n'est pas appliquée en transform depuis le JS mais passée
-        // en variable CSS : c'est la feuille de styles qui décide de l'ampleur
-        // du décalage (voir .event-card__media dans _event-carousel.scss), et
-        // elle seule connaît la largeur de l'image, donc la marge dont elle
-        // dispose avant de découvrir un bord.
-        progress: setParallax,
-        setTranslate: setParallax,
-        // Pendant une transition pilotée (clic sur une flèche), Swiper anime la
-        // piste avec une durée. Sans la reporter sur les images, elles
-        // sauteraient d'un coup à leur position finale au lieu de suivre.
-        setTransition: (swiper, duration) => {
-          swiper.slides.forEach((slide) => {
-            const media = slide.querySelector('.event-card__media');
-            if (media) media.style.transitionDuration = `${duration}ms`;
-          });
-        },
-      },
+      // Pas de pilotage du décalage des photos ici : il est entièrement en CSS,
+      // adossé au défilement de la page via une view-timeline (voir
+      // .event-card__media dans _event-carousel.scss).
     });
   });
 }
