@@ -6,6 +6,19 @@
  */
 @use '../variables' as *;
 
+// Corps des textes du footer — SOURCE UNIQUE.
+//
+// ⚠ 16pt dans XD, et XD compte en POINTS : 16 × 4/3 = 21.33px. La pente suit
+// la règle du site — 21.33 / 2560 (largeur du plan de travail) = 0.83vw.
+//
+// Plancher à 14px, la taille précédente : il ne borne que les petites
+// largeurs, où la proportion donnerait un corps illisible. Le footer reste
+// donc à 14px jusqu'à ~1690px, puis suit la maquette au-delà.
+//
+// Ne concerne PAS la barre légale (.footer-bottom), qui garde ses 13px : ce
+// sont des mentions, pas du texte de lecture.
+$footer-text: clamp(14px, 0.83vw, 21.33px); // 16pt XD
+
 .site-footer {
   background-color: $depth-1;
   color: $body-text;
@@ -17,7 +30,7 @@
 
 .footer-tagline {
   font-family: 'Montserrat', system-ui, sans-serif;
-  font-size: 14px;
+  font-size: $footer-text;
   font-weight: 400;
   line-height: 1.6;
   color: $body-text;
@@ -35,7 +48,7 @@
 
 .footer-menu-link {
   font-family: 'Montserrat', system-ui, sans-serif;
-  font-size: 14px;
+  font-size: $footer-text;
   color: $body-text;
   transition: color 0.3s ease;
 
@@ -95,7 +108,7 @@
 
 .footer-contact {
   font-family: 'Montserrat', system-ui, sans-serif;
-  font-size: 14px;
+  font-size: $footer-text;
   font-style: normal; // <address> est en italique par défaut
   line-height: 1.75;
   color: $body-text;

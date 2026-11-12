@@ -1114,7 +1114,7 @@
 
 .footer-tagline {
   font-family: "Montserrat", system-ui, sans-serif;
-  font-size: 14px;
+  font-size: clamp(14px, 0.83vw, 21.33px);
   font-weight: 400;
   line-height: 1.6;
   color: #D8CFC4;
@@ -1129,7 +1129,7 @@
 
 .footer-menu-link {
   font-family: "Montserrat", system-ui, sans-serif;
-  font-size: 14px;
+  font-size: clamp(14px, 0.83vw, 21.33px);
   color: #D8CFC4;
   transition: color 0.3s ease;
 }
@@ -1189,7 +1189,7 @@
 
 .footer-contact {
   font-family: "Montserrat", system-ui, sans-serif;
-  font-size: 14px;
+  font-size: clamp(14px, 0.83vw, 21.33px);
   font-style: normal;
   line-height: 1.75;
   color: #D8CFC4;
