@@ -61,6 +61,10 @@ if ( ! $rumhora_about_image ) {
 rs_text_media(
 	array(
 		'id'           => 'about',
+		// 'page' et non 'surface' : la section suit le hero, qui est déjà sur le
+		// fond de base. En ton intermédiaire elle ouvrait une bande plus claire
+		// juste sous lui. L'alternance des fonds reprend à la section suivante.
+		'fond'         => 'page',
 		'surtitre'     => get_field( 'about_surtitre' ) ?: __( 'About us', 'rumhora' ),
 		// <em> : titre entièrement doré (voir .text-media__title em). Côté
 		// éditeur, c'est le bouton « italique » — rien à expliquer au client.
