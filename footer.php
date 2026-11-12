@@ -79,7 +79,7 @@ $rumhora_copyright = get_field( 'footer_copyright', 'option' )
 					      // fragile. Chaque ligne est déjà un élément — autant les animer
 					      // telles quelles. ?>
 					<address class="footer-contact lg:text-right md:mt-6 mt-5"
-						data-stagger-group data-stagger-start="top 95%">
+						data-stagger-group data-stagger-start="top 100%">
 					<?php if ( $rumhora_address ) : ?>
 						<span class="block" data-stagger-item><?php echo esc_html( $rumhora_address ); ?></span>
 					<?php endif; ?>
@@ -100,9 +100,16 @@ $rumhora_copyright = get_field( 'footer_copyright', 'option' )
 
 		</div>
 
-		<!-- Barre légale, séparée par un filet (voir .footer-bottom) -->
+		<?php // Seuil à 105% — au-DELÀ de 100 — et ce n'est pas un excès de zèle :
+	      // ce bloc est le dernier élément de la page, et un seuil à 95% exigeait
+	      // un scroll que la page n'a pas toujours. Mesuré : à 1200px de hauteur
+	      // de fenêtre il fallait atteindre 4899 pour un maximum de 4885, donc la
+	      // barre ne s'affichait JAMAIS ; à 900px elle passait à 1 pixel près.
+	      // 105% ramène le scroll requis sous le maximum avec ~100px de marge à
+	      // toutes les hauteurs testées. ?>
+	<!-- Barre légale, séparée par un filet (voir .footer-bottom) -->
 		<div class="footer-bottom fade-in flex flex-wrap justify-between items-center gap-3 md:mt-16 mt-12 md:pt-5 pt-4"
-			data-fade-start="95" data-fade-duration="0.8">
+			data-fade-start="105" data-fade-duration="0.8">
 			<span class="footer-copyright"><?php echo esc_html( $rumhora_copyright ); ?></span>
 
 			<nav class="footer-legal" aria-label="<?php esc_attr_e( 'Mentions légales', 'rumhora' ); ?>">
