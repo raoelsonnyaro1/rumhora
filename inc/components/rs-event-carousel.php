@@ -80,8 +80,14 @@ function rs_event_carousel( $args = array() ) {
 					      // toutes suivent en cascade, y compris hors cadre.
 					      //
 					      // « top 100% » : même seuil que les titres de carte et la
-					      // navigation, le carrousel étant bas dans la section. ?>
-					<div class="swiper-wrapper" data-stagger-group data-stagger-start="top 100%">
+					      // navigation, le carrousel étant bas dans la section.
+					      //
+					      // Le délai de 0.4s laisse passer le surtitre et le titre de section
+					      // avant que les cartes n'entrent : les trois partaient sinon
+					      // ensemble. Un délai plutôt qu'un seuil plus tardif — il tient
+					      // l'ordre d'apparition quelle que soit la vitesse de défilement,
+					      // là où un seuil se fait rattraper par un scroll rapide. ?>
+					<div class="swiper-wrapper" data-stagger-group data-stagger-start="top 100%" data-stagger-delay="0.4">
 						<?php foreach ( $events as $event ) : ?>
 							<?php
 							$image = $event['image'] ?? null;
