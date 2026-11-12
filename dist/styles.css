@@ -1727,17 +1727,6 @@
     transform: none;
     transition: opacity 0.4s ease;
   }
-
-  .event-carousel__arrow svg {
-    transition: none;
-  }
-
-  .event-carousel__arrow--prev:hover svg,
-  .event-carousel__arrow--prev:focus-visible svg,
-  .event-carousel__arrow--next:hover svg,
-  .event-carousel__arrow--next:focus-visible svg {
-    transform: none;
-  }
 }
 
 /* ==========================================================================
@@ -1861,6 +1850,28 @@
   opacity: 0.35;
   cursor: default;
   pointer-events: none;
+}
+
+/* Le glissement des flèches est un ornement : en mouvement réduit l'icône ne
+   bouge plus.
+
+   ⚠ DÉCLARÉ ICI, APRÈS .event-carousel__arrow, et pas dans le bloc
+   prefers-reduced-motion plus haut : les sélecteurs y sont identiques à ceux
+   qui posent le glissement, donc à spécificité égale c'est l'ordre de source
+   qui tranche. Placé avant, ce bloc était purement décoratif — le mouvement
+   réduit n'avait aucun effet sur les flèches. */
+
+@media (prefers-reduced-motion: reduce) {
+  .event-carousel__arrow svg {
+    transition: none;
+  }
+
+  .event-carousel__arrow--prev:hover svg,
+  .event-carousel__arrow--prev:focus-visible svg,
+  .event-carousel__arrow--next:hover svg,
+  .event-carousel__arrow--next:focus-visible svg {
+    transform: none;
+  }
 }
 
 /**
