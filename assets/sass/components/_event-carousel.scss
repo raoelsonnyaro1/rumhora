@@ -269,36 +269,17 @@ $gap: 2.5rem;
   // ne sert qu'à égarer la prochaine lecture.
   transition: color 0.3s ease;
 
-
   svg {
     width: 46px;
     height: 20px;
     display: block;
-    transition: transform 0.3s ease;
   }
 
   // Pas de changement de couleur au survol : la flèche reste dorée, comme les
   // autres boutons du site. C'est le glissement de l'icône qui porte la
-  // réponse.
-  //
-  // Un simple déplacement de quelques pixels DANS le sens où la flèche emmène
-  // — la gauche vers la gauche, la droite vers la droite — et non un relais de
-  // deux copies : le geste reste continu et l'icône ne quitte jamais le bouton.
-  //
-  // Le glissement porte sur le <svg> et non sur le bouton : la zone cliquable
-  // ne doit pas se dérober sous le curseur.
-  //
-  // :focus-visible en plus de :hover pour que le repère existe aussi au
-  // clavier, où la couleur ne change pas non plus.
-  &--prev:hover svg,
-  &--prev:focus-visible svg {
-    transform: translateX(-6px);
-  }
-
-  &--next:hover svg,
-  &--next:focus-visible svg {
-    transform: translateX(6px);
-  }
+  // réponse — deux copies qui se relaient dans une boîte rognée, voir
+  // .icon-slide dans _buttons.scss. Le sens vient du modificateur posé sur le
+  // markup.
 
   // Swiper pose cette classe en début/fin de liste : la flèche inactive reste
   // visible mais clairement inopérante, plutôt que de disparaître et de faire
@@ -307,27 +288,6 @@ $gap: 2.5rem;
     opacity: 0.35;
     cursor: default;
     pointer-events: none;
-  }
-}
-
-/* Le glissement des flèches est un ornement : en mouvement réduit l'icône ne
-   bouge plus.
-
-   ⚠ DÉCLARÉ ICI, APRÈS .event-carousel__arrow, et pas dans le bloc
-   prefers-reduced-motion plus haut : les sélecteurs y sont identiques à ceux
-   qui posent le glissement, donc à spécificité égale c'est l'ordre de source
-   qui tranche. Placé avant, ce bloc était purement décoratif — le mouvement
-   réduit n'avait aucun effet sur les flèches. */
-@media (prefers-reduced-motion: reduce) {
-  .event-carousel__arrow svg {
-    transition: none;
-  }
-
-  .event-carousel__arrow--prev:hover svg,
-  .event-carousel__arrow--prev:focus-visible svg,
-  .event-carousel__arrow--next:hover svg,
-  .event-carousel__arrow--next:focus-visible svg {
-    transform: none;
   }
 }
 

@@ -156,10 +156,16 @@ function rs_event_carousel( $args = array() ) {
 			      // de 4740 à 1440x900). ?>
 			<div class="event-carousel__nav fade-in" data-fade-start="120" data-fade-delay="0">
 				<button type="button" class="event-carousel__arrow event-carousel__arrow--prev" id="<?php echo esc_attr( $uid ); ?>-prev" aria-label="<?php esc_attr_e( 'Événement précédent', 'rumhora' ); ?>">
-					<?php rs_arrow_icon( 'left' ); ?>
+					<span class="icon-slide icon-slide--left">
+						<span class="icon-slide__in"><?php rs_arrow_icon( 'left' ); ?></span>
+						<span class="icon-slide__in icon-slide__in--dup"><?php rs_arrow_icon( 'left' ); ?></span>
+					</span>
 				</button>
 				<button type="button" class="event-carousel__arrow event-carousel__arrow--next" id="<?php echo esc_attr( $uid ); ?>-next" aria-label="<?php esc_attr_e( 'Événement suivant', 'rumhora' ); ?>">
-					<?php rs_arrow_icon( 'right' ); ?>
+					<span class="icon-slide icon-slide--right">
+						<span class="icon-slide__in"><?php rs_arrow_icon( 'right' ); ?></span>
+						<span class="icon-slide__in icon-slide__in--dup"><?php rs_arrow_icon( 'right' ); ?></span>
+					</span>
 				</button>
 			</div>
 		<?php endif; ?>

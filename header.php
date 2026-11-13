@@ -58,7 +58,19 @@ $rumhora_book_url = get_field( 'book_url', 'option' ) ?: home_url( '/book-a-tabl
 	}
 	</script>
 	<link rel="profile" href="https://gmpg.org/xfn/11">
-	<link rel="icon" type="image/svg+xml" href="<?php echo esc_url( get_template_directory_uri() . '/img/favicon.svg' ); ?>">
+	<?php
+	// Favicon : le logomark du header, et non plus le placeholder SVG hérité du
+	// starter — un « R » dessiné à la main qui n'avait rien de la marque.
+	//
+	// Le fichier n'est pas carré (214 × 246) : le navigateur le réduit en
+	// conservant ses proportions, le logomark étant déjà cadré avec sa marge.
+	//
+	// Ce lien est ignoré si une icône de site est définie dans WordPress —
+	// wp_head() émet alors la sienne, plus tard dans le <head>, et c'est le
+	// dernier lien qui gagne. L'icône saisie par le client prime donc toujours.
+	?>
+	<link rel="icon" type="image/png" href="<?php echo esc_url( get_template_directory_uri() . '/img/logo-mark.png' ); ?>">
+	<link rel="apple-touch-icon" href="<?php echo esc_url( get_template_directory_uri() . '/img/logo-mark.png' ); ?>">
 
 	<?php
 	// Préchargement des 2 polices variables : elles portent TOUT le rendu

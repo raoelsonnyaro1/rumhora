@@ -1870,9 +1870,7 @@
         watchOverflow: true,
         breakpoints: {
           640: { slidesPerView: 2, spaceBetween: 14 },
-          // 3 et non 2 : à 1440 la carte fait alors ~365px de large, soit la
-          // cote de la maquette (393px). À 2 elle en ferait 550.
-          1024: { slidesPerView: 3, spaceBetween: 16 }
+          1024: { slidesPerView: 2, spaceBetween: 16 }
         }
       }, prevEl && nextEl ? { navigation: { prevEl, nextEl } } : {}));
     });
